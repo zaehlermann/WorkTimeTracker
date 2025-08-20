@@ -1,4 +1,4 @@
-package de.elementcamper.model;
+package de.zaehlermann.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

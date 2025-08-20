@@ -1,8 +1,7 @@
-package de.elementcamper.repository;
+package de.zaehlermann.repository;
 
-import de.elementcamper.model.Employee;
-import de.elementcamper.model.Journal;
-import de.elementcamper.model.RfIdScan;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.toList;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,10 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import de.zaehlermann.model.Employee;
+import de.zaehlermann.model.Journal;
+import de.zaehlermann.model.RfIdScan;
 
 public class RfidScanRepository {
 
@@ -21,13 +21,13 @@ public class RfidScanRepository {
   private static final String JOURNAL_FILE_PATH = "journal";
   private final String baseDir;
 
-  public RfidScanRepository(String baseDir) {
+  public RfidScanRepository(final String baseDir) {
     this.baseDir = baseDir;
     new File(baseDir).mkdirs();
   }
 
-  public void saveScan(String input) throws IOException {
-    Path filePath = getTrackingFilePath(input);
+  public void saveScan(final String input) throws IOException {
+    final Path filePath = getTrackingFilePath(input);
     if (!filePath.toFile().exists()) {
       filePath.getParent().toFile().mkdirs();
       writeToFile(RfIdScan.HEADER_LINE, filePath);
@@ -35,50 +35,50 @@ public class RfidScanRepository {
     writeToFile(new RfIdScan(input).toCsvLine(), filePath);
   }
 
-  private Path getTrackingFilePath(String input) {
+  private Path getTrackingFilePath(final String input) {
     return Path.of(baseDir, TRACKING_FILE_PATH, input + ".csv");
   }
 
-  private Path getJournalFilePath(String input) {
+  private Path getJournalFilePath(final String input) {
     return Path.of(baseDir, JOURNAL_FILE_PATH, input + ".txt");
   }
 
-  private void writeToFile(String csvLine, Path filePath) throws IOException {
+  private void writeToFile(final String csvLine, final Path filePath) throws IOException {
     System.out.println(csvLine);
     Files.writeString(filePath, csvLine, UTF_8,
         StandardOpenOption.CREATE,
         StandardOpenOption.APPEND);
   }
 
-  public void createJournal(String input) throws IOException {
-    Path rfIdScanFilePath = getTrackingFilePath(input);
-    Path journalFilePath = getJournalFilePath(input);
-    List<RfIdScan> allScans = findAllRfIds(rfIdScanFilePath);
-    Employee employee = findEmployee(input);
-    String journal = new Journal(employee, allScans).printJournal();
+  public void createJournal(final String input) throws IOException {
+    final Path rfIdScanFilePath = getTrackingFilePath(input);
+    final Path journalFilePath = getJournalFilePath(input);
+    final List<RfIdScan> allScans = findAllRfIds(rfIdScanFilePath);
+    final Employee employee = findEmployee(input);
+    final String journal = new Journal(employee, allScans).printJournal();
     System.out.println(journal);
     writeNewFile(journalFilePath, journal);
   }
 
-  private void writeNewFile(Path filePath, String content) throws IOException {
+  private void writeNewFile(final Path filePath, final String content) throws IOException {
     filePath.getParent().toFile().mkdirs();
     Files.writeString(filePath, content, UTF_8,
         StandardOpenOption.CREATE,
         StandardOpenOption.TRUNCATE_EXISTING);
   }
 
-  private Employee findEmployee(String input) {
+  private Employee findEmployee(final String input) {
     return new Employee(input); //TODO find from config file
   }
 
-  private List<RfIdScan> findAllRfIds(Path filePath) {
+  private List<RfIdScan> findAllRfIds(final Path filePath) {
     try (Stream<String> stream = Files.lines(filePath, UTF_8)) {
       return stream
           .filter(s-> !s.startsWith("RFID"))// skip header line
           .map(RfIdScan::fromCsvLine)
           .distinct()
-          .collect(Collectors.toList());
-    } catch (IOException e) {
+          .collect(toList());
+    } catch (final IOException e) {
       throw new RuntimeException(e);
     }
   }
