@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Clock;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -14,6 +15,13 @@ import de.zaehlermann.timetracker.globals.Defaults;
 import de.zaehlermann.timetracker.model.RfidScan;
 
 public class RfidScanRepository extends AbstractCsvRepository {
+
+  private Clock clock;
+
+  public RfidScanRepository(final Clock clock) {
+    this.clock = clock;
+    new File(Defaults.BASE_DIR).mkdirs();
+  }
 
   public RfidScanRepository() {
     new File(Defaults.BASE_DIR).mkdirs();
@@ -25,7 +33,7 @@ public class RfidScanRepository extends AbstractCsvRepository {
       filePath.getParent().toFile().mkdirs();
       appendToFile(RfidScan.HEADER_LINE, filePath);
     }
-    final String csvLine = new RfidScan(rfid).toCsvLine();
+    final String csvLine = new RfidScan(clock, rfid).toCsvLine();
     appendToFile(csvLine, filePath);
     return csvLine;
   }

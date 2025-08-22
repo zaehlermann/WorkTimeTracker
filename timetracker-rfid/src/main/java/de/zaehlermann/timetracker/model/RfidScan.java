@@ -1,5 +1,6 @@
 package de.zaehlermann.timetracker.model;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +18,12 @@ public class RfidScan {
     this.rfid = rfid;
     this.workday = LocalDate.now();
     this.scanTime = LocalTime.now();
+  }
+
+  public RfidScan(final Clock clock, final String rfid) {
+    this.rfid = rfid;
+    this.workday = LocalDate.now(clock);
+    this.scanTime = LocalTime.now(clock);
   }
 
   public RfidScan(final String rfid, final String workday, final String scanTime) {
@@ -48,16 +55,15 @@ public class RfidScan {
 
   @Override
   public boolean equals(final Object o) {
-    if (!(o instanceof final RfidScan rfIdScan)) return false;
+    if(!(o instanceof final RfidScan rfIdScan)) return false;
     return Objects.equals(rfid, rfIdScan.rfid) &&
-        Objects.equals(workday, rfIdScan.workday) &&
-        Objects.equals(scanTime, rfIdScan.scanTime);
+           Objects.equals(workday, rfIdScan.workday) &&
+           Objects.equals(scanTime, rfIdScan.scanTime);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(rfid, workday, scanTime);
   }
-
 
 }
