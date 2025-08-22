@@ -10,14 +10,14 @@ import java.time.LocalTime;
 
 public class Workday {
 
-  public static final String HEADER_LINE = "DAY\t\t\tLOGIN\tLOGOUT\tHOURS\tSALDO";
+  public static final String HEADER_LINE = "DATE        LOGIN  LOGOUT HOURS  SALDO";
   private final LocalDate day;
   private final LocalTime login;
   private final LocalTime logout;
   private final Duration hoursDay;
   private final BigDecimal saldo;
 
-  public Workday(LocalDate day, LocalTime login, LocalTime logout) {
+  public Workday(final LocalDate day, final LocalTime login, final LocalTime logout) {
     this.day = day;
     this.login = login;
     this.logout = logout;
@@ -30,10 +30,10 @@ public class Workday {
   }
 
   public String toTxtLine() {
-    return day + "\t" +
-        login.format(TimeFormat.TIME_FORMAT) + "\t" +
-        logout.format(TimeFormat.TIME_FORMAT) + "\t" +
-        String.format("%02d", hoursDay.toHoursPart()) + ":" + String.format("%02d", hoursDay.toMinutesPart()) + "\t" +
+    return day + "  " +
+        login.format(TimeFormat.TIME_FORMAT) + "  " +
+        logout.format(TimeFormat.TIME_FORMAT) + "  " +
+        String.format("%02d", hoursDay.toHoursPart()) + ":" + String.format("%02d", hoursDay.toMinutesPart()) + "  " +
         saldo +
         System.lineSeparator();
   }

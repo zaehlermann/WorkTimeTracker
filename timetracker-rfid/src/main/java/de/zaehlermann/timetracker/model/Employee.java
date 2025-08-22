@@ -7,7 +7,7 @@ public class Employee {
   private final String firstName;
   private final String lastName;
 
-  public Employee(String rfid) {
+  public Employee(final String rfid) {
     this.rfid = rfid;
     this.userId = "0815";
     this.firstName = "Max";
@@ -16,8 +16,8 @@ public class Employee {
 
   @Override
   public String toString() {
-    return "EmployeeID: " + userId + "\t" +
-        "RFID:"  + rfid + "\t" +
-        "Name: " + firstName + " " + lastName;
+    return "EmployeeID: " + userId + System.lineSeparator() +
+           "RFID:" + rfid + System.lineSeparator() +
+           "Name: " + firstName + " " + lastName;
   }
 }

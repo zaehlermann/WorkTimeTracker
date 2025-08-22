@@ -31,17 +31,22 @@ public class RfidScanRepository {
     return csvLine;
   }
 
-  private Path getTrackingFilePath(final String input) {
-    return Path.of(Defaults.TRACKING_DIR, input + ".csv");
+  public List<String> findAllRfids() {
+    try(final Stream<Path> list = Files.list(Path.of(Defaults.TRACKING_DIR))) {
+      return list
+        .filter(Files::isRegularFile)
+        .map(path -> {
+          final String name = path.getFileName().toString();
+          final int dotIndex = name.lastIndexOf('.');
+          return (dotIndex > 0) ? name.substring(0, dotIndex) : name;
+        }).toList();
+    }
+    catch(final IOException e) {
+      throw new IllegalStateException("Error during reading all RFIDs", e);
+    }
   }
 
-  private void writeToFile(final String csvLine, final Path filePath) throws IOException {
-    Files.writeString(filePath, csvLine, UTF_8,
-                      StandardOpenOption.CREATE,
-                      StandardOpenOption.APPEND);
-  }
-
-  public List<RfidScan> findAllRfIds(final String input) {
+  public List<RfidScan> findAllRfIdScansByRfid(final String input) {
     final Path trackingFilePath = getTrackingFilePath(input);
     if(!trackingFilePath.toFile().exists()) {
       return Collections.emptyList();
@@ -57,5 +62,15 @@ public class RfidScanRepository {
     catch(final IOException e) {
       throw new IllegalStateException(e);
     }
+  }
+
+  private Path getTrackingFilePath(final String input) {
+    return Path.of(Defaults.TRACKING_DIR, input + ".csv");
+  }
+
+  private void writeToFile(final String csvLine, final Path filePath) throws IOException {
+    Files.writeString(filePath, csvLine, UTF_8,
+                      StandardOpenOption.CREATE,
+                      StandardOpenOption.APPEND);
   }
 }

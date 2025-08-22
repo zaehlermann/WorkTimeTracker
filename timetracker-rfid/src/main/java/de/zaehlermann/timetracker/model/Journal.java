@@ -17,12 +17,12 @@ public class Journal {
     this.employee = employee;
 
     final Map<LocalDate, List<RfidScan>> scansOfTheDay = allScans.stream()
-        .collect(Collectors.groupingBy(RfidScan::getWorkday));
+      .collect(Collectors.groupingBy(RfidScan::getWorkday));
 
     this.workdays = scansOfTheDay.entrySet().stream()
-        .map(Journal::createWorkDay)
-        .sorted(Comparator.comparing(Workday::getDay))
-        .toList();
+      .map(Journal::createWorkDay)
+      .sorted(Comparator.comparing(Workday::getDay))
+      .toList();
   }
 
   private static Workday createWorkDay(final Map.Entry<LocalDate, List<RfidScan>> e) {
@@ -31,15 +31,15 @@ public class Journal {
 
   public String printJournal() {
     final BigDecimal saldoSum = workdays.stream()
-        .map(Workday::getSaldo)
-        .reduce(BigDecimal.ZERO, BigDecimal::add);
+      .map(Workday::getSaldo)
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
     return employee.toString() + System.lineSeparator() +
-        SPLITLINE +
-        Workday.HEADER_LINE + System.lineSeparator() +
-        workdays.stream()
-            .map(Workday::toTxtLine)
-            .collect(Collectors.joining()) +
-        SPLITLINE +
-        "\t\t\t\t\t\t\t\t\t" + saldoSum;
+           SPLITLINE +
+           Workday.HEADER_LINE + System.lineSeparator() +
+           workdays.stream()
+             .map(Workday::toTxtLine)
+             .collect(Collectors.joining()) +
+           SPLITLINE +
+           "                                 " + saldoSum;
   }
 }
