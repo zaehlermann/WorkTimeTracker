@@ -25,7 +25,7 @@ public class Employee implements AbstractCsvEntity<Employee> {
   }
 
   public static Employee fromCsvLine(final String csvLine) {
-    final String[] split = csvLine.split(";");
+    final String[] split = csvLine.split(";",-1);
     return new Employee(split[0], split[1], split[2], split[3]);
   }
 

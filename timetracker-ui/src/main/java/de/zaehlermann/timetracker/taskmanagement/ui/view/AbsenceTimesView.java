@@ -1,7 +1,9 @@
 package de.zaehlermann.timetracker.taskmanagement.ui.view;
 
 import java.io.Serial;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -9,6 +11,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -56,6 +59,8 @@ public class AbsenceTimesView extends Main {
     selectType.setItems(absenceTypes);
     selectType.setValue(absenceTypes.getFirst());
 
+    startDateField.setValue(LocalDate.now());
+
     final VerticalLayout layout = new VerticalLayout();
     layout.setSizeFull();
 
@@ -71,12 +76,12 @@ public class AbsenceTimesView extends Main {
   }
 
   private void configureGrid() {
-    grid.addColumn(Absence::getEmployeeId).setHeader("Employee ID");
-    grid.addColumn(Absence::getStartDay).setHeader("Start Date");
-    grid.addColumn(Absence::getStartTime).setHeader("Start Time");
-    grid.addColumn(Absence::getEndDay).setHeader("End Day");
-    grid.addColumn(Absence::getEndTime).setHeader("End Time");
-    grid.addColumn(Absence::getType).setHeader("Type");
+    grid.addColumn(Absence::employeeId).setHeader("Employee ID");
+    grid.addColumn(Absence::startDay).setHeader("Start Date");
+    grid.addColumn(Absence::startTime).setHeader("Start Time");
+    grid.addColumn(Absence::endDay).setHeader("End Day");
+    grid.addColumn(Absence::endTime).setHeader("End Time");
+    grid.addColumn(Absence::type).setHeader("Type");
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
   }
 
@@ -101,22 +106,22 @@ public class AbsenceTimesView extends Main {
     ABSENCE_SERVICE.save(newAbsence);
     Notification.show("Absence saved");
     updateGrid();
-    deleteAbsence();
   }
 
   private void deleteAbsence() {
-    final Absence selected = grid.asSingleSelect().getValue();
-    if(selected != null) {
+    final Set<Absence> selected = grid.getSelectedItems();
+    if(!selected.isEmpty()) {
       ABSENCE_SERVICE.delete(selected);
-      Notification.show("Absence deleted");
+      Notification.show("Absence deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
       updateGrid();
     }
     else {
-      Notification.show("No absence selected for deletion");
+      Notification.show("No absence selected for deletion").addThemeVariants(NotificationVariant.LUMO_ERROR);
     }
   }
 
   private void updateGrid() {
     grid.setItems(ABSENCE_SERVICE.findAll());
   }
+
 }
