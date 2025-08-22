@@ -2,7 +2,7 @@ package de.zaehlermann.timetracker.repository;
 
 import java.nio.file.Path;
 
-import de.zaehlermann.timetracker.globals.Defaults;
+import de.zaehlermann.timetracker.globals.DefaultDirs;
 
 public class JournalRepository extends AbstractCsvRepository {
 
@@ -12,7 +12,7 @@ public class JournalRepository extends AbstractCsvRepository {
   }
 
   private Path getJournalFilePath(final String rfid) {
-    return Path.of(Defaults.JOURNAL_DIR, rfid + ".txt");
+    return Path.of(DefaultDirs.JOURNAL_DIR, rfid + ".txt");
   }
 
 }

@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import de.zaehlermann.timetracker.globals.Defaults;
+import de.zaehlermann.timetracker.globals.DefaultDirs;
 import de.zaehlermann.timetracker.model.RfidScan;
 
 public class RfidScanRepository extends AbstractCsvRepository {
@@ -20,11 +20,11 @@ public class RfidScanRepository extends AbstractCsvRepository {
 
   public RfidScanRepository(final Clock clock) {
     this.clock = clock;
-    new File(Defaults.BASE_DIR).mkdirs();
+    new File(DefaultDirs.BASE_DIR).mkdirs();
   }
 
   public RfidScanRepository() {
-    new File(Defaults.BASE_DIR).mkdirs();
+    new File(DefaultDirs.BASE_DIR).mkdirs();
   }
 
   public String saveScan(final String rfid) {
@@ -39,7 +39,7 @@ public class RfidScanRepository extends AbstractCsvRepository {
   }
 
   public List<String> findAllRfids() {
-    try(final Stream<Path> list = Files.list(Path.of(Defaults.TRACKING_DIR))) {
+    try(final Stream<Path> list = Files.list(Path.of(DefaultDirs.TRACKING_DIR))) {
       return list
         .filter(Files::isRegularFile)
         .map(path -> {
@@ -74,7 +74,7 @@ public class RfidScanRepository extends AbstractCsvRepository {
   }
 
   private Path getTrackingFilePath(final String input) {
-    return Path.of(Defaults.TRACKING_DIR, input + ".csv");
+    return Path.of(DefaultDirs.TRACKING_DIR, input + ".csv");
   }
 
 }
