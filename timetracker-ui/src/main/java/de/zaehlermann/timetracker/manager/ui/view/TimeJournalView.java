@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -16,6 +17,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.service.JournalService;
 import jakarta.annotation.security.PermitAll;
 
@@ -30,8 +32,6 @@ public class TimeJournalView extends Main {
   private static final JournalService JOURNAL_SERVICE = new JournalService();
 
   public TimeJournalView() {
-
-    final VerticalLayout layout = new VerticalLayout();
 
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
     final Select<String> selectEmployee = new Select<>();
@@ -63,9 +63,12 @@ public class TimeJournalView extends Main {
       textArea.setValue(journal);
     });
 
-    layout.add(selectEmployee, selectYear, selectMonth, button, textArea);
-    add(layout);
+    final FormLayout formLayout = new FormLayout(selectEmployee, selectYear, selectMonth, button);
+    final VerticalLayout verticalLayout = new VerticalLayout(formLayout, textArea);
+    verticalLayout.setSizeFull();
 
+    setSizeFull();
+    add(new ViewToolbar("Time Journal"));
+    add(verticalLayout);
   }
-
 }

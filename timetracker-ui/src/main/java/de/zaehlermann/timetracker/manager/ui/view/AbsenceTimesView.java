@@ -13,7 +13,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.timepicker.TimePicker;
@@ -21,6 +20,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.model.Absence;
 import de.zaehlermann.timetracker.model.AbsenceType;
 import de.zaehlermann.timetracker.service.AbsenceService;
@@ -62,16 +62,15 @@ public class AbsenceTimesView extends Main {
 
     startDateField.setValue(LocalDate.now());
 
-    final VerticalLayout layout = new VerticalLayout();
-    layout.setSizeFull();
-
+    final VerticalLayout verticalLayout = new VerticalLayout();
+    verticalLayout.setSizeFull();
+    verticalLayout.add(createForm());
     configureGrid();
-    layout.add(grid);
-
-    layout.add(createForm());
+    verticalLayout.add(grid);
 
     setSizeFull();
-    add(layout);
+    add(new ViewToolbar("Absence Times"));
+    add(verticalLayout);
 
     updateGrid();
   }
@@ -87,17 +86,13 @@ public class AbsenceTimesView extends Main {
   }
 
   private FormLayout createForm() {
-    final FormLayout formLayout = new FormLayout();
-    formLayout.add(selectEmployee, selectType, startDateField, startTimeField, endDateField, endTimeField);
-
     final Button saveButton = new Button("Save", event -> saveAbsence());
     saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     final Button deleteButton = new Button("Delete", event -> deleteAbsence());
-
-    final HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
-    formLayout.add(buttons);
-
-    return formLayout;
+    return new FormLayout(selectEmployee, selectType,
+                          startDateField, startTimeField,
+                          endDateField, endTimeField,
+                          saveButton, deleteButton);
   }
 
   private void saveAbsence() {
@@ -106,7 +101,7 @@ public class AbsenceTimesView extends Main {
                                            startDateField.getValue(), endDateField.getValue(),
                                            startTimeField.getValue(), endTimeField.getValue());
     ABSENCE_SERVICE.save(newAbsence);
-    Notification.show("Absence saved");
+    Notification.show("Absence saved").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     updateGrid();
   }
 
