@@ -3,24 +3,38 @@ package de.zaehlermann.timetracker.model;
 public enum AbsenceType {
 
   /**
+   * Wochenende
+   */
+  WEEKEND("WE"),
+
+  /**
    * Krank
    */
-  SICKNESS,
+  SICKNESS("K"),
   /**
    * Urlaub
    */
-  VACATION,
+  VACATION("U"),
   /**
    * Entschuldigt abwesent, z.B. privater Termin mitten am Tag
    */
-  ALLOWED_ABSENCE,
+  ALLOWED_ABSENCE("EA"),
   /**
    * Feiertag
    */
-  PUBLIC_HOLIDAY,
+  PUBLIC_HOLIDAY("F"),
   /**
    * Betriebsferien
    */
-  COMPANY_HOLIDAY;
+  COMPANY_HOLIDAY("BF");
 
+  private final String display;
+
+  AbsenceType(final String display) {
+    this.display = display;
+  }
+
+  public String getDisplay() {
+    return display;
+  }
 }
