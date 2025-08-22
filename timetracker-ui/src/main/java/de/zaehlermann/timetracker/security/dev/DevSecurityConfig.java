@@ -52,7 +52,7 @@ class DevSecurityConfig {
 
     private static final Logger log = LoggerFactory.getLogger(DevSecurityConfig.class);
 
-    DevSecurityConfig(Environment environment) {
+    DevSecurityConfig(final Environment environment) {
         if (!isRunningLocally(environment)) {
             log.error("Development security config attempted in non-local environment");
             throw new IllegalStateException("Development security can only be used when running locally");
@@ -64,7 +64,7 @@ class DevSecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http.with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(DevLoginView.LOGIN_PATH))
                 .build();
     }
@@ -84,14 +84,14 @@ class DevSecurityConfig {
                 log.warn("║ If you are seeing this in production, you should check your application configuration! ║");
                 log.warn("╚════════════════════════════════════════════════════════════════════════════════════════╝");
             }
-            var routeConfiguration = RouteConfiguration.forApplicationScope();
+            final RouteConfiguration routeConfiguration = RouteConfiguration.forApplicationScope();
             routeConfiguration.setRoute(DevLoginView.LOGIN_PATH, DevLoginView.class);
         };
     }
 
-    private boolean isRunningLocally(Environment environment) {
-        boolean hasUserHome = System.getProperty("user.home") != null;
-        CloudPlatform activePlatform = CloudPlatform.getActive(environment);
+    private boolean isRunningLocally(final Environment environment) {
+        final boolean hasUserHome = System.getProperty("user.home") != null;
+        final CloudPlatform activePlatform = CloudPlatform.getActive(environment);
 
         log.info("Local environment check - User home: {}, Cloud platform: {}", hasUserHome, activePlatform);
 
