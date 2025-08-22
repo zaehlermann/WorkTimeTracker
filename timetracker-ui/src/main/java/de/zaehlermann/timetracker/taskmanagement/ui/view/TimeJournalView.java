@@ -33,7 +33,6 @@ public class TimeJournalView extends Main {
     final VerticalLayout layout = new VerticalLayout();
 
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
-
     final Select<String> selectEmployee = new Select<>();
     selectEmployee.setLabel("Employee");
     selectEmployee.setItems(allEmployeeNames); // select from the employee file

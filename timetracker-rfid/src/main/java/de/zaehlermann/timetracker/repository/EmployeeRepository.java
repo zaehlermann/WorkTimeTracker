@@ -35,14 +35,14 @@ public class EmployeeRepository extends AbstractCsvRepository {
     return Path.of(Defaults.EMPLOYEE_DIR, "employees.csv");
   }
 
-  public Employee findEmployee(final String rfid) {
+  public Employee findEmployeeByEmployeeId(final String employeeId) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       return lines
         .map(Employee::fromCsvLine)
-        .filter(e -> rfid.equals(e.getRfid()))
+        .filter(e -> employeeId.equals(e.getEmployeeId()))
         .findFirst()
-        .orElse(new Employee(rfid, UNKNOWN, UNKNOWN, UNKNOWN));
+        .orElse(new Employee(employeeId, UNKNOWN, UNKNOWN, UNKNOWN));
     }
     catch(final IOException e) {
       throw new IllegalStateException("Error during reading file from path " + filePath, e);

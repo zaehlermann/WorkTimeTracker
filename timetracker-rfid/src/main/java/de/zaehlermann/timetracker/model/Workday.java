@@ -53,7 +53,7 @@ public class Workday {
   public String toTxtLine() {
     return day + "  " +
            day.getDayOfWeek().getValue() + "  " +
-           String.format("%-3s", absenceType != null ? absenceType.getDisplay() : "") + "  " +
+           String.format("%-3s", absenceType != null ? absenceType.getPrintValue() : "") + "  " +
            String.format("%-5s", login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + "  " +
            String.format("%-6s", logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + "  " +
            String.format("%02d", hoursDayInPlace.toHoursPart()) + ":" +
