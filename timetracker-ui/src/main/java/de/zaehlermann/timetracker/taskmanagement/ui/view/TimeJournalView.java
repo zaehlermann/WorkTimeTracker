@@ -56,7 +56,10 @@ public class TimeJournalView extends Main {
     add(textArea);
 
     final Button button = new Button("Create Journal");
-    button.addClickListener(clickEvent -> textArea.setValue(JOURNAL_SERVICE.createJournal(selectEmployee.getValue())));
+    button.addClickListener(clickEvent -> {
+      final String journal = JOURNAL_SERVICE.createJournal(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
+      textArea.setValue(journal);
+    });
 
     layout.add(selectEmployee, selectYear, selectMonth, button, textArea);
     add(layout);

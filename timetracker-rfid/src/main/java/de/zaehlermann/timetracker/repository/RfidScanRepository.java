@@ -53,7 +53,7 @@ public class RfidScanRepository extends AbstractCsvRepository {
     }
   }
 
-  public List<RfidScan> findAllRfIdScansByRfid(final String rfid) {
+  public List<RfidScan> findAllRfIdScansByRfid(final String rfid, final Integer year, final Integer month) {
     final Path trackingFilePath = getTrackingFilePath(rfid);
     if(!trackingFilePath.toFile().exists()) {
       return Collections.emptyList();
@@ -63,6 +63,8 @@ public class RfidScanRepository extends AbstractCsvRepository {
       return stream
         .filter(s -> !s.startsWith("RFID"))// skip header line
         .map(RfidScan::fromCsvLine)
+        .filter(scan -> (year == null || scan.getWorkday().getYear() == year) &&
+                        (month == null || scan.getWorkday().getMonthValue() == month))
         .distinct()
         .toList();
     }
