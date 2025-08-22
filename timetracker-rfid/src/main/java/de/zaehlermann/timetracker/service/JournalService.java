@@ -19,7 +19,7 @@ public class JournalService {
     final List<RfidScan> allScans = rfidScanRepository.findAllRfIdScansByRfid(rfid);
     final Employee employee = employeeRepository.findEmployee(rfid);
     final String journal = new Journal(employee, allScans).printJournal();
-    journalRepository.writeNewFile(rfid, journal);
+    journalRepository.saveToFile(rfid, journal);
     return journal;
   }
 

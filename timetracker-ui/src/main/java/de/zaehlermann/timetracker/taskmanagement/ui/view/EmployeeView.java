@@ -1,16 +1,10 @@
 package de.zaehlermann.timetracker.taskmanagement.ui.view;
 
-import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRequest;
-
 import java.io.Serial;
-import java.time.Clock;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Optional;
+import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
@@ -22,8 +16,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
-import de.zaehlermann.timetracker.taskmanagement.domain.Task;
-import de.zaehlermann.timetracker.taskmanagement.service.TaskService;
+import de.zaehlermann.timetracker.model.Employee;
+import de.zaehlermann.timetracker.service.EmployeeService;
 import jakarta.annotation.security.PermitAll;
 
 @Route("task-list")
@@ -34,58 +28,89 @@ public class EmployeeView extends Main {
 
   @Serial
   private static final long serialVersionUID = -8665685480589825450L;
-  private final TaskService taskService;
+  private static final EmployeeService EMPLOYEE_SERVICE = new EmployeeService();
 
-  final TextField description;
-  final DatePicker dueDate;
-  final Button createBtn;
-  final Grid<Task> taskGrid;
+  private final TextField employeeId = new TextField();
+  private final TextField rfid = new TextField();
+  private final TextField firstName = new TextField();
+  private final TextField lastName = new TextField();
 
-  public EmployeeView(final TaskService taskService, final Clock clock) {
-    this.taskService = taskService;
+  private final Button saveBtn;
+  private final Button deleteBtn;
+  final Grid<Employee> employeeGrid;
 
-    description = new TextField();
-    description.setPlaceholder("Manage your employees.");
-    description.setAriaLabel("Task description");
-    description.setMaxLength(Task.DESCRIPTION_MAX_LENGTH);
-    description.setMinWidth("20em");
+  public EmployeeView() {
 
-    dueDate = new DatePicker();
-    dueDate.setPlaceholder("Due date");
-    dueDate.setAriaLabel("Due date");
+    employeeId.setPlaceholder("Employee ID");
+    rfid.setPlaceholder("RFID");
+    firstName.setPlaceholder("First Name");
+    lastName.setPlaceholder("Last Name");
 
-    createBtn = new Button("Create", event -> createTask());
-    createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    employeeId.setRequired(true);
+    rfid.setRequired(true);
+    firstName.setRequired(true);
+    lastName.setRequired(true);
 
-    final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withZone(clock.getZone())
-      .withLocale(getLocale());
-    final DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(getLocale());
+    saveBtn = new Button("Save", event -> createTask());
+    saveBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    deleteBtn = new Button("Delete", event -> deleteTask());
 
-    taskGrid = new Grid<>();
-    taskGrid.setItems(query -> taskService.list(toSpringPageRequest(query)).stream());
+    employeeGrid = new Grid<>();
+    employeeGrid.setItems(EMPLOYEE_SERVICE.findAll());
 
     // columns
-    taskGrid.addColumn(Task::getDescription).setHeader("Name");
-    taskGrid.addColumn(task -> Optional.ofNullable(task.getDueDate()).map(dateFormatter::format).orElse("Never")).setHeader("Due Date");
-    taskGrid.addColumn(task -> dateTimeFormatter.format(task.getCreationDate())).setHeader("Creation Date");
-
-    taskGrid.setSizeFull();
+    employeeGrid.addColumn(Employee::getEmployeeId).setHeader("Employee ID");
+    employeeGrid.addColumn(Employee::getRfid).setHeader("RFID");
+    employeeGrid.addColumn(Employee::getFirstName).setHeader("First Name");
+    employeeGrid.addColumn(Employee::getLastName).setHeader("Last Name");
+    employeeGrid.setSizeFull();
 
     setSizeFull();
     addClassNames(LumoUtility.BoxSizing.BORDER, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN,
                   LumoUtility.Padding.MEDIUM, LumoUtility.Gap.SMALL);
 
-    add(new ViewToolbar("Employee Configuration", ViewToolbar.group(description, dueDate, createBtn)));
-    add(taskGrid);
+    add(new ViewToolbar("Employees", ViewToolbar.group(employeeId, rfid, firstName, lastName, saveBtn, deleteBtn)));
+    add(employeeGrid);
   }
 
   private void createTask() {
-    taskService.createTask(description.getValue(), dueDate.getValue());
-    taskGrid.getDataProvider().refreshAll();
-    description.clear();
-    dueDate.clear();
-    Notification.show("Task added", 3000, Notification.Position.BOTTOM_END)
+
+    final boolean isValid = validate(List.of(rfid, firstName, lastName, employeeId));
+    if(!isValid) {
+      Notification.show("Please fill all required fields", 3000, Notification.Position.BOTTOM_END)
+        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+      return;
+    }
+
+    EMPLOYEE_SERVICE.addEmployee(new Employee(employeeId.getValue(), rfid.getValue(), firstName.getValue(), lastName.getValue()));
+    employeeGrid.setItems(EMPLOYEE_SERVICE.findAll());
+    employeeId.clear();
+    rfid.clear();
+    firstName.clear();
+    lastName.clear();
+    Notification.show("Employee added", 3000, Notification.Position.BOTTOM_END)
       .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+  }
+
+  private void deleteTask() {
+    employeeGrid.setItems(EMPLOYEE_SERVICE.deleteByRfid(employeeGrid.getSelectedItems()));
+    Notification.show("Employee deleted", 3000, Notification.Position.BOTTOM_END)
+      .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+  }
+
+  private boolean validate(final List<TextField> textFields) {
+    final boolean isInvalid = textFields.stream()
+      .map(this::validate)
+      .toList()
+      .stream()
+      .anyMatch(e -> e.equals(false));
+    return !isInvalid;
+  }
+
+  private boolean validate(final TextField textField) {
+    final boolean invalid = textField.getValue() == null || textField.getValue().trim().isEmpty();
+    textField.setInvalid(invalid);
+    return !invalid;
   }
 
 }

@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -14,20 +13,20 @@ import java.util.stream.Stream;
 import de.zaehlermann.timetracker.globals.Defaults;
 import de.zaehlermann.timetracker.model.RfidScan;
 
-public class RfidScanRepository {
+public class RfidScanRepository extends AbstractCsvRepository {
 
   public RfidScanRepository() {
     new File(Defaults.BASE_DIR).mkdirs();
   }
 
-  public String saveScan(final String input) throws IOException {
-    final Path filePath = getTrackingFilePath(input);
+  public String saveScan(final String rfid) {
+    final Path filePath = getTrackingFilePath(rfid);
     if(!filePath.toFile().exists()) {
       filePath.getParent().toFile().mkdirs();
-      writeToFile(RfidScan.HEADER_LINE, filePath);
+      appendToFile(RfidScan.HEADER_LINE, filePath);
     }
-    final String csvLine = new RfidScan(input).toCsvLine();
-    writeToFile(csvLine, filePath);
+    final String csvLine = new RfidScan(rfid).toCsvLine();
+    appendToFile(csvLine, filePath);
     return csvLine;
   }
 
@@ -46,8 +45,8 @@ public class RfidScanRepository {
     }
   }
 
-  public List<RfidScan> findAllRfIdScansByRfid(final String input) {
-    final Path trackingFilePath = getTrackingFilePath(input);
+  public List<RfidScan> findAllRfIdScansByRfid(final String rfid) {
+    final Path trackingFilePath = getTrackingFilePath(rfid);
     if(!trackingFilePath.toFile().exists()) {
       return Collections.emptyList();
     }
@@ -68,9 +67,4 @@ public class RfidScanRepository {
     return Path.of(Defaults.TRACKING_DIR, input + ".csv");
   }
 
-  private void writeToFile(final String csvLine, final Path filePath) throws IOException {
-    Files.writeString(filePath, csvLine, UTF_8,
-                      StandardOpenOption.CREATE,
-                      StandardOpenOption.APPEND);
-  }
 }
