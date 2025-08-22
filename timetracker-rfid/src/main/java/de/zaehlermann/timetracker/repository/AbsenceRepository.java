@@ -7,9 +7,10 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
+
 import de.zaehlermann.timetracker.globals.Defaults;
 import de.zaehlermann.timetracker.model.Absence;
-import de.zaehlermann.timetracker.model.Employee;
 
 public class AbsenceRepository extends AbstractCsvRepository {
 
@@ -34,14 +35,17 @@ public class AbsenceRepository extends AbstractCsvRepository {
     return Path.of(Defaults.EMPLOYEE_DIR, "absence.csv");
   }
 
-  public Absence findEmployeeByEmployeeId(final String employeeId) {
+  @Nonnull
+  public List<Absence> findAbsencesByEmployeeId(final String employeeId, final Integer year, final Integer month) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       return lines
+        .filter(line -> !line.isEmpty())
+        .filter(line -> !line.equals(Absence.HEADER_LINE))
         .map(Absence::fromCsvLine)
         .filter(e -> employeeId.equals(e.employeeId()))
-        .findFirst()
-        .orElse(null);
+        .filter(e -> e.isInMonth(year, month))
+        .toList();
     }
     catch(final IOException e) {
       throw new IllegalStateException("Error during reading file from path " + filePath, e);

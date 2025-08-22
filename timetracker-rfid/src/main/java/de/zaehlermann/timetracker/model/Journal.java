@@ -7,13 +7,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nonnull;
+
 public class Journal {
 
   public static final String SPLIT_LINE = "==================================================" + System.lineSeparator();
   private final Employee employee;
   private final List<Workday> workdays;
 
-  public Journal(final Employee employee, final List<RfidScan> allScans, final Integer year, final Integer month) {
+  public Journal(@Nonnull final Employee employee,
+                 @Nonnull final List<Absence> absences,
+                 @Nonnull final List<RfidScan> allScans,
+                 @Nonnull final Integer year,
+                 @Nonnull final Integer month) {
     this.employee = employee;
 
     final Map<LocalDate, List<RfidScan>> scansOfTheDay = allScans.stream()
@@ -25,18 +31,25 @@ public class Journal {
     firstDayOfMonth.datesUntil(endOfTheMonth).forEach(d -> scansOfTheDay.putIfAbsent(d, List.of()));
 
     this.workdays = scansOfTheDay.entrySet().stream()
-      .map(Journal::createWorkDay)
+      .map(e -> createWorkDay(e, absences))
       .sorted(Comparator.comparing(Workday::getDay))
       .toList();
   }
 
-  private static Workday createWorkDay(final Map.Entry<LocalDate, List<RfidScan>> e) {
+  @Nonnull
+  private static Workday createWorkDay(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> e, @Nonnull final List<Absence> absences) {
     final boolean hasNoScans = e.getValue().isEmpty();
-    return new Workday(e.getKey(),
+    final LocalDate day = e.getKey();
+    final Absence absenceForDay = absences.stream()
+      .filter(a -> a.isInDay(day))
+      .findFirst()
+      .orElse(null);
+    return new Workday(day, absenceForDay,
                        hasNoScans ? null : e.getValue().getFirst().getScanTime(),
                        hasNoScans ? null : e.getValue().getLast().getScanTime());
   }
 
+  @Nonnull
   public String printJournal() {
     final BigDecimal saldoSum = workdays.stream()
       .map(Workday::getSaldo)
