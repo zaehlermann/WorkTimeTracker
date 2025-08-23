@@ -16,7 +16,7 @@ import de.zaehlermann.timetracker.model.RfidScan;
 
 public class RfidScanRepository extends AbstractCsvRepository {
 
-  private Clock clock;
+  private final Clock clock;
 
   public RfidScanRepository(final Clock clock) {
     this.clock = clock;
@@ -24,6 +24,7 @@ public class RfidScanRepository extends AbstractCsvRepository {
   }
 
   public RfidScanRepository() {
+    this.clock = Clock.systemDefaultZone();
     new File(DefaultDirs.RECORDS_BASE_DIR).mkdirs();
   }
 
