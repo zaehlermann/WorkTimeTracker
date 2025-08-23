@@ -20,11 +20,11 @@ public class RfidScanRepository extends AbstractCsvRepository {
 
   public RfidScanRepository(final Clock clock) {
     this.clock = clock;
-    new File(DefaultDirs.BASE_DIR).mkdirs();
+    new File(DefaultDirs.RECORDS_BASE_DIR).mkdirs();
   }
 
   public RfidScanRepository() {
-    new File(DefaultDirs.BASE_DIR).mkdirs();
+    new File(DefaultDirs.RECORDS_BASE_DIR).mkdirs();
   }
 
   public String saveScan(final String rfid) {
