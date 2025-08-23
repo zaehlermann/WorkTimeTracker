@@ -5,6 +5,8 @@ import static java.util.Objects.requireNonNull;
 import java.time.ZoneId;
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
+
 import org.jspecify.annotations.Nullable;
 
 import de.zaehlermann.timetracker.security.AppUserInfo;
@@ -44,41 +46,49 @@ record DevUserInfo(UserId userId, String preferredUsername, String fullName, @Nu
   }
 
   @Override
+  @Nonnull
   public UserId getUserId() {
     return userId;
   }
 
   @Override
+  @Nonnull
   public String getPreferredUsername() {
     return preferredUsername;
   }
 
   @Override
+  @Nonnull
   public String getFullName() {
     return fullName;
   }
 
   @Override
-  public @Nullable String getProfileUrl() {
+  @Nullable
+  public String getProfileUrl() {
     return profileUrl;
   }
 
   @Override
-  public @Nullable String getPictureUrl() {
+  @Nullable
+  public String getPictureUrl() {
     return pictureUrl;
   }
 
   @Override
-  public @Nullable String getEmail() {
+  @Nullable
+  public String getEmail() {
     return email;
   }
 
   @Override
+  @Nonnull
   public ZoneId getZoneId() {
     return zoneId;
   }
 
   @Override
+  @Nonnull
   public Locale getLocale() {
     return locale;
   }

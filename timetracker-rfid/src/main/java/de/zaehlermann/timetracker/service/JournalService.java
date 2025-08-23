@@ -17,16 +17,16 @@ import de.zaehlermann.timetracker.repository.RfidScanRepository;
 
 public class JournalService {
 
-  private final RfidScanRepository rfidScanRepository = new RfidScanRepository();
-  private final JournalRepository journalRepository = new JournalRepository();
-  private final EmployeeRepository employeeRepository = new EmployeeRepository();
-  private final AbsenceRepository absenceRepository = new AbsenceRepository();
+  private static final RfidScanRepository RFID_SCAN_REPOSITORY = new RfidScanRepository();
+  private static final JournalRepository JOURNAL_REPOSITORY = new JournalRepository();
+  private static final EmployeeRepository EMPLOYEE_REPOSITORY = new EmployeeRepository();
+  private static final AbsenceRepository ABSENCE_REPOSITORY = new AbsenceRepository();
 
   @Nonnull
   public String createAndSaveJournalTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nonnull final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalTxt();
-    journalRepository.saveToTxtFile(employeeId, journalTxt);
+    JOURNAL_REPOSITORY.saveToTxtFile(employeeId, journalTxt);
     return journalTxt;
   }
 
@@ -34,27 +34,27 @@ public class JournalService {
   public File downloadCsv(@Nonnull final String employeeId, @Nonnull final Integer year, @Nonnull final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalCsv();
-    return journalRepository.saveToCsvFile(employeeId, journalTxt);
+    return JOURNAL_REPOSITORY.saveToCsvFile(employeeId, journalTxt);
   }
 
   @Nonnull
   public File downloadTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nonnull final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalTxt();
-    return journalRepository.saveToTxtFile(employeeId, journalTxt);
+    return JOURNAL_REPOSITORY.saveToTxtFile(employeeId, journalTxt);
   }
 
   @Nonnull
   private Journal createJournal(@Nonnull final String employeeId, @Nonnull final Integer year, @Nonnull final Integer month) {
-    final Employee employee = employeeRepository.findEmployeeByEmployeeId(employeeId);
-    final List<Absence> absences = absenceRepository.findAbsencesByEmployeeId(employeeId, year, month);
-    final List<RfidScan> allScans = rfidScanRepository.findAllRfIdScansByRfid(employee.getRfid(), year, month);
+    final Employee employee = EMPLOYEE_REPOSITORY.findEmployeeByEmployeeId(employeeId);
+    final List<Absence> absences = ABSENCE_REPOSITORY.findAbsencesByEmployeeId(employeeId, year, month);
+    final List<RfidScan> allScans = RFID_SCAN_REPOSITORY.findAllRfIdScansByRfid(employee.getRfid(), year, month);
     return new Journal(employee, absences, allScans, year, month);
   }
 
   @Nonnull
   public List<String> getAllEmployeeNames() {
-    return employeeRepository.findAll().stream()
+    return EMPLOYEE_REPOSITORY.findAll().stream()
       .map(Employee::getEmployeeId)
       .toList();
   }

@@ -121,11 +121,16 @@
   </build>
 
   <profiles>
+
     <profile>
-      <id>production</id>
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
+      <id>local-development</id>
+    </profile>
+
+    <profile>
+      <id>production</id>
       <dependencies>
         <dependency>
           <!-- Exclude development dependencies from production -->

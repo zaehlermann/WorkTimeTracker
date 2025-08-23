@@ -2,6 +2,7 @@ package de.zaehlermann.timetracker.security.dev;
 
 import static java.util.Objects.requireNonNull;
 
+import java.io.Serial;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
+
+import javax.annotation.Nonnull;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
@@ -56,6 +59,8 @@ import de.zaehlermann.timetracker.security.domain.UserId;
  */
 final class DevUser implements AppUserPrincipal, UserDetails {
 
+  @Serial
+  private static final long serialVersionUID = -1212955476671135975L;
   private final AppUserInfo appUser;
   private final Set<GrantedAuthority> authorities;
   private final String password;
@@ -67,11 +72,13 @@ final class DevUser implements AppUserPrincipal, UserDetails {
   }
 
   @Override
+  @Nonnull
   public AppUserInfo getAppUser() {
     return appUser;
   }
 
   @Override
+  @Nonnull
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return authorities;
   }

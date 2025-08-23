@@ -87,7 +87,7 @@ public final class SampleUsers {
    * require administrative access.
    * </p>
    */
-  private static DevUser ADMIN = DevUser.builder()
+  private static final DevUser ADMIN = DevUser.builder()
     .preferredUsername(ADMIN_USERNAME)
     .fullName("Administrator")
     .userId(ADMIN_ID)
@@ -118,8 +118,13 @@ public final class SampleUsers {
    * access.
    * </p>
    */
-  static final DevUser USER = DevUser.builder().preferredUsername(USER_USERNAME).fullName("Ursula User")
-    .userId(USER_ID).password(SAMPLE_PASSWORD).email("ursula@example.com").roles(AppRoles.USER).build();
+  static final DevUser USER = DevUser.builder()
+    .preferredUsername(USER_USERNAME)
+    .fullName("Ursula User")
+    .userId(USER_ID)
+    .password(SAMPLE_PASSWORD)
+    .email("ursula@example.com")
+    .roles(AppRoles.USER).build();
 
   /**
    * An unmodifiable list containing all sample users.
