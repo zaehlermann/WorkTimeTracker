@@ -1,13 +1,14 @@
 package de.zaehlermann.timetracker.security.dev;
 
-import de.zaehlermann.timetracker.security.AppUserInfo;
-import de.zaehlermann.timetracker.security.domain.UserId;
-import org.jspecify.annotations.Nullable;
+import static java.util.Objects.requireNonNull;
 
 import java.time.ZoneId;
 import java.util.Locale;
 
-import static java.util.Objects.requireNonNull;
+import org.jspecify.annotations.Nullable;
+
+import de.zaehlermann.timetracker.security.AppUserInfo;
+import de.zaehlermann.timetracker.security.domain.UserId;
 
 /**
  * Implementation of {@link AppUserInfo} used by {@link DevUser} for development environments.
@@ -20,74 +21,65 @@ import static java.util.Objects.requireNonNull;
  * This implementation is specifically designed for development and test environments and should not be used in
  * production. It's primarily used by the {@link DevUser} class to represent test user information.
  * </p>
- *
- * @param userId
- *            the unique identifier for the user (never {@code null})
- * @param preferredUsername
- *            the user's preferred username (never {@code null}).
- * @param fullName
- *            the user's full name (never {@code null})
- * @param profileUrl
- *            the URL to the user's profile page, or {@code null} if not available
- * @param pictureUrl
- *            the URL to the user's profile picture, or {@code null} if not available
- * @param email
- *            the user's email address, or {@code null} if not available
- * @param zoneId
- *            the user's time zone (never {@code null})
- * @param locale
- *            the user's locale (never {@code null})
+ * @param userId the unique identifier for the user (never {@code null})
+ * @param preferredUsername the user's preferred username (never {@code null}).
+ * @param fullName the user's full name (never {@code null})
+ * @param profileUrl the URL to the user's profile page, or {@code null} if not available
+ * @param pictureUrl the URL to the user's profile picture, or {@code null} if not available
+ * @param email the user's email address, or {@code null} if not available
+ * @param zoneId the user's time zone (never {@code null})
+ * @param locale the user's locale (never {@code null})
  * @see DevUser The development user class that uses this record
  * @see AppUserInfo The interface this record implements
  */
 record DevUserInfo(UserId userId, String preferredUsername, String fullName, @Nullable String profileUrl,
-        @Nullable String pictureUrl, @Nullable String email, ZoneId zoneId, Locale locale) implements AppUserInfo {
+                   @Nullable String pictureUrl, @Nullable String email, ZoneId zoneId, Locale locale) implements AppUserInfo {
 
-    DevUserInfo {
-        requireNonNull(userId);
-        requireNonNull(preferredUsername);
-        requireNonNull(fullName);
-        requireNonNull(zoneId);
-        requireNonNull(locale);
-    }
+  DevUserInfo {
+    requireNonNull(userId);
+    requireNonNull(preferredUsername);
+    requireNonNull(fullName);
+    requireNonNull(zoneId);
+    requireNonNull(locale);
+  }
 
-    @Override
-    public UserId getUserId() {
-        return userId;
-    }
+  @Override
+  public UserId getUserId() {
+    return userId;
+  }
 
-    @Override
-    public String getPreferredUsername() {
-        return preferredUsername;
-    }
+  @Override
+  public String getPreferredUsername() {
+    return preferredUsername;
+  }
 
-    @Override
-    public String getFullName() {
-        return fullName;
-    }
+  @Override
+  public String getFullName() {
+    return fullName;
+  }
 
-    @Override
-    public @Nullable String getProfileUrl() {
-        return profileUrl;
-    }
+  @Override
+  public @Nullable String getProfileUrl() {
+    return profileUrl;
+  }
 
-    @Override
-    public @Nullable String getPictureUrl() {
-        return pictureUrl;
-    }
+  @Override
+  public @Nullable String getPictureUrl() {
+    return pictureUrl;
+  }
 
-    @Override
-    public @Nullable String getEmail() {
-        return email;
-    }
+  @Override
+  public @Nullable String getEmail() {
+    return email;
+  }
 
-    @Override
-    public ZoneId getZoneId() {
-        return zoneId;
-    }
+  @Override
+  public ZoneId getZoneId() {
+    return zoneId;
+  }
 
-    @Override
-    public Locale getLocale() {
-        return locale;
-    }
+  @Override
+  public Locale getLocale() {
+    return locale;
+  }
 }

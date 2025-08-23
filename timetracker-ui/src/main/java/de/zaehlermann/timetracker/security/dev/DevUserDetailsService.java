@@ -1,13 +1,13 @@
 package de.zaehlermann.timetracker.security.dev;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * Implementation of {@link UserDetailsService} for development environments.
@@ -44,31 +44,28 @@ import java.util.Optional;
  * </pre>
  * <!-- spotless:on -->
  * </p>
- *
  * @see DevUser The development user class stored in this service
  * @see UserDetailsService Spring Security's interface for loading user authentication details
  */
 final class DevUserDetailsService implements UserDetailsService {
 
-    private final Map<String, UserDetails> userByUsername;
+  private final Map<String, UserDetails> userByUsername;
 
-    /**
-     * Creates a new service with the specified development users.
-     * <p>
-     * This constructor stores the provided users in memory, indexing them by preferred username for efficient lookups.
-     * </p>
-     *
-     * @param users
-     *            the development users to include in this service
-     */
-    DevUserDetailsService(Collection<DevUser> users) {
-        userByUsername = new HashMap<>();
-        users.forEach(user -> userByUsername.put(user.getAppUser().getPreferredUsername(), user));
-    }
+  /**
+   * Creates a new service with the specified development users.
+   * <p>
+   * This constructor stores the provided users in memory, indexing them by preferred username for efficient lookups.
+   * </p>
+   * @param users the development users to include in this service
+   */
+  DevUserDetailsService(final Collection<DevUser> users) {
+    userByUsername = new HashMap<>();
+    users.forEach(user -> userByUsername.put(user.getAppUser().getPreferredUsername(), user));
+  }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return Optional.ofNullable(userByUsername.get(username))
-                .orElseThrow(() -> new UsernameNotFoundException(username));
-    }
+  @Override
+  public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+    return Optional.ofNullable(userByUsername.get(username))
+      .orElseThrow(() -> new UsernameNotFoundException(username));
+  }
 }
