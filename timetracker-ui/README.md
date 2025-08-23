@@ -30,8 +30,20 @@ docker build -t my-application:latest .
 ```
 
 # Deploy to Raspberry Pi
+
 My raspberry pi has the dnc timetrcker.local
 
 ```bash
 scp target/timetracker-ui-1.0-SNAPSHOT.jar mike@timetracker.local:/home/mike/timetracker
+```
+
+copy the auto start service file timetracker.service to /etc/systemd/system
+Enable and start the service:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable timetracker
+sudo systemctl start timetracker
+sudo systemctl status timetracker
+watch -n 2 sudo systemctl status timetracker
 ```
