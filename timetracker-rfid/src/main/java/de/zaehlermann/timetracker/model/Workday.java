@@ -62,7 +62,8 @@ public class Workday {
     return day;
   }
 
-  public static final String HEADER_LINE = "DATE        D  OFF  LOGIN  LOGOUT  HOURS  SALDO";
+  public static final String HEADER_LINE_TXT = "DATE        D  OFF  LOGIN  LOGOUT  HOURS  SALDO";
+  public static final String HEADER_LINE_CSV = "DATE;D;OFF;LOGIN;LOGOUT;HOURS;SALDO";
 
   public String toTxtLine() {
     return day + "  " +
@@ -70,8 +71,18 @@ public class Workday {
            String.format("%-3s", absenceType != null ? absenceType.getPrintValue() : "") + "  " +
            String.format("%-5s", login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + "  " +
            String.format("%-6s", logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + "  " +
-           String.format("%02d", hoursDayInPlace.toHoursPart()) + ":" +
-           String.format("%02d", hoursDayInPlace.toMinutesPart()) + "  " +
+           String.format("%02d", hoursDayInPlace.toHoursPart()) + ":" + String.format("%02d", hoursDayInPlace.toMinutesPart()) + "  " +
+           String.format("%+.2f", saldo) +
+           System.lineSeparator();
+  }
+
+  public String toCsvLine() {
+    return day + ";" +
+           day.getDayOfWeek().getValue() + ";" +
+           (absenceType != null ? absenceType.getPrintValue() : "") + ";" +
+           (login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + ";" +
+           (logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + ";" +
+           String.format("%02d", hoursDayInPlace.toHoursPart()) + ":" + String.format("%02d", hoursDayInPlace.toMinutesPart()) + ";" +
            String.format("%+.2f", saldo) +
            System.lineSeparator();
   }
@@ -79,4 +90,5 @@ public class Workday {
   public BigDecimal getSaldo() {
     return saldo;
   }
+
 }

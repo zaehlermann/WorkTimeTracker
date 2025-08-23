@@ -50,17 +50,31 @@ public class Journal {
   }
 
   @Nonnull
-  public String printJournal() {
+  public String printJournalTxt() {
     final BigDecimal saldoSum = workdays.stream()
       .map(Workday::getSaldo)
       .reduce(BigDecimal.ZERO, BigDecimal::add);
     return employee.toJournalHeader() + System.lineSeparator() +
            SPLIT_LINE +
-           Workday.HEADER_LINE + System.lineSeparator() +
+           Workday.HEADER_LINE_TXT + System.lineSeparator() +
            workdays.stream()
              .map(Workday::toTxtLine)
              .collect(Collectors.joining()) +
            SPLIT_LINE +
            "                                 " + saldoSum;
+  }
+
+  public String printJournalCsv() {
+    final BigDecimal saldoSum = workdays.stream()
+      .map(Workday::getSaldo)
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
+    return employee.toJournalHeader() + System.lineSeparator() +
+           SPLIT_LINE +
+           Workday.HEADER_LINE_CSV + System.lineSeparator() +
+           workdays.stream()
+             .map(Workday::toCsvLine)
+             .collect(Collectors.joining()) +
+           SPLIT_LINE +
+           "Total Saldo:" + saldoSum;
   }
 }
