@@ -54,17 +54,15 @@ public class Workday {
                                : (this.hoursDayInPlace.toMinutes() - MUST_WORK_MINUTES_A_DAY);
   }
 
+  @Nonnull
   private static Duration calcHoursInPlace(final LocalTime login, final LocalTime logout) {
     return login != null && logout != null ? Duration.between(login, logout) : Duration.ZERO;
-  }
-
-  public LocalDate getDay() {
-    return day;
   }
 
   public static final String HEADER_LINE_TXT = "DATE        D  OFF  LOGIN  LOGOUT  HOURS  SALDO";
   public static final String HEADER_LINE_CSV = "DATE;D;OFF;LOGIN;LOGOUT;HOURS;SALDO";
 
+  @Nonnull
   public String toTxtLine() {
     return day + "  " +
            day.getDayOfWeek().getValue() + "  " +
@@ -76,6 +74,7 @@ public class Workday {
            System.lineSeparator();
   }
 
+  @Nonnull
   public String toCsvLine() {
     return day + ";" +
            day.getDayOfWeek().getValue() + ";" +
@@ -87,8 +86,18 @@ public class Workday {
            System.lineSeparator();
   }
 
+  @Nonnull
+  public LocalDate getDay() {
+    return day;
+  }
+
+  @Nonnull
   public BigDecimal getSaldo() {
     return saldo;
   }
 
+  @Nonnull
+  public Duration getHoursDayInPlace() {
+    return hoursDayInPlace;
+  }
 }

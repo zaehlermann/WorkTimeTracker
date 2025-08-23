@@ -53,7 +53,12 @@ public class AbsenceTimesView extends Main {
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
     selectEmployee.setLabel("Employee");
     selectEmployee.setItems(allEmployeeNames);
-    selectEmployee.setValue(allEmployeeNames.getFirst());
+    if(!allEmployeeNames.isEmpty()) {
+      selectEmployee.setValue(allEmployeeNames.getFirst());
+    }
+    else {
+      Notification.show("No employees found, please add employees first.").addThemeVariants(NotificationVariant.LUMO_ERROR);
+    }
 
     final List<AbsenceType> absenceTypes = AbsenceType.getSelectableValues();
     selectType.setLabel("Type");
