@@ -24,11 +24,12 @@ public final class MainView extends Main {
   MainView() {
     addClassName(LumoUtility.Padding.MEDIUM);
     add(new ViewToolbar("Main"));
-    add(new Div("Welcome to the Time Tracker application!"));
+    add(new Div("Welcome to the Time Tracker Management application!"));
     add(new Div("1. Setup  your employee configuration."));
     add(new Div("2. Manage your employees absence times."));
     add(new Div("3. Scan your rfid tag to login/logout."));
     add(new Div("4. Create time journal for an employee."));
+    add(new Div("5. Have fun!"));
   }
 
   /**
