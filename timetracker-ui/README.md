@@ -36,7 +36,7 @@ docker build -t my-application:latest .
 1. Transfer jar file and autostart service file to the raspberry pi
 
 ```bash
-scp target/timetracker-ui-1.0-SNAPSHOT.jar mike@timetracker.local:/home/mike/timetracker
+scp target/timetracker-ui-1.0-SNAPSHOT.jar mike@timetracker.local:/home/mike/timetrackercd timetracker
 scp timetracker-ui.service mike@timetracker.local:/home/mike/timetracker
 ```
 

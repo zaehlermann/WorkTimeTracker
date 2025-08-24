@@ -9,4 +9,8 @@ public class Logger {
   public void info(final String msg) {
     System.out.println(msg); // simple logging to console.
   }
+
+  public void error(final String msg) {
+    System.err.println(msg); // simple logging to console.
+  }
 }
