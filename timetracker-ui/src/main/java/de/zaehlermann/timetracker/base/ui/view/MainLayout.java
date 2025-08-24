@@ -25,6 +25,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.Layout;
@@ -35,10 +36,13 @@ import com.vaadin.flow.spring.security.AuthenticationContext;
 
 import de.zaehlermann.timetracker.security.AppUserInfo;
 import de.zaehlermann.timetracker.security.CurrentUser;
+import de.zaehlermann.timetracker.service.InfoService;
 
 @Layout
 @AnonymousAllowed // Allow all users, including anonymous ones. If you want only authenticated users, change to @PermitAll.
 public final class MainLayout extends AppLayout {
+
+  private static final InfoService INFO_SERVICE = new InfoService();
 
   @Serial
   private static final long serialVersionUID = -1005348531124747334L;
@@ -51,7 +55,7 @@ public final class MainLayout extends AppLayout {
     currentUser.get().ifPresent(user -> addToDrawer(createUserMenu(user)));
   }
 
-  private Div createHeader() {
+  private VerticalLayout createHeader() {
     final Icon appLogo = VaadinIcon.CUBES.create();
     appLogo.addClassNames(TextColor.PRIMARY, IconSize.LARGE);
 
@@ -60,7 +64,10 @@ public final class MainLayout extends AppLayout {
 
     final Div header = new Div(appLogo, appName);
     header.addClassNames(Display.FLEX, Padding.MEDIUM, Gap.MEDIUM, AlignItems.CENTER);
-    return header;
+
+    final Div divVersion = new Div(INFO_SERVICE.getAppVersion());
+
+    return new VerticalLayout(header, divVersion);
   }
 
   private SideNav createSideNav() {
