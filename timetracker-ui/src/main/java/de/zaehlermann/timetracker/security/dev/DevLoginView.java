@@ -55,19 +55,8 @@ class DevLoginView extends Main implements BeforeEnterObserver {
     contentDiv.addClassNames("dev-content-div");
     add(contentDiv);
 
-    final Div devModeMenuDiv = new Div("You can also use the Dev Mode Menu here to impersonate any user");
-    devModeMenuDiv.addClassNames("dev-mode-speech-bubble");
-    // Hide the callout when clicked
-    devModeMenuDiv.addClickListener(event -> {
-      WebStorage.setItem(WebStorage.Storage.LOCAL_STORAGE, CALLOUT_HIDDEN_KEY, "1");
-      devModeMenuDiv.setVisible(false);
-    });
-    devModeMenuDiv.setVisible(false);
-    add(devModeMenuDiv);
-
     // Don't show the callout if already hidden once
-    WebStorage.getItem(WebStorage.Storage.LOCAL_STORAGE, CALLOUT_HIDDEN_KEY,
-                       value -> devModeMenuDiv.setVisible(value == null));
+    WebStorage.getItem(WebStorage.Storage.LOCAL_STORAGE, CALLOUT_HIDDEN_KEY);
   }
 
   private Component createSampleUserCard(final DevUser user) {
