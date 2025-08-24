@@ -11,7 +11,6 @@ public class DataTracker {
   private static final Logger LOG = Logger.INSTANCE;
 
   public static void main(final String[] args) {
-    System.setProperty("org.slf4j.simpleLogger.logFormat", "%msg%n");
 
     LOG.info("============================");
     LOG.info("Welcome to Work-Time-Tracker");
