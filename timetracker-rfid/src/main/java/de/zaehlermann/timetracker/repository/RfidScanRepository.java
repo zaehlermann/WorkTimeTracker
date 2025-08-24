@@ -69,4 +69,19 @@ public class RfidScanRepository extends AbstractCsvRepository {
     return Path.of(DefaultDirs.TRACKING_DIR, input + ".csv");
   }
 
+  @Nonnull
+  public List<String> findAllRfids() {
+    try(final Stream<Path> list = Files.list(Path.of(DefaultDirs.TRACKING_DIR))) {
+      return list
+        .filter(Files::isRegularFile)
+        .map(path -> {
+          final String name = path.getFileName().toString();
+          final int dotIndex = name.lastIndexOf('.');
+          return (dotIndex > 0) ? name.substring(0, dotIndex) : name;
+        }).toList();
+    }
+    catch(final IOException e) {
+      throw new IllegalStateException("Error during reading all RFIDs", e);
+    }
+  }
 }
