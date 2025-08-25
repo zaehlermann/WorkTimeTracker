@@ -15,7 +15,8 @@ import de.zaehlermann.timetracker.globals.TimeFormat;
 
 public class Workday {
 
-  private static final int MUST_WORK_MINUTES_A_DAY = 8 * 60;
+  private static final int WORKTIME_A_DAY = 8 * 60;
+  private static final int BREAKTIME_A_DAY = 30;
   private final LocalDate day;
   private final LocalTime login;
   private final LocalTime logout;
@@ -55,7 +56,7 @@ public class Workday {
   private long calcSaldoInMinutes(final Duration hoursDayInPlace) {
     if(hoursDayInPlace == null) return 0;
     return absenceType != null ? this.hoursDayInPlace.toMinutes()
-                               : (this.hoursDayInPlace.toMinutes() - MUST_WORK_MINUTES_A_DAY);
+                               : (this.hoursDayInPlace.toMinutes() - WORKTIME_A_DAY - BREAKTIME_A_DAY);
   }
 
   @Nonnull
