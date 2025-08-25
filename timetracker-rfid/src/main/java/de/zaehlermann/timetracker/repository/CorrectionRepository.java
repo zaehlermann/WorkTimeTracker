@@ -53,4 +53,19 @@ public class CorrectionRepository extends AbstractCsvRepository {
       throw new IllegalStateException("Error during reading file from path " + filePath, e);
     }
   }
+
+  @Nonnull
+  public List<Correction> findAll() {
+    final Path filePath = getFilePath();
+    try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
+      return lines
+        .filter(line -> !line.isEmpty())
+        .filter(line -> !line.equals(Correction.HEADER_LINE))
+        .map(Correction::fromCsvLine)
+        .toList();
+    }
+    catch(final IOException e) {
+      throw new IllegalStateException("Error during reading file from path " + filePath, e);
+    }
+  }
 }

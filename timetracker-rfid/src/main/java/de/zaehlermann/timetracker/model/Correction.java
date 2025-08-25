@@ -7,6 +7,8 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class Correction implements AbstractCsvEntity<Correction> {
 
   public static final String HEADER_LINE = "EMPLOYEE;WORKDAY;LOGIN;LOGOUT";
@@ -27,8 +29,8 @@ public class Correction implements AbstractCsvEntity<Correction> {
                     @Nullable final String login, @Nullable final String logout) {
     this.employeeId = employeeId;
     this.workday = LocalDate.parse(workday);
-    this.login = login == null ? null : LocalTime.parse(login);
-    this.logout = logout == null ? null : LocalTime.parse(logout);
+    this.login = StringUtils.isBlank(login) ? null : LocalTime.parse(login);
+    this.logout = StringUtils.isBlank(logout) ? null : LocalTime.parse(logout);
   }
 
   @Nonnull
@@ -64,7 +66,10 @@ public class Correction implements AbstractCsvEntity<Correction> {
 
   @Nonnull
   public String toCsvLine() {
-    return employeeId + ";" + workday + ";" + login + ";" + logout + System.lineSeparator();
+    return employeeId + ";" +
+           workday + ";" +
+           (login == null ? "" : login) + ";" +
+           (logout == null ? "" : logout) + System.lineSeparator();
   }
 
   @Nonnull

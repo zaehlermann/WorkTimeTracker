@@ -30,8 +30,8 @@ import de.zaehlermann.timetracker.service.JournalService;
 import jakarta.annotation.security.PermitAll;
 
 @Route("time-journal")
-@PageTitle("Time Journal")
-@Menu(order = 2, icon = "vaadin:clipboard-check", title = "Time Journal")
+@PageTitle("Time journal")
+@Menu(order = 3, icon = "vaadin:clipboard-check", title = "Time journal")
 @PermitAll // When security is enabled, allow all authenticated users
 public class TimeJournalView extends Main {
 
@@ -80,7 +80,7 @@ public class TimeJournalView extends Main {
     verticalLayout.setSizeFull();
 
     setSizeFull();
-    add(new ViewToolbar("Time Journal"));
+    add(new ViewToolbar("Time journal"));
     add(verticalLayout);
   }
 

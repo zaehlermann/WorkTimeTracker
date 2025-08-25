@@ -21,34 +21,32 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
-import de.zaehlermann.timetracker.model.Absence;
-import de.zaehlermann.timetracker.model.AbsenceType;
-import de.zaehlermann.timetracker.service.AbsenceService;
+import de.zaehlermann.timetracker.model.Correction;
+import de.zaehlermann.timetracker.service.CorrectionService;
 import de.zaehlermann.timetracker.service.JournalService;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
-@Route("absence-times")
-@PageTitle("Absence times")
-@Menu(order = 1, icon = "vaadin:clipboard-check", title = "Absence times")
+@Route("correction-times")
+@PageTitle("Correction times")
+@Menu(order = 2, icon = "vaadin:clipboard-check", title = "Correction times")
 @PermitAll // When security is enabled, allow all authenticated users
-public class AbsenceTimesView extends Main {
+public class CorrectionTimesView extends Main {
   @Serial
   private static final long serialVersionUID = -6845528650198433439L;
 
-  private static final AbsenceService ABSENCE_SERVICE = new AbsenceService();
+  private static final CorrectionService CORRECTION_SERVICE = new CorrectionService();
   private static final JournalService JOURNAL_SERVICE = new JournalService();
 
   // Form fields
   private final Select<String> selectEmployee = new Select<>();
-  private final Select<AbsenceType> selectType = new Select<>();
-  private final DatePicker startDateField = new DatePicker("Start Date");
-  private final TimePicker startTimeField = new TimePicker("Start Time");
-  private final DatePicker endDateField = new DatePicker("End Date");
-  private final TimePicker endTimeField = new TimePicker("End Time");
+  private final DatePicker workdayField = new DatePicker("Date");
+  private final TimePicker loginTimeField = new TimePicker("Login Time Correction");
+  private final TimePicker logoutTimeField = new TimePicker("Logout Time Correction");
 
-  private final Grid<Absence> grid = new Grid<>(Absence.class, false);
+  private final Grid<Correction> grid = new Grid<>(Correction.class, false);
 
-  public AbsenceTimesView() {
+  public CorrectionTimesView() {
 
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
     selectEmployee.setLabel("Employee");
@@ -60,12 +58,7 @@ public class AbsenceTimesView extends Main {
       Notification.show("No employees found, please add employees first.").addThemeVariants(NotificationVariant.LUMO_ERROR);
     }
 
-    final List<AbsenceType> absenceTypes = AbsenceType.getSelectableValues();
-    selectType.setLabel("Type");
-    selectType.setItems(absenceTypes);
-    selectType.setValue(absenceTypes.getFirst());
-
-    startDateField.setValue(LocalDate.now());
+    workdayField.setValue(LocalDate.now());
 
     final VerticalLayout verticalLayout = new VerticalLayout();
     verticalLayout.setSizeFull();
@@ -74,46 +67,43 @@ public class AbsenceTimesView extends Main {
     verticalLayout.add(grid);
 
     setSizeFull();
-    add(new ViewToolbar("Absence times"));
+    add(new ViewToolbar("Correction times"));
     add(verticalLayout);
 
     updateGrid();
   }
 
   private void configureGrid() {
-    grid.addColumn(Absence::employeeId).setHeader("Employee ID");
-    grid.addColumn(Absence::startDay).setHeader("Start Date");
-    grid.addColumn(Absence::startTime).setHeader("Start Time");
-    grid.addColumn(Absence::endDay).setHeader("End Day");
-    grid.addColumn(Absence::endTime).setHeader("End Time");
-    grid.addColumn(Absence::type).setHeader("Type");
+    grid.addColumn(Correction::getEmployeeId).setHeader("Employee ID");
+    grid.addColumn(Correction::getWorkday).setHeader("Date");
+    grid.addColumn(Correction::getLogin).setHeader("Login correction");
+    grid.addColumn(Correction::getLogout).setHeader("Logout correction");
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
   }
 
+  @Nonnull
   private FormLayout createForm() {
     final Button saveButton = new Button("Save", event -> saveAbsence());
     saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     final Button deleteButton = new Button("Delete", event -> deleteAbsence());
-    return new FormLayout(selectEmployee, selectType,
-                          startDateField, startTimeField,
-                          endDateField, endTimeField,
+    return new FormLayout(selectEmployee, workdayField,
+                          loginTimeField, logoutTimeField,
                           saveButton, deleteButton);
   }
 
   private void saveAbsence() {
 
-    final Absence newAbsence = new Absence(selectEmployee.getValue(), selectType.getValue(),
-                                           startDateField.getValue(), endDateField.getValue(),
-                                           startTimeField.getValue(), endTimeField.getValue());
-    ABSENCE_SERVICE.save(newAbsence);
-    Notification.show("Absence saved").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    final Correction correction = new Correction(selectEmployee.getValue(), workdayField.getValue(),
+                                                 loginTimeField.getValue(), logoutTimeField.getValue());
+    CORRECTION_SERVICE.save(correction);
+    Notification.show("Correction saved").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     updateGrid();
   }
 
   private void deleteAbsence() {
-    final Set<Absence> selected = grid.getSelectedItems();
+    final Set<Correction> selected = grid.getSelectedItems();
     if(!selected.isEmpty()) {
-      ABSENCE_SERVICE.delete(selected);
+      CORRECTION_SERVICE.delete(selected);
       Notification.show("Absence deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
       updateGrid();
     }
@@ -123,7 +113,7 @@ public class AbsenceTimesView extends Main {
   }
 
   private void updateGrid() {
-    grid.setItems(ABSENCE_SERVICE.findAll());
+    grid.setItems(CORRECTION_SERVICE.findAll());
   }
 
 }
