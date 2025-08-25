@@ -1,5 +1,6 @@
 package de.zaehlermann.timetracker.model;
 
+import java.time.LocalTime;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -25,9 +26,9 @@ public class Employee implements AbstractCsvEntity<Employee> {
 
   @Nonnull
   public String toJournalTxtHeader() {
-    return "EmployeeID: " + employeeId + System.lineSeparator() +
-           "RFID: " + rfid + System.lineSeparator() +
-           "Name: " + firstName + " " + lastName;
+    return "EmployeeID: " + employeeId + ", RFID: " + rfid + ", Name: " + firstName + " " + lastName + System.lineSeparator() +
+           "Daily worktime: " + LocalTime.of(Workday.WORKTIME_A_DAY_IN_HOURS, 0).toString() + "h, " + System.lineSeparator() +
+           "Daily breaktime: " + LocalTime.of(0, Workday.BREAKTIME_A_DAY_IN_MIN).toString() + "h";
   }
 
   @Nonnull
