@@ -13,7 +13,10 @@ public class Employee implements AbstractCsvEntity<Employee> {
   private final String firstName;
   private final String lastName;
 
-  public Employee(final String employeeId, final String rfid, final String firstName, final String lastName) {
+  public Employee(@Nonnull final String employeeId,
+                  @Nonnull final String rfid,
+                  @Nonnull final String firstName,
+                  @Nonnull final String lastName) {
     this.employeeId = employeeId;
     this.rfid = rfid;
     this.firstName = firstName;
@@ -28,7 +31,7 @@ public class Employee implements AbstractCsvEntity<Employee> {
   }
 
   @Nonnull
-  public static Employee fromCsvLine(final String csvLine) {
+  public static Employee fromCsvLine(@Nonnull final String csvLine) {
     final String[] split = csvLine.split(";", -1);
     return new Employee(split[0], split[1], split[2], split[3]);
   }
@@ -39,18 +42,22 @@ public class Employee implements AbstractCsvEntity<Employee> {
     return employeeId + ";" + rfid + ";" + firstName + ";" + lastName + System.lineSeparator();
   }
 
+  @Nonnull
   public String getFirstName() {
     return firstName;
   }
 
+  @Nonnull
   public String getLastName() {
     return lastName;
   }
 
+  @Nonnull
   public String getRfid() {
     return rfid;
   }
 
+  @Nonnull
   public String getEmployeeId() {
     return employeeId;
   }
