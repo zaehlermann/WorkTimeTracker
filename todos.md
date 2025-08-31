@@ -5,7 +5,6 @@
 * add more ui validation
 * calculate subtotals for weeks and months
 * calculate full years
-* calculate break times
 
 # deployment
 
