@@ -70,7 +70,7 @@ public class Workday {
   @Nonnull
   public String toTxtLine() {
     return day + "  " +
-           getWeekDay() + "  " +
+           getWeekDayValue() + "  " +
            String.format("%-3s", absenceType != null ? absenceType.getPrintValue() : "") + "  " +
            String.format("%-5s", login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + "  " +
            String.format("%-6s", logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + "  " +
@@ -83,7 +83,7 @@ public class Workday {
   @Nonnull
   public String toCsvLine() {
     return day + ";" +
-           getWeekDay() + ";" +
+           getWeekDayValue() + ";" +
            (absenceType != null ? absenceType.getPrintValue() : "") + ";" +
            (login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + ";" +
            (logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + ";" +
@@ -98,8 +98,13 @@ public class Workday {
     return day;
   }
 
-  public int getWeekDay() {
+  public int getWeekDayValue() {
     return day.getDayOfWeek().getValue();
+  }
+
+  @Nonnull
+  public DayOfWeek getWeekDay() {
+    return day.getDayOfWeek();
   }
 
   @Nullable
@@ -136,4 +141,4 @@ public class Workday {
     return saldo;
   }
 
-}
+  }
