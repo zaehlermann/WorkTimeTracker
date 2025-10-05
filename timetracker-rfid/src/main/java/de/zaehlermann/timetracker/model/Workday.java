@@ -6,7 +6,9 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -103,8 +105,8 @@ public class Workday {
   }
 
   @Nonnull
-  public DayOfWeek getWeekDay() {
-    return day.getDayOfWeek();
+  public String getWeekDayName() {
+    return day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
   }
 
   @Nullable
