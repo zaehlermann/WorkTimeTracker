@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +37,7 @@ public class Journal {
 
     // Ensure all days of the month are represented, even if there are no scans
     final LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
-    final LocalDate endOfTheMonth = LocalDate.of(year, month + 1, 1);
+    final LocalDate endOfTheMonth = YearMonth.of(year, month).atEndOfMonth().plusDays(1);
     firstDayOfMonth.datesUntil(endOfTheMonth).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
 
     this.workdays = scanByDay.entrySet().stream()
@@ -77,6 +79,7 @@ public class Journal {
     return dailyScans.getValue().isEmpty() ? null : dailyScans.getValue().getFirst().getScanTime();
   }
 
+  @Nullable
   private static LocalTime getLogout(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
                                      @Nullable final Correction correctionOfTheDay) {
 
@@ -87,9 +90,17 @@ public class Journal {
   }
 
   @Nonnull
+  public List<JournalSummaryItem> getJournalSummaryItems() {
+    final List<JournalSummaryItem> headers = new ArrayList<>(employee.toJournalSummaryHeaders());
+    headers.add(new JournalSummaryItem("Hours Total", calcHoursTotal()));
+    headers.add(new JournalSummaryItem("Saldo Total", calcSaldoTotal()));
+    return headers;
+  }
+
+  @Nonnull
   public String printJournalTxt() {
-    final String saldoTotal = calcSaldoTotal();
     final String hoursTotal = calcHoursTotal();
+    final String saldoTotal = calcSaldoTotal();
     return employee.toJournalTxtHeader() + System.lineSeparator() +
            SPLIT_LINE +
            Workday.HEADER_LINE_TXT + System.lineSeparator() +
@@ -102,8 +113,8 @@ public class Journal {
 
   @Nonnull
   public String printJournalCsv() {
-    final String saldoTotal = calcSaldoTotal();
     final String hoursTotal = calcHoursTotal();
+    final String saldoTotal = calcSaldoTotal();
     return employee.toJournalTxtHeader() + System.lineSeparator() +
            SPLIT_LINE +
            Workday.HEADER_LINE_CSV + System.lineSeparator() +
@@ -137,5 +148,48 @@ public class Journal {
     final long hours = duration.toHours();
     final long minutes = duration.minusHours(hours).toMinutes();
     return String.format("%03d:%02d", hours, minutes);
+  }
+
+  @Nonnull
+  public List<Workday> getWorkdays() {
+    return workdays;
+  }
+
+  public int getTotalDays() {
+    return workdays.size();
+  }
+
+  @Nonnull
+  public String getTotalSaldo() {
+    return calcSaldoTotal();
+  }
+
+  @Nonnull
+  public String getTotalHours() {
+    return calcHoursTotal();
+  }
+
+  public long getTotalAbsenceDays() {
+    return workdays.stream()
+      .filter(w -> w.getAbsenceType() != null)
+      .count();
+  }
+
+  public long getTotalCorrectedDays() {
+    return workdays.stream()
+      .filter(Workday::isCorrected)
+      .count();
+  }
+
+  public long getTotalLogins() {
+    return workdays.stream()
+      .filter(w -> w.getLogin() != null)
+      .count();
+  }
+
+  public long getTotalLogouts() {
+    return workdays.stream()
+      .filter(w -> w.getLogout() != null)
+      .count();
   }
 }
