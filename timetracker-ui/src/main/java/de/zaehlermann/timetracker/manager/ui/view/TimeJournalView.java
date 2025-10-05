@@ -85,7 +85,6 @@ public class TimeJournalView extends Main {
     summaryDetails.setOpened(true);
 
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
-
     workdayGrid.addColumn(Workday::getDay).setKey(COLUMN_DATE).setHeader(COLUMN_DATE).setFooter("Total Days:");
     workdayGrid.addColumn(Workday::getWeekDayName).setKey(COLUMN_WEEKDAY).setHeader(COLUMN_WEEKDAY)
       .setComparator(Comparator.comparing(Workday::getWeekDayValue));
@@ -108,8 +107,8 @@ public class TimeJournalView extends Main {
     workdayGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
     final Details workdayGridDetails = new Details("Time Journal Details", workdayGrid);
-    workdayGridDetails.setWidthFull();
     workdayGridDetails.setOpened(true);
+    workdayGridDetails.setWidthFull();
 
     final Button btnShowJournal = new Button("Show Journal");
     btnShowJournal.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -124,10 +123,13 @@ public class TimeJournalView extends Main {
     formDetails.setOpened(true);
 
     final FormLayout downloadLayout = new FormLayout(downloadJournalTxt, downloadJournalCsv, downloadJournalBackup);
-    downloadLayout.setMaxColumns(3);
+    downloadLayout.setAutoResponsive(true);
+    downloadLayout.setAutoRows(true);
     downloadLayout.setWidthFull();
 
     final Details downloadDetails = new Details("Download Journal", downloadLayout);
+    downloadDetails.setOpened(true);
+    downloadDetails.setWidthFull();
 
     final VerticalLayout verticalLayout = new VerticalLayout(formDetails, summaryDetails, workdayGridDetails, downloadDetails);
     verticalLayout.setSizeFull();
