@@ -45,6 +45,15 @@ public class TimeJournalView extends Main {
   @Serial
   private static final long serialVersionUID = -7891828904175930796L;
   private static final JournalService JOURNAL_SERVICE = new JournalService();
+  private static final String COLUMN_DATE = "Date";
+  public static final String COLUMN_HOURS = "Hours";
+  public static final String COLUMN_SALDO = "Saldo";
+  public static final String COLUMN_ABSENCE = "Absence";
+  public static final String COLUMN_CORRECTED = "Corrected";
+  public static final String COLUMN_WEEKDAY = "Weekday";
+  public static final String COLUMN_LOGIN = "Login";
+  public static final String COLUMN_LOGOUT = "Logout";
+  public static final String TOTAL = "Total: ";
 
   public TimeJournalView() {
 
@@ -77,20 +86,20 @@ public class TimeJournalView extends Main {
 
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
     workdayGrid.setColumnReorderingAllowed(true);
-    workdayGrid.addColumn(Workday::getDay).setHeader("Date");
-    workdayGrid.addColumn(Workday::getWeekDayName).setHeader("Weekday").setComparator(Comparator.comparing(Workday::getWeekDayValue));
-    workdayGrid.addColumn(Workday::getAbsenceType).setHeader("Absence");
-    workdayGrid.addColumn(Workday::getLogin).setHeader("Login");
-    workdayGrid.addColumn(Workday::getLogout).setHeader("Logout");
-    workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "").setHeader("Corrected");
-    workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted).setHeader("Hours").setTextAlign(ColumnTextAlign.END);
-    workdayGrid.addColumn(Workday::getSaldo).setHeader("Saldo").setTextAlign(ColumnTextAlign.END);
+    workdayGrid.addColumn(Workday::getDay).setKey(COLUMN_DATE).setHeader(COLUMN_DATE).setFooter("Total Days:");
+    workdayGrid.addColumn(Workday::getWeekDayName).setKey(COLUMN_WEEKDAY).setHeader(COLUMN_WEEKDAY)
+      .setComparator(Comparator.comparing(Workday::getWeekDayValue));
+    workdayGrid.addColumn(Workday::getAbsenceType).setKey(COLUMN_ABSENCE).setHeader(COLUMN_ABSENCE);
+    workdayGrid.addColumn(Workday::getLogin).setKey(COLUMN_LOGIN).setHeader(COLUMN_LOGIN);
+    workdayGrid.addColumn(Workday::getLogout).setKey(COLUMN_LOGOUT).setHeader(COLUMN_LOGOUT);
+    workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "").setKey(COLUMN_CORRECTED).setHeader(COLUMN_CORRECTED);
+    workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted).setKey(COLUMN_HOURS).setHeader(COLUMN_HOURS).setTextAlign(ColumnTextAlign.END);
+    workdayGrid.addColumn(Workday::getSaldo).setKey(COLUMN_SALDO).setHeader(COLUMN_SALDO).setTextAlign(ColumnTextAlign.END);
     workdayGrid.getColumns().forEach(column -> {
       column.setSortable(true);
       column.setResizable(true);
     });
     workdayGrid.setWidthFull();
-    workdayGrid.setAllRowsVisible(true);
     workdayGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
     workdayGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
     workdayGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
@@ -168,5 +177,12 @@ public class TimeJournalView extends Main {
     journalSummaryGrid.setItems(journal.getJournalSummaryItems());
     journalSummaryGrid.recalculateColumnWidths();
     workdayGrid.setItems(journal.getWorkdays());
+    workdayGrid.getColumnByKey(COLUMN_DATE).setFooter(TOTAL + journal.getTotalDays());
+    workdayGrid.getColumnByKey(COLUMN_ABSENCE).setFooter(TOTAL + journal.getTotalAbsenceDays());
+    workdayGrid.getColumnByKey(COLUMN_CORRECTED).setFooter(TOTAL + journal.getTotalCorrectedDays());
+    workdayGrid.getColumnByKey(COLUMN_LOGIN).setFooter(TOTAL + journal.getTotalLogins());
+    workdayGrid.getColumnByKey(COLUMN_LOGOUT).setFooter(TOTAL + journal.getTotalLogouts());
+    workdayGrid.getColumnByKey(COLUMN_HOURS).setFooter(journal.getTotalHours());
+    workdayGrid.getColumnByKey(COLUMN_SALDO).setFooter(journal.getTotalSaldo());
   }
 }

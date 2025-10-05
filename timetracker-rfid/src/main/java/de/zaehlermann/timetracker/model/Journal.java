@@ -90,15 +90,6 @@ public class Journal {
   }
 
   @Nonnull
-  public String getSummaryTxt() {
-    final String hoursTotal = calcHoursTotal();
-    final String saldoTotal = calcSaldoTotal();
-    return employee.toJournalTxtHeader() + System.lineSeparator() +
-           "Hours Total: " + hoursTotal + System.lineSeparator() +
-           "Saldo Total: " + saldoTotal;
-  }
-
-  @Nonnull
   public List<JournalSummaryItem> getJournalSummaryItems() {
     final List<JournalSummaryItem> headers = new ArrayList<>(employee.toJournalSummaryHeaders());
     headers.add(new JournalSummaryItem("Hours Total", calcHoursTotal()));
@@ -164,4 +155,41 @@ public class Journal {
     return workdays;
   }
 
+  public int getTotalDays() {
+    return workdays.size();
+  }
+
+  @Nonnull
+  public String getTotalSaldo() {
+    return calcSaldoTotal();
+  }
+
+  @Nonnull
+  public String getTotalHours() {
+    return calcHoursTotal();
+  }
+
+  public long getTotalAbsenceDays() {
+    return workdays.stream()
+      .filter(w -> w.getAbsenceType() != null)
+      .count();
+  }
+
+  public long getTotalCorrectedDays() {
+    return workdays.stream()
+      .filter(Workday::isCorrected)
+      .count();
+  }
+
+  public long getTotalLogins() {
+    return workdays.stream()
+      .filter(w -> w.getLogin() != null)
+      .count();
+  }
+
+  public long getTotalLogouts() {
+    return workdays.stream()
+      .filter(w -> w.getLogout() != null)
+      .count();
+  }
 }
