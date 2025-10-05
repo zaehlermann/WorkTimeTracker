@@ -26,8 +26,10 @@ public class Employee implements AbstractCsvEntity<Employee> {
 
   @Nonnull
   public String toJournalTxtHeader() {
-    return "EmployeeID: " + employeeId + ", RFID: " + rfid + ", Name: " + firstName + " " + lastName + System.lineSeparator() +
-           "Daily worktime: " + LocalTime.of(Workday.WORKTIME_A_DAY_IN_HOURS, 0).toString() + "h, " + System.lineSeparator() +
+    return "EmployeeID: " + employeeId + System.lineSeparator() +
+           "Name: " + firstName + " " + lastName + System.lineSeparator() +
+           "RFID: " + rfid + System.lineSeparator() +
+           "Daily worktime: " + LocalTime.of(Workday.WORKTIME_A_DAY_IN_HOURS, 0).toString() + "h " + System.lineSeparator() +
            "Daily breaktime: " + LocalTime.of(0, Workday.BREAKTIME_A_DAY_IN_MIN).toString() + "h";
   }
 
