@@ -1,6 +1,6 @@
 Timetracker UI
 =====================
-This is the web application to manage employees, rfids and initiate the time journal generation
+This is the web application to manage employees, RFIDs and initiate the time journal generation
 
 # Building
 
@@ -20,7 +20,7 @@ To build the application in production mode, run:
 Start the application with:
 
 ```bash
-java -jar target/timetracker-ui-1.0.0.jar
+java -jar target/timetracker-ui-1.1.0.jar
 ```
 
 To also build a Docker image, continue by running:
@@ -36,7 +36,7 @@ My raspberry pi has the dnc timetracker.local. The UI service must run under the
 1. Transfer jar file and autostart service file to the raspberry pi
 
 ```bash
-scp target/timetracker-ui-1.0-SNAPSHOT.jar mike@timetracker.local:/home/mike/timetracker
+scp target/timetracker-ui-1.1.0.jar mike@timetracker.local:/home/mike/timetracker
 scp timetracker-ui.service mike@timetracker.local:/home/mike/timetracker
 ```
 
@@ -45,7 +45,7 @@ scp timetracker-ui.service mike@timetracker.local:/home/mike/timetracker
 ```bash
 ssh mike@timetracker.local
 cd timetracker
-mv timetracker-ui-1.0-SNAPSHOT.jar timetracker-ui.jar
+mv timetracker-ui-1.1.0 timetracker-ui.jar
 cp timetracker-ui.service /home/mike/.config/systemd/user
 ```
 
