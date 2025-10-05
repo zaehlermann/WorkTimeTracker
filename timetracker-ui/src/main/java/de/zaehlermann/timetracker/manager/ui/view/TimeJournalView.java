@@ -85,7 +85,7 @@ public class TimeJournalView extends Main {
     summaryDetails.setOpened(true);
 
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
-    workdayGrid.setColumnReorderingAllowed(true);
+
     workdayGrid.addColumn(Workday::getDay).setKey(COLUMN_DATE).setHeader(COLUMN_DATE).setFooter("Total Days:");
     workdayGrid.addColumn(Workday::getWeekDayName).setKey(COLUMN_WEEKDAY).setHeader(COLUMN_WEEKDAY)
       .setComparator(Comparator.comparing(Workday::getWeekDayValue));
@@ -95,12 +95,14 @@ public class TimeJournalView extends Main {
     workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "").setKey(COLUMN_CORRECTED).setHeader(COLUMN_CORRECTED);
     workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted).setKey(COLUMN_HOURS).setHeader(COLUMN_HOURS).setTextAlign(ColumnTextAlign.END);
     workdayGrid.addColumn(Workday::getSaldo).setKey(COLUMN_SALDO).setHeader(COLUMN_SALDO).setTextAlign(ColumnTextAlign.END);
+
+    workdayGrid.setColumnReorderingAllowed(true);
+    workdayGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
     workdayGrid.getColumns().forEach(column -> {
       column.setSortable(true);
       column.setResizable(true);
     });
     workdayGrid.setWidthFull();
-    workdayGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
     workdayGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
     workdayGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
     workdayGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);

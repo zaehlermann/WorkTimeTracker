@@ -10,6 +10,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -88,6 +89,15 @@ public class AbsenceTimesView extends Main {
     grid.addColumn(Absence::endTime).setHeader("End Time");
     grid.addColumn(Absence::type).setHeader("Type");
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+    grid.setColumnReorderingAllowed(true);
+    grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
+    grid.getColumns().forEach(column -> {
+      column.setSortable(true);
+      column.setResizable(true);
+    });
+    grid.addThemeVariants(GridVariant.LUMO_COMPACT);
+    grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
+    grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
   }
 
   private FormLayout createForm() {

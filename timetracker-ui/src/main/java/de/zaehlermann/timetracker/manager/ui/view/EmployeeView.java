@@ -9,6 +9,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -66,6 +67,15 @@ public class EmployeeView extends Main {
     employeeGrid.addColumn(Employee::getFirstName).setHeader("First Name");
     employeeGrid.addColumn(Employee::getLastName).setHeader("Last Name");
     employeeGrid.setSizeFull();
+    employeeGrid.setColumnReorderingAllowed(true);
+    employeeGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
+    employeeGrid.getColumns().forEach(column -> {
+      column.setSortable(true);
+      column.setResizable(true);
+    });
+    employeeGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
+    employeeGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
+    employeeGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
     final FormLayout formLayout = new FormLayout(employeeId, rfid, firstName, lastName, saveBtn, deleteBtn);
 
