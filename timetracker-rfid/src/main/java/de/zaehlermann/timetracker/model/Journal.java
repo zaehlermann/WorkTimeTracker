@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,7 @@ public class Journal {
     return dailyScans.getValue().isEmpty() ? null : dailyScans.getValue().getFirst().getScanTime();
   }
 
+  @Nullable
   private static LocalTime getLogout(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
                                      @Nullable final Correction correctionOfTheDay) {
 
@@ -94,6 +96,14 @@ public class Journal {
     return employee.toJournalTxtHeader() + System.lineSeparator() +
            "Hours Total: " + hoursTotal + System.lineSeparator() +
            "Saldo Total: " + saldoTotal;
+  }
+
+  @Nonnull
+  public List<JournalSummaryItem> getJournalSummaryItems() {
+    final List<JournalSummaryItem> headers = new ArrayList<>(employee.toJournalSummaryHeaders());
+    headers.add(new JournalSummaryItem("Hours Total", calcHoursTotal()));
+    headers.add(new JournalSummaryItem("Saldo Total", calcSaldoTotal()));
+    return headers;
   }
 
   @Nonnull
