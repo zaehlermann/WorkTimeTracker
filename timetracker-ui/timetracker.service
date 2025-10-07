@@ -1,0 +1,11 @@
+[Unit]
+Description=WorkTimeTracker Service
+After=network.target
+
+[Service]
+User=mike
+ExecStart=sudo /usr/bin/java -jar /home/mike/timetracker/timetracker-ui.jar
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
