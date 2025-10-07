@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -90,6 +91,7 @@ public class AbsenceTimesView extends Main {
     formLayout.add(selectEmployee, selectType, startDateField, startTimeField, endDateField, endTimeField);
 
     final Button saveButton = new Button("Save", event -> saveAbsence());
+    saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     final Button deleteButton = new Button("Delete", event -> deleteAbsence());
 
     final HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);

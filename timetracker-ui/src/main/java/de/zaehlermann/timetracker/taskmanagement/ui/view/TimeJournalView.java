@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -55,6 +56,8 @@ public class TimeJournalView extends Main {
     add(textArea);
 
     final Button button = new Button("Create Journal");
+    button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
     button.addClickListener(clickEvent -> {
       final String journal = JOURNAL_SERVICE.createJournal(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
       textArea.setValue(journal);
