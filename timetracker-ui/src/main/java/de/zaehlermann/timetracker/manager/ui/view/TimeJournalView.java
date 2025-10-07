@@ -61,7 +61,7 @@ public class TimeJournalView extends Main {
     final Select<String> selectEmployee = new Select<>();
     selectEmployee.setLabel("Employee");
     selectEmployee.setItems(allEmployeeNames); // select from the employee file
-    selectEmployee.setValue(allEmployeeNames.getFirst());
+    selectEmployee.setValue(allEmployeeNames.isEmpty() ? null : allEmployeeNames.getFirst());
 
     final Select<Integer> selectYear = new Select<>();
     selectYear.setLabel("Year");
@@ -87,7 +87,7 @@ public class TimeJournalView extends Main {
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
     workdayGrid.addColumn(Workday::getDay).setKey(COLUMN_DATE).setHeader(COLUMN_DATE).setFooter("Total Days:");
     workdayGrid.addColumn(Workday::getWeekDayName).setKey(COLUMN_WEEKDAY).setHeader(COLUMN_WEEKDAY)
-      .setComparator(Comparator.comparing(Workday::getWeekDayValue));
+        .setComparator(Comparator.comparing(Workday::getWeekDayValue));
     workdayGrid.addColumn(Workday::getAbsenceType).setKey(COLUMN_ABSENCE).setHeader(COLUMN_ABSENCE);
     workdayGrid.addColumn(Workday::getLogin).setKey(COLUMN_LOGIN).setHeader(COLUMN_LOGIN);
     workdayGrid.addColumn(Workday::getLogout).setKey(COLUMN_LOGOUT).setHeader(COLUMN_LOGOUT);
