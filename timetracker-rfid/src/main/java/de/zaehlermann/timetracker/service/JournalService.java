@@ -15,8 +15,8 @@ public class JournalService {
   private final JournalRepository journalRepository = new JournalRepository();
   private final EmployeeRepository employeeRepository = new EmployeeRepository();
 
-  public String createJournal(final String rfid) {
-    final List<RfidScan> allScans = rfidScanRepository.findAllRfIdScansByRfid(rfid);
+  public String createJournal(final String rfid, final Integer year, final Integer month) {
+    final List<RfidScan> allScans = rfidScanRepository.findAllRfIdScansByRfid(rfid, year, month);
     final Employee employee = employeeRepository.findEmployee(rfid);
     final String journal = new Journal(employee, allScans).printJournal();
     journalRepository.saveToFile(rfid, journal);

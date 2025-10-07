@@ -25,7 +25,7 @@ public class JournalCreator {
         break;
       }
 
-      LOG.info(JOURNAL_SERVICE.createJournal(input));
+      LOG.info(JOURNAL_SERVICE.createJournal(input, null, null));
     }
   }
 }
