@@ -1,4 +1,4 @@
-package de.zaehlermann.timetracker.taskmanagement.ui.view;
+package de.zaehlermann.timetracker.manager.ui.view;
 
 import java.io.Serial;
 import java.time.LocalDate;
