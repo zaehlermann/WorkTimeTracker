@@ -6,7 +6,9 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,8 +34,7 @@ public class Workday {
                  @Nullable final LocalTime logout,
                  final boolean corrected) {
     this.day = day;
-
-    this.absenceType = getAbsenceType(day, absences);
+    this.absenceType = calcAbsenceType(day, absences);
     this.login = login;
     this.logout = logout;
     this.corrected = corrected;
@@ -43,7 +44,7 @@ public class Workday {
   }
 
   @Nullable
-  private static AbsenceType getAbsenceType(final LocalDate day, final Absence absences) {
+  private static AbsenceType calcAbsenceType(final LocalDate day, final Absence absences) {
     if(isWeekend(day)) {
       return AbsenceType.WEEKEND;
     }
@@ -71,12 +72,12 @@ public class Workday {
   @Nonnull
   public String toTxtLine() {
     return day + "  " +
-           day.getDayOfWeek().getValue() + "  " +
+           getWeekDayValue() + "  " +
            String.format("%-3s", absenceType != null ? absenceType.getPrintValue() : "") + "  " +
            String.format("%-5s", login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + "  " +
            String.format("%-6s", logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + "  " +
            String.format("%-1s", corrected ? "X" : "") + "  " +
-           String.format("%02d", hoursDayInPlace.toHoursPart()) + ":" + String.format("%02d", hoursDayInPlace.toMinutesPart()) + "  " +
+           getHoursDayInPlaceFormatted() + "  " +
            String.format("%+.2f", saldo) +
            System.lineSeparator();
   }
@@ -84,12 +85,12 @@ public class Workday {
   @Nonnull
   public String toCsvLine() {
     return day + ";" +
-           day.getDayOfWeek().getValue() + ";" +
+           getWeekDayValue() + ";" +
            (absenceType != null ? absenceType.getPrintValue() : "") + ";" +
            (login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + ";" +
            (logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + ";" +
            (corrected ? "X" : "") + ";" +
-           String.format("%02d", hoursDayInPlace.toHoursPart()) + ":" + String.format("%02d", hoursDayInPlace.toMinutesPart()) + ";" +
+           getHoursDayInPlaceFormatted() + ";" +
            String.format("%+.2f", saldo) +
            System.lineSeparator();
   }
@@ -99,13 +100,47 @@ public class Workday {
     return day;
   }
 
+  public int getWeekDayValue() {
+    return day.getDayOfWeek().getValue();
+  }
+
   @Nonnull
-  public BigDecimal getSaldo() {
-    return saldo;
+  public String getWeekDayName() {
+    return day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+  }
+
+  @Nullable
+  public AbsenceType getAbsenceType() {
+    return absenceType;
+  }
+
+  @Nullable
+  public LocalTime getLogin() {
+    return login;
+  }
+
+  @Nullable
+  public LocalTime getLogout() {
+    return logout;
+  }
+
+  public boolean isCorrected() {
+    return corrected;
   }
 
   @Nonnull
   public Duration getHoursDayInPlace() {
     return hoursDayInPlace;
   }
-}
+
+  @Nonnull
+  public String getHoursDayInPlaceFormatted() {
+    return String.format("%02d", hoursDayInPlace.toHoursPart()) + ":" + String.format("%02d", hoursDayInPlace.toMinutesPart());
+  }
+
+  @Nonnull
+  public BigDecimal getSaldo() {
+    return saldo;
+  }
+
+  }
