@@ -20,7 +20,7 @@ public class Employee implements AbstractCsvEntity<Employee> {
 
   public String toJournalHeader() {
     return "EmployeeID: " + employeeId + System.lineSeparator() +
-           "RFID:" + rfid + System.lineSeparator() +
+           "RFID: " + rfid + System.lineSeparator() +
            "Name: " + firstName + " " + lastName;
   }
 

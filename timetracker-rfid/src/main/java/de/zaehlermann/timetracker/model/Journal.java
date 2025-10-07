@@ -13,11 +13,16 @@ public class Journal {
   private final Employee employee;
   private final List<Workday> workdays;
 
-  public Journal(final Employee employee, final List<RfidScan> allScans) {
+  public Journal(final Employee employee, final List<RfidScan> allScans, final Integer year, final Integer month) {
     this.employee = employee;
 
     final Map<LocalDate, List<RfidScan>> scansOfTheDay = allScans.stream()
       .collect(Collectors.groupingBy(RfidScan::getWorkday));
+
+    // Ensure all days of the month are represented, even if there are no scans
+    final LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
+    final LocalDate endOfTheMonth = LocalDate.of(year, month + 1, 1);
+    firstDayOfMonth.datesUntil(endOfTheMonth).forEach(d -> scansOfTheDay.putIfAbsent(d, List.of()));
 
     this.workdays = scansOfTheDay.entrySet().stream()
       .map(Journal::createWorkDay)
@@ -26,7 +31,10 @@ public class Journal {
   }
 
   private static Workday createWorkDay(final Map.Entry<LocalDate, List<RfidScan>> e) {
-    return new Workday(e.getKey(), e.getValue().getFirst().getScanTime(), e.getValue().getLast().getScanTime());
+    final boolean hasNoScans = e.getValue().isEmpty();
+    return new Workday(e.getKey(),
+                       hasNoScans ? null : e.getValue().getFirst().getScanTime(),
+                       hasNoScans ? null : e.getValue().getLast().getScanTime());
   }
 
   public String printJournal() {
