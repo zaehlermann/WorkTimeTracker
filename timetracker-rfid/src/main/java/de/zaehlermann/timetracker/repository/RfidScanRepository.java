@@ -21,14 +21,19 @@ public class RfidScanRepository extends AbstractCsvRepository {
 
   private final Clock clock;
 
-  public RfidScanRepository(final Clock clock) {
+  public RfidScanRepository(@Nonnull final Clock clock) {
     this.clock = clock;
-    new File(DefaultDirs.RECORDS_BASE_DIR).mkdirs();
+    createDefaultDirs();
   }
 
   public RfidScanRepository() {
     this.clock = Clock.systemDefaultZone();
+    createDefaultDirs();
+  }
+
+  private static void createDefaultDirs() {
     new File(DefaultDirs.RECORDS_BASE_DIR).mkdirs();
+    new File(DefaultDirs.TRACKING_DIR).mkdirs();
   }
 
   @Nonnull
