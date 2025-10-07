@@ -1,10 +1,10 @@
 package de.zaehlermann.timetracker.security.dev;
 
-import de.zaehlermann.timetracker.security.AppRoles;
-import de.zaehlermann.timetracker.security.domain.UserId;
-
 import java.util.List;
 import java.util.UUID;
+
+import de.zaehlermann.timetracker.security.AppRoles;
+import de.zaehlermann.timetracker.security.domain.UserId;
 
 /**
  * Provides predefined sample users for development and testing environments.
@@ -48,95 +48,98 @@ import java.util.UUID;
  * <strong>Important:</strong> This class is intended only for development and testing purposes. The sample users have
  * fixed, well-known credentials and should never be used in production environments.
  * </p>
- *
  * @see DevUser The development user implementation
  * @see DevUserDetailsService The service that uses these sample users
  */
 public final class SampleUsers {
 
-    /**
-     * Private constructor to prevent instantiation of this utility class.
-     */
-    private SampleUsers() {
-    }
+  /**
+   * Private constructor to prevent instantiation of this utility class.
+   */
+  private SampleUsers() {
+  }
 
-    /**
-     * The raw, unencoded password used by all sample users.
-     */
-    static final String SAMPLE_PASSWORD = "123";
+  /**
+   * The raw, unencoded password used by all sample users.
+   */
+  static final String SAMPLE_PASSWORD = "123";
 
-    /**
-     * The user ID for the admin sample user.
-     * <p>
-     * This constant can be used in tests and assertions to verify that operations were performed by the admin user.
-     * </p>
-     */
-    public static final UserId ADMIN_ID = UserId.of(UUID.randomUUID().toString());
+  /**
+   * The user ID for the admin sample user.
+   * <p>
+   * This constant can be used in tests and assertions to verify that operations were performed by the admin user.
+   * </p>
+   */
+  public static final UserId ADMIN_ID = UserId.of(UUID.randomUUID().toString());
 
-    /**
-     * The preferred username of the admin sample user.
-     * <p>
-     * This constant can be used with {@code @WithUserDetails} in tests to authenticate as the admin user.
-     * </p>
-     */
-    public static final String ADMIN_USERNAME = "admin";
+  /**
+   * The preferred username of the admin sample user.
+   * <p>
+   * This constant can be used with {@code @WithUserDetails} in tests to authenticate as the admin user.
+   * </p>
+   */
+  public static final String ADMIN_USERNAME = "admin";
 
-    /**
-     * The admin sample user with administrative privileges.
-     * <p>
-     * This user has both the "ADMIN" and the "USER" role and can be used in development configurations and tests that
-     * require administrative access.
-     * </p>
-     */
-    static DevUser ADMIN = DevUser.builder().preferredUsername(ADMIN_USERNAME).fullName("Alice Administrator")
-            .userId(ADMIN_ID).password(SAMPLE_PASSWORD).email("alice@example.com").roles(AppRoles.ADMIN, AppRoles.USER)
-            .build();
+  /**
+   * The admin sample user with administrative privileges.
+   * <p>
+   * This user has both the "ADMIN" and the "USER" role and can be used in development configurations and tests that
+   * require administrative access.
+   * </p>
+   */
+  private static DevUser ADMIN = DevUser.builder()
+    .preferredUsername(ADMIN_USERNAME)
+    .fullName("Administrator")
+    .userId(ADMIN_ID)
+    .password(SAMPLE_PASSWORD)
+    .roles(AppRoles.ADMIN, AppRoles.USER)
+    .build();
 
-    /**
-     * The user ID for the regular sample user.
-     * <p>
-     * This constant can be used in tests and assertions to verify that operations were performed by the regular user.
-     * </p>
-     */
-    public static final UserId USER_ID = UserId.of(UUID.randomUUID().toString());
+  /**
+   * The user ID for the regular sample user.
+   * <p>
+   * This constant can be used in tests and assertions to verify that operations were performed by the regular user.
+   * </p>
+   */
+  public static final UserId USER_ID = UserId.of(UUID.randomUUID().toString());
 
-    /**
-     * The preferred username of the regular sample user.
-     * <p>
-     * This constant can be used with {@code @WithUserDetails} in tests to authenticate as the regular user.
-     * </p>
-     */
-    public static final String USER_USERNAME = "user";
+  /**
+   * The preferred username of the regular sample user.
+   * <p>
+   * This constant can be used with {@code @WithUserDetails} in tests to authenticate as the regular user.
+   * </p>
+   */
+  public static final String USER_USERNAME = "user";
 
-    /**
-     * The regular sample user with standard privileges.
-     * <p>
-     * This user has the "USER" role and can be used in development configurations and tests that require standard user
-     * access.
-     * </p>
-     */
-    static final DevUser USER = DevUser.builder().preferredUsername(USER_USERNAME).fullName("Ursula User")
-            .userId(USER_ID).password(SAMPLE_PASSWORD).email("ursula@example.com").roles(AppRoles.USER).build();
+  /**
+   * The regular sample user with standard privileges.
+   * <p>
+   * This user has the "USER" role and can be used in development configurations and tests that require standard user
+   * access.
+   * </p>
+   */
+  static final DevUser USER = DevUser.builder().preferredUsername(USER_USERNAME).fullName("Ursula User")
+    .userId(USER_ID).password(SAMPLE_PASSWORD).email("ursula@example.com").roles(AppRoles.USER).build();
 
-    /**
-     * An unmodifiable list containing all sample users.
-     * <p>
-     * This list provides a convenient way to access all sample users at once, which is particularly useful when
-     * creating a {@link DevUserDetailsService} that should include all available test users. Using this list ensures
-     * that any new sample users added to this class will automatically be included in services that use it.
-     * </p>
-     * <p>
-     * Example usage in development configuration: <!-- spotless:off -->
-     * <pre>
-     * {@code
-     * @Bean
-     * UserDetailsService userDetailsService() {
-     *     return new DevUserDetailsService(SampleUsers.ALL_USERS);
-     * }
-     * }
-     * </pre>
-     * <!-- spotless:on -->
-     * </p>
-     */
-    static final List<DevUser> ALL_USERS = List.of(USER, ADMIN);
+  /**
+   * An unmodifiable list containing all sample users.
+   * <p>
+   * This list provides a convenient way to access all sample users at once, which is particularly useful when
+   * creating a {@link DevUserDetailsService} that should include all available test users. Using this list ensures
+   * that any new sample users added to this class will automatically be included in services that use it.
+   * </p>
+   * <p>
+   * Example usage in development configuration: <!-- spotless:off -->
+   * <pre>
+   * {@code
+   * @Bean
+   * UserDetailsService userDetailsService() {
+   *     return new DevUserDetailsService(SampleUsers.ALL_USERS);
+   * }
+   * }
+   * </pre>
+   * <!-- spotless:on -->
+   * </p>
+   */
+  static final List<DevUser> ALL_USERS = List.of(ADMIN); //USER not used at the moment
 }
