@@ -37,7 +37,7 @@ public class EmployeeView extends Main {
 
   private final Button saveBtn;
   private final Button deleteBtn;
-  final Grid<Employee> employeeGrid;
+  private final Grid<Employee> employeeGrid;
 
   public EmployeeView() {
 
