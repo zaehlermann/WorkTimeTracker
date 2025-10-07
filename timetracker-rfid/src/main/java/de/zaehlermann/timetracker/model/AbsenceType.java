@@ -3,8 +3,6 @@ package de.zaehlermann.timetracker.model;
 import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,18 +19,22 @@ public enum AbsenceType {
    * Krank
    */
   SICKNESS("S"),
+
   /**
    * Urlaub
    */
   VACATION("V"),
+
   /**
-   * Entschuldigt abwesent, z.B. privater Termin mitten am Tag
+   * Entschuldigt abwesend, z.B. privater Termin mitten am Tag
    */
   ALLOWED_ABSENCE("AE"),
+
   /**
    * Feiertag
    */
   PUBLIC_HOLIDAY("PH"),
+
   /**
    * Betriebsferien
    */

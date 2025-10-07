@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serial;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -64,28 +65,36 @@ public class TimeJournalView extends Main {
     selectMonth.setValue(LocalDate.now().getMonth().getValue());
 
     final Grid<JournalSummaryItem> journalSummaryGrid = new Grid<>(JournalSummaryItem.class, false);
-    journalSummaryGrid.addColumn(JournalSummaryItem::getKey).setHeader("Description").setResizable(true).setTextAlign(ColumnTextAlign.END);
-    journalSummaryGrid.addColumn(JournalSummaryItem::getValue).setHeader("Value").setResizable(true).setTextAlign(ColumnTextAlign.START);
+    journalSummaryGrid.addColumn(JournalSummaryItem::getKey).setHeader("Description").setResizable(true).setAutoWidth(true);
+    journalSummaryGrid.addColumn(JournalSummaryItem::getValue).setHeader("Value").setResizable(true).setAutoWidth(true);
     journalSummaryGrid.setAllRowsVisible(true);
     journalSummaryGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
+    journalSummaryGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
+    journalSummaryGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
     final Details summaryDetails = new Details("Time Journal Summary", journalSummaryGrid);
     summaryDetails.setOpened(true);
 
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
     workdayGrid.setColumnReorderingAllowed(true);
-    workdayGrid.addColumn(Workday::getDay).setHeader("Date").setSortable(true).setResizable(true);
-    workdayGrid.addColumn(Workday::getWeekDay).setHeader("Weekday").setSortable(true).setResizable(true);
-    workdayGrid.addColumn(Workday::getAbsenceType).setHeader("Absence").setSortable(true).setResizable(true);
-    workdayGrid.addColumn(Workday::getLogin).setHeader("Login").setSortable(true).setResizable(true);
-    workdayGrid.addColumn(Workday::getLogout).setHeader("Logout").setSortable(true).setResizable(true);
-    workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "").setHeader("Corrected").setSortable(true).setResizable(true);
-    workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted).setHeader("Hours").setSortable(true).setResizable(true);
-    workdayGrid.addColumn(Workday::getSaldo).setHeader("Saldo").setSortable(true).setResizable(true).setTextAlign(ColumnTextAlign.END);
+    workdayGrid.addColumn(Workday::getDay).setHeader("Date");
+    workdayGrid.addColumn(Workday::getWeekDayName).setHeader("Weekday").setComparator(Comparator.comparing(Workday::getWeekDayValue));
+    workdayGrid.addColumn(Workday::getAbsenceType).setHeader("Absence");
+    workdayGrid.addColumn(Workday::getLogin).setHeader("Login");
+    workdayGrid.addColumn(Workday::getLogout).setHeader("Logout");
+    workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "").setHeader("Corrected");
+    workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted).setHeader("Hours").setTextAlign(ColumnTextAlign.END);
+    workdayGrid.addColumn(Workday::getSaldo).setHeader("Saldo").setTextAlign(ColumnTextAlign.END);
+    workdayGrid.getColumns().forEach(column -> {
+      column.setSortable(true);
+      column.setResizable(true);
+    });
     workdayGrid.setWidthFull();
     workdayGrid.setAllRowsVisible(true);
     workdayGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
     workdayGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
+    workdayGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
+    workdayGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
     final Details workdayGridDetails = new Details("Time Journal Details", workdayGrid);
     workdayGridDetails.setWidthFull();
@@ -152,11 +161,12 @@ public class TimeJournalView extends Main {
   private static void displayJournal(@Nonnull final Select<String> selectEmployee,
                                      @Nonnull final Select<Integer> selectYear,
                                      @Nonnull final Select<Integer> selectMonth,
-                                     @Nonnull final Grid<JournalSummaryItem> journalSummary,
+                                     @Nonnull final Grid<JournalSummaryItem> journalSummaryGrid,
                                      @Nonnull final Grid<Workday> workdayGrid) {
 
     final Journal journal = JOURNAL_SERVICE.createJournal(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
-    journalSummary.setItems(journal.getJournalSummaryItems());
+    journalSummaryGrid.setItems(journal.getJournalSummaryItems());
+    journalSummaryGrid.recalculateColumnWidths();
     workdayGrid.setItems(journal.getWorkdays());
   }
 }
