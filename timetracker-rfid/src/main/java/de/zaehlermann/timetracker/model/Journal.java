@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class Journal {
 
-  public static final String SPLITLINE = "==================================================" + System.lineSeparator();
+  public static final String SPLIT_LINE = "==================================================" + System.lineSeparator();
   private final Employee employee;
   private final List<Workday> workdays;
 
@@ -33,13 +33,13 @@ public class Journal {
     final BigDecimal saldoSum = workdays.stream()
       .map(Workday::getSaldo)
       .reduce(BigDecimal.ZERO, BigDecimal::add);
-    return employee.toString() + System.lineSeparator() +
-           SPLITLINE +
+    return employee.toJournalHeader() + System.lineSeparator() +
+           SPLIT_LINE +
            Workday.HEADER_LINE + System.lineSeparator() +
            workdays.stream()
              .map(Workday::toTxtLine)
              .collect(Collectors.joining()) +
-           SPLITLINE +
+           SPLIT_LINE +
            "                                 " + saldoSum;
   }
 }

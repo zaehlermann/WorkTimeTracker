@@ -1,6 +1,5 @@
 package de.zaehlermann.timetracker;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 import de.zaehlermann.timetracker.log.Logger;
@@ -11,7 +10,7 @@ public class DataTracker {
   private static final RfidScanRepository RFID_SCAN_REPOSITORY = new RfidScanRepository();
   private static final Logger LOG = Logger.INSTANCE;
 
-  public static void main(final String[] args) throws IOException {
+  public static void main(final String[] args) {
     System.setProperty("org.slf4j.simpleLogger.logFormat", "%msg%n");
 
     LOG.info("============================");

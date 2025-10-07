@@ -1,6 +1,5 @@
 package de.zaehlermann.timetracker;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 import de.zaehlermann.timetracker.log.Logger;
@@ -11,7 +10,7 @@ public class JournalCreator {
   private static final Logger LOG = Logger.INSTANCE;
   private static final JournalService JOURNAL_SERVICE = new JournalService();
 
-  public static void main(final String[] args) throws IOException {
+  public static void main(final String[] args) {
     LOG.info("====================================");
     LOG.info("Welcome to Work-Time-Journal-Creator");
     LOG.info("====================================");
@@ -26,8 +25,7 @@ public class JournalCreator {
         break;
       }
 
-      final String journal = JOURNAL_SERVICE.createJournal(input);
-      LOG.info(journal);
+      LOG.info(JOURNAL_SERVICE.createJournal(input));
     }
   }
 }

@@ -34,10 +34,10 @@ public class TimeJournalView extends Main {
 
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
 
-    final Select<String> selectEmployees = new Select<>();
-    selectEmployees.setLabel("Employees");
-    selectEmployees.setItems(allEmployeeNames); // select from the employee file
-    selectEmployees.setValue(allEmployeeNames.getFirst());
+    final Select<String> selectEmployee = new Select<>();
+    selectEmployee.setLabel("Employee");
+    selectEmployee.setItems(allEmployeeNames); // select from the employee file
+    selectEmployee.setValue(allEmployeeNames.getFirst());
 
     final Select<Integer> selectYear = new Select<>();
     selectYear.setLabel("Year (Not implemented yet.)");
@@ -56,9 +56,9 @@ public class TimeJournalView extends Main {
     add(textArea);
 
     final Button button = new Button("Create Journal");
-    button.addClickListener(clickEvent -> textArea.setValue(JOURNAL_SERVICE.createJournal(selectEmployees.getValue())));
+    button.addClickListener(clickEvent -> textArea.setValue(JOURNAL_SERVICE.createJournal(selectEmployee.getValue())));
 
-    layout.add(selectEmployees, selectYear, selectMonth, button, textArea);
+    layout.add(selectEmployee, selectYear, selectMonth, button, textArea);
     add(layout);
 
   }

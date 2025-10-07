@@ -13,13 +13,13 @@ public class RfidScan {
   private final LocalDate workday;
   private final LocalTime scanTime;
 
-  public RfidScan(String rfid) {
+  public RfidScan(final String rfid) {
     this.rfid = rfid;
     this.workday = LocalDate.now();
     this.scanTime = LocalTime.now();
   }
 
-  public RfidScan(String rfid, String workday, String scanTime) {
+  public RfidScan(final String rfid, final String workday, final String scanTime) {
     this.rfid = rfid;
     this.workday = LocalDate.parse(workday);
     this.scanTime = LocalTime.parse(scanTime);
@@ -37,8 +37,8 @@ public class RfidScan {
     return scanTime;
   }
 
-  public static RfidScan fromCsvLine(String csvLine) {
-    String[] split = csvLine.split(";");
+  public static RfidScan fromCsvLine(final String csvLine) {
+    final String[] split = csvLine.split(";");
     return new RfidScan(split[0], split[1], split[2]);
   }
 
@@ -47,8 +47,8 @@ public class RfidScan {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (!(o instanceof RfidScan rfIdScan)) return false;
+  public boolean equals(final Object o) {
+    if (!(o instanceof final RfidScan rfIdScan)) return false;
     return Objects.equals(rfid, rfIdScan.rfid) &&
         Objects.equals(workday, rfIdScan.workday) &&
         Objects.equals(scanTime, rfIdScan.scanTime);
