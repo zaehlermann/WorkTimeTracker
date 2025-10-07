@@ -60,27 +60,27 @@ public class TimeJournalView extends Main {
     selectMonth.setItems(asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
     selectMonth.setValue(LocalDate.now().getMonth().getValue());
 
+    final TextArea textAreaSummary = new TextArea();
+    textAreaSummary.setWidthFull();
+    textAreaSummary.setLabel("Time Journal Summary:");
+
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
+    workdayGrid.setAriaLabel("Time Journal Summary:");
     workdayGrid.addColumn(Workday::getDay).setHeader("Date").setSortable(true);
     workdayGrid.addColumn(Workday::getWeekDay).setHeader("Weekday").setSortable(true);
     workdayGrid.addColumn(Workday::getAbsenceType).setHeader("Absence").setSortable(true);
     workdayGrid.addColumn(Workday::getLogin).setHeader("Login").setSortable(true);
     workdayGrid.addColumn(Workday::getLogout).setHeader("Logout").setSortable(true);
-    workdayGrid.addColumn(Workday::isCorrected).setHeader("Corrected").setSortable(true);
+    workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "").setHeader("Corrected").setSortable(true);
     workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted).setHeader("Hours").setSortable(true);
     workdayGrid.addColumn(Workday::getSaldo).setHeader("Saldo").setSortable(true);
     workdayGrid.setWidthFull();
     workdayGrid.setAllRowsVisible(true);
     workdayGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
 
-    final TextArea textArea = new TextArea();
-    textArea.setWidthFull();
-    textArea.setLabel("Time Journal:");
-    textArea.addClassName("journal-font");
-
     final Button btnShowJournal = new Button("Show Journal");
     btnShowJournal.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    btnShowJournal.addClickListener(clickEvent -> displayJournal(selectEmployee, selectYear, selectMonth, textArea, workdayGrid));
+    btnShowJournal.addClickListener(clickEvent -> displayJournal(selectEmployee, selectYear, selectMonth, textAreaSummary, workdayGrid));
 
     final Anchor downloadJournalTxt = new Anchor(downloadTxt(selectEmployee, selectYear, selectMonth), "Download Journal as TXT");
     final Anchor downloadJournalCsv = new Anchor(downloadCsv(selectEmployee, selectYear, selectMonth), "Download Journal as CSV");
@@ -91,7 +91,7 @@ public class TimeJournalView extends Main {
     downloadLayout.setMaxColumns(3);
     downloadLayout.setWidthFull();
 
-    final VerticalLayout verticalLayout = new VerticalLayout(formLayout, workdayGrid, textArea, downloadLayout);
+    final VerticalLayout verticalLayout = new VerticalLayout(formLayout, textAreaSummary, workdayGrid, downloadLayout);
     verticalLayout.setSizeFull();
 
     setSizeFull();
@@ -134,13 +134,11 @@ public class TimeJournalView extends Main {
   private static void displayJournal(@Nonnull final Select<String> selectEmployee,
                                      @Nonnull final Select<Integer> selectYear,
                                      @Nonnull final Select<Integer> selectMonth,
-                                     @Nonnull final TextArea textArea,
+                                     @Nonnull final TextArea textAreaSummary,
                                      @Nonnull final Grid<Workday> workdayGrid) {
 
-    final String journalTxt = JOURNAL_SERVICE.createAndSaveJournalTxt(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
-    textArea.setValue(journalTxt);
-
     final Journal journal = JOURNAL_SERVICE.createJournal(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
+    textAreaSummary.setValue(journal.getSummaryTxt());
     workdayGrid.setItems(journal.getWorkdays());
   }
 }
