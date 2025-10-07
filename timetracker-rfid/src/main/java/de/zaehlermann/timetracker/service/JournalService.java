@@ -15,15 +15,17 @@ public class JournalService {
   private final JournalRepository journalRepository = new JournalRepository();
   private final EmployeeRepository employeeRepository = new EmployeeRepository();
 
-  public String createJournal(final String rfid, final Integer year, final Integer month) {
-    final List<RfidScan> allScans = rfidScanRepository.findAllRfIdScansByRfid(rfid, year, month);
-    final Employee employee = employeeRepository.findEmployee(rfid);
+  public String createJournal(final String employeeId, final Integer year, final Integer month) {
+    final Employee employee = employeeRepository.findEmployeeByEmployeeId(employeeId);
+    final List<RfidScan> allScans = rfidScanRepository.findAllRfIdScansByRfid(employee.getRfid(), year, month);
     final String journal = new Journal(employee, allScans, year, month).printJournal();
-    journalRepository.saveToFile(rfid, journal);
+    journalRepository.saveToFile(employeeId, journal);
     return journal;
   }
 
   public List<String> getAllEmployeeNames() {
-    return rfidScanRepository.findAllRfids();
+    return employeeRepository.findAll().stream()
+      .map(Employee::getEmployeeId)
+      .toList();
   }
 }

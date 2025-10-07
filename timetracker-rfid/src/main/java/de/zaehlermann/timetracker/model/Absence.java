@@ -2,6 +2,7 @@ package de.zaehlermann.timetracker.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 /**
  * One closed period of absence.
@@ -10,7 +11,7 @@ import java.time.LocalTime;
 public class Absence implements AbstractCsvEntity<Employee> {
   public static final String HEADER_LINE = "RFID;TYPE;STARTDAY;ENDDAY;STARTTIME;ENDTIME";
 
-  private final String rfid;
+  private final String employeeId;
   private final AbsenceType type;
   private final LocalDate startDay;
 
@@ -28,10 +29,10 @@ public class Absence implements AbstractCsvEntity<Employee> {
    */
   private final LocalTime endTime;
 
-  public Absence(final String rfid, final AbsenceType type,
+  public Absence(final String employeeId, final AbsenceType type,
                  final LocalDate startDay, final LocalDate endDay,
                  final LocalTime startTime, final LocalTime endTime) {
-    this.rfid = rfid;
+    this.employeeId = employeeId;
     this.type = type;
     this.startDay = startDay;
     this.endDay = endDay;
@@ -41,12 +42,48 @@ public class Absence implements AbstractCsvEntity<Employee> {
 
   @Override
   public String toCsvLine() {
-    return rfid + ";" +
+    return employeeId + ";" +
            type.name() + ";" +
            startDay.toString() + ";" +
            (endDay != null ? endDay.toString() : "") + ";" +
            (startTime != null ? startTime.toString() : "") + ";" +
            (endTime != null ? endTime.toString() : "") +
            System.lineSeparator();
+  }
+
+  public LocalDate getEndDay() {
+    return endDay;
+  }
+
+  public LocalTime getEndTime() {
+    return endTime;
+  }
+
+  public String getEmployeeId() {
+    return employeeId;
+  }
+
+  public LocalDate getStartDay() {
+    return startDay;
+  }
+
+  public LocalTime getStartTime() {
+    return startTime;
+  }
+
+  public AbsenceType getType() {
+    return type;
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if(!(o instanceof final Absence absence)) return false;
+    return Objects.equals(employeeId, absence.employeeId) && Objects.equals(startDay, absence.startDay) &&
+           Objects.equals(endDay, absence.endDay) && Objects.equals(startTime, absence.startTime);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(employeeId, startDay, endDay, startTime);
   }
 }

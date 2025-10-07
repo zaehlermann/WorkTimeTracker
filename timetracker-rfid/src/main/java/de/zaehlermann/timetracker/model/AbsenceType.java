@@ -1,5 +1,8 @@
 package de.zaehlermann.timetracker.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum AbsenceType {
 
   /**
@@ -28,13 +31,17 @@ public enum AbsenceType {
    */
   COMPANY_HOLIDAY("BF");
 
-  private final String display;
+  private final String printValue;
 
-  AbsenceType(final String display) {
-    this.display = display;
+  AbsenceType(final String printValue) {
+    this.printValue = printValue;
   }
 
-  public String getDisplay() {
-    return display;
+  public static List<AbsenceType> getSelectableValues() {
+    return Arrays.asList(SICKNESS, VACATION, ALLOWED_ABSENCE, PUBLIC_HOLIDAY, COMPANY_HOLIDAY);
+  }
+
+  public String getPrintValue() {
+    return printValue;
   }
 }
