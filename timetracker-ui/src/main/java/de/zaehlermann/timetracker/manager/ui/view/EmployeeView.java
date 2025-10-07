@@ -1,8 +1,5 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
-import java.io.Serial;
-import java.util.List;
-
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -19,13 +16,16 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.model.Employee;
 import de.zaehlermann.timetracker.service.EmployeeService;
 import de.zaehlermann.timetracker.service.RfidScanService;
+import de.zaehlermann.timetracker.validate.ValidateUtils;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+
+import java.io.Serial;
+import java.util.List;
 
 @Route("employees")
 @PageTitle("Employees")
@@ -89,7 +89,7 @@ public class EmployeeView extends Main {
 
   private void saveEmployee() {
 
-    final boolean isValid = validate(List.of(rfid, firstName, lastName, employeeId));
+    final boolean isValid = ValidateUtils.validateTextFields(List.of(rfid, firstName, lastName, employeeId));
     if(!isValid) {
       Notification.show("Please fill all required fields", 3000, Notification.Position.BOTTOM_END)
         .addThemeVariants(NotificationVariant.LUMO_ERROR);
@@ -119,21 +119,6 @@ public class EmployeeView extends Main {
       .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
   }
 
-  private boolean validate(@Nonnull final List<? extends HasValue<?, String>> textFields) {
-    final boolean isInvalid = textFields.stream()
-      .map(this::validate)
-      .toList()
-      .stream()
-      .anyMatch(e -> e.equals(false));
-    return !isInvalid;
-  }
 
-  private boolean validate(@Nonnull final HasValue<?, String> textField) {
-    final boolean invalid = textField.getValue() == null || textField.getValue().trim().isEmpty();
-    if(textField instanceof final HasValidationProperties hasValidationProperties) {
-      hasValidationProperties.setInvalid(invalid);
-    }
-    return !invalid;
-  }
 
 }
