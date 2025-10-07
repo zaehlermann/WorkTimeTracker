@@ -5,10 +5,12 @@ import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -30,30 +32,22 @@ public class EmployeeView extends Main {
   private static final long serialVersionUID = -8665685480589825450L;
   private static final EmployeeService EMPLOYEE_SERVICE = new EmployeeService();
 
-  private final TextField employeeId = new TextField();
-  private final TextField rfid = new TextField();
-  private final TextField firstName = new TextField();
-  private final TextField lastName = new TextField();
-
-  private final Button saveBtn;
-  private final Button deleteBtn;
+  private final TextField employeeId = new TextField("Employee ID");
+  private final TextField rfid = new TextField("RFID");
+  private final TextField firstName = new TextField("First Name");
+  private final TextField lastName = new TextField("Last Name");
   private final Grid<Employee> employeeGrid;
 
   public EmployeeView() {
-
-    employeeId.setPlaceholder("Employee ID");
-    rfid.setPlaceholder("RFID");
-    firstName.setPlaceholder("First Name");
-    lastName.setPlaceholder("Last Name");
 
     employeeId.setRequired(true);
     rfid.setRequired(true);
     firstName.setRequired(true);
     lastName.setRequired(true);
 
-    saveBtn = new Button("Save", event -> createTask());
+    final Button saveBtn = new Button("Save", event -> createTask());
     saveBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    deleteBtn = new Button("Delete", event -> deleteTask());
+    final Button deleteBtn = new Button("Delete", event -> deleteTask());
 
     employeeGrid = new Grid<>();
     employeeGrid.setItems(EMPLOYEE_SERVICE.findAll());
@@ -65,12 +59,17 @@ public class EmployeeView extends Main {
     employeeGrid.addColumn(Employee::getLastName).setHeader("Last Name");
     employeeGrid.setSizeFull();
 
-    setSizeFull();
     addClassNames(LumoUtility.BoxSizing.BORDER, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN,
                   LumoUtility.Padding.MEDIUM, LumoUtility.Gap.SMALL);
 
-    add(new ViewToolbar("Employees", ViewToolbar.group(employeeId, rfid, firstName, lastName, saveBtn, deleteBtn)));
-    add(employeeGrid);
+    final FormLayout formLayout = new FormLayout(employeeId, rfid, firstName, lastName, saveBtn, deleteBtn);
+
+    final VerticalLayout verticalLayout = new VerticalLayout(formLayout, employeeGrid);
+    verticalLayout.setSizeFull();
+
+    setSizeFull();
+    add(new ViewToolbar("Employees"));
+    add(verticalLayout);
   }
 
   private void createTask() {
