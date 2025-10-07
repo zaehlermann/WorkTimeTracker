@@ -20,6 +20,8 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Main;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.Menu;
@@ -34,6 +36,7 @@ import de.zaehlermann.timetracker.model.Journal;
 import de.zaehlermann.timetracker.model.JournalSummaryItem;
 import de.zaehlermann.timetracker.model.Workday;
 import de.zaehlermann.timetracker.service.JournalService;
+import de.zaehlermann.timetracker.validate.ValidateUtils;
 import jakarta.annotation.security.PermitAll;
 
 @Route("time-journal")
@@ -55,10 +58,12 @@ public class TimeJournalView extends Main {
   public static final String COLUMN_LOGOUT = "Logout";
   public static final String TOTAL = "Total: ";
 
+
+  final Select<String> selectEmployee = new Select<>();
+
   public TimeJournalView() {
 
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
-    final Select<String> selectEmployee = new Select<>();
     selectEmployee.setLabel("Employee");
     selectEmployee.setItems(allEmployeeNames); // select from the employee file
     selectEmployee.setValue(allEmployeeNames.isEmpty() ? null : allEmployeeNames.getFirst());
@@ -176,6 +181,13 @@ public class TimeJournalView extends Main {
                                      @Nonnull final Select<Integer> selectMonth,
                                      @Nonnull final Grid<JournalSummaryItem> journalSummaryGrid,
                                      @Nonnull final Grid<Workday> workdayGrid) {
+
+    final boolean isValid = ValidateUtils.validateSelects(List.of(selectEmployee, selectYear, selectMonth));
+    if(!isValid) {
+      Notification.show("Please fill all required fields", 3000, Notification.Position.BOTTOM_END)
+          .addThemeVariants(NotificationVariant.LUMO_ERROR);
+      return;
+    }
 
     final Journal journal = JOURNAL_SERVICE.createJournal(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
     journalSummaryGrid.setItems(journal.getJournalSummaryItems());
