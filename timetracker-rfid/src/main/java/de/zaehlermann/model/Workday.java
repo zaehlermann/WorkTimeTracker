@@ -1,6 +1,6 @@
-package de.elementcamper.model;
+package de.zaehlermann.model;
 
-import de.elementcamper.config.TimeFormat;
+import de.zaehlermann.config.TimeFormat;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

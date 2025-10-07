@@ -1,6 +1,6 @@
-package de.elementcamper;
+package de.zaehlermann;
 
-import de.elementcamper.repository.RfidScanRepository;
+import de.zaehlermann.repository.RfidScanRepository;
 
 import java.io.IOException;
 import java.util.Scanner;

@@ -1,4 +1,4 @@
-package de.elementcamper.model;
+package de.zaehlermann.model;
 
 public enum AbsenceType {
 

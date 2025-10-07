@@ -1,4 +1,4 @@
-package de.elementcamper.config;
+package de.zaehlermann.config;
 
 import java.time.format.DateTimeFormatter;
 
