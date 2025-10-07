@@ -7,37 +7,24 @@ import java.util.Objects;
 /**
  * One closed period of absence.
  * a.k.a. Abwesenheit
+ * @param endDay null means the full start day only
+ * @param startTime Start/End null means the full day;
+ * @param endTime Start/End null means the full day;
  */
-public class Absence implements AbstractCsvEntity<Employee> {
-  public static final String HEADER_LINE = "RFID;TYPE;STARTDAY;ENDDAY;STARTTIME;ENDTIME";
+public record Absence(String employeeId, AbsenceType type, LocalDate startDay, LocalDate endDay, LocalTime startTime, LocalTime endTime)
+  implements AbstractCsvEntity<Employee> {
+  public static final String HEADER_LINE = "EMPLOYEE;TYPE;STARTDAY;ENDDAY;STARTTIME;ENDTIME";
 
-  private final String employeeId;
-  private final AbsenceType type;
-  private final LocalDate startDay;
+  @Override
+  public boolean equals(final Object o) {
+    if(!(o instanceof final Absence absence)) return false;
+    return Objects.equals(employeeId, absence.employeeId) && Objects.equals(startDay, absence.startDay) &&
+           Objects.equals(endDay, absence.endDay) && Objects.equals(startTime, absence.startTime);
+  }
 
-  /**
-   * null means the full start day only
-   */
-  private final LocalDate endDay;
-
-  /**
-   * Start/End null means the full day;
-   */
-  private final LocalTime startTime;
-  /**
-   * Start/End null means the full day;
-   */
-  private final LocalTime endTime;
-
-  public Absence(final String employeeId, final AbsenceType type,
-                 final LocalDate startDay, final LocalDate endDay,
-                 final LocalTime startTime, final LocalTime endTime) {
-    this.employeeId = employeeId;
-    this.type = type;
-    this.startDay = startDay;
-    this.endDay = endDay;
-    this.startTime = startTime;
-    this.endTime = endTime;
+  @Override
+  public int hashCode() {
+    return Objects.hash(employeeId, startDay, endDay, startTime);
   }
 
   @Override
@@ -51,39 +38,14 @@ public class Absence implements AbstractCsvEntity<Employee> {
            System.lineSeparator();
   }
 
-  public LocalDate getEndDay() {
-    return endDay;
-  }
-
-  public LocalTime getEndTime() {
-    return endTime;
-  }
-
-  public String getEmployeeId() {
-    return employeeId;
-  }
-
-  public LocalDate getStartDay() {
-    return startDay;
-  }
-
-  public LocalTime getStartTime() {
-    return startTime;
-  }
-
-  public AbsenceType getType() {
-    return type;
-  }
-
-  @Override
-  public boolean equals(final Object o) {
-    if(!(o instanceof final Absence absence)) return false;
-    return Objects.equals(employeeId, absence.employeeId) && Objects.equals(startDay, absence.startDay) &&
-           Objects.equals(endDay, absence.endDay) && Objects.equals(startTime, absence.startTime);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(employeeId, startDay, endDay, startTime);
+  public static Absence fromCsvLine(final String csvLine) {
+    final String[] parts = csvLine.split(";",-1);
+    final String employeeId = parts[0];
+    final AbsenceType type = AbsenceType.valueOf(parts[1]);
+    final LocalDate startDay = LocalDate.parse(parts[2]);
+    final LocalDate endDay = parts[3] == null || parts[3].isEmpty() ? null : LocalDate.parse(parts[3]);
+    final LocalTime startTime = parts[4] == null || parts[4].isEmpty() ? null : LocalTime.parse(parts[4]);
+    final LocalTime endTime = parts[5] == null || parts[5].isEmpty() ? null : LocalTime.parse(parts[5]);
+    return new Absence(employeeId, type, startDay, endDay, startTime, endTime);
   }
 }
