@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
-import de.zaehlermann.timetracker.globals.Defaults;
+import de.zaehlermann.timetracker.globals.DefaultDirs;
 import de.zaehlermann.timetracker.model.Employee;
 
 public class EmployeeRepository extends AbstractCsvRepository {
@@ -32,7 +32,7 @@ public class EmployeeRepository extends AbstractCsvRepository {
   }
 
   private Path getFilePath() {
-    return Path.of(Defaults.EMPLOYEE_DIR, "employees.csv");
+    return Path.of(DefaultDirs.EMPLOYEE_DIR, "employees.csv");
   }
 
   public Employee findEmployeeByEmployeeId(final String employeeId) {

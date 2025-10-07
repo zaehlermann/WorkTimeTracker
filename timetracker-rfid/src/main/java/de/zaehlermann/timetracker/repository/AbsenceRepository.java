@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
-import de.zaehlermann.timetracker.globals.Defaults;
+import de.zaehlermann.timetracker.globals.DefaultDirs;
 import de.zaehlermann.timetracker.model.Absence;
 
 public class AbsenceRepository extends AbstractCsvRepository {
@@ -32,7 +32,7 @@ public class AbsenceRepository extends AbstractCsvRepository {
   }
 
   private Path getFilePath() {
-    return Path.of(Defaults.EMPLOYEE_DIR, "absence.csv");
+    return Path.of(DefaultDirs.EMPLOYEE_DIR, "absence.csv");
   }
 
   @Nonnull
