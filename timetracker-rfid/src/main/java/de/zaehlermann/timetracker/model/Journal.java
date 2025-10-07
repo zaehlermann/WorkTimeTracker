@@ -138,4 +138,9 @@ public class Journal {
     final long minutes = duration.minusHours(hours).toMinutes();
     return String.format("%03d:%02d", hours, minutes);
   }
+
+  @Nonnull
+  public List<Workday> getWorkdays() {
+    return workdays;
+  }
 }

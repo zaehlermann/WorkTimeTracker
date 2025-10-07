@@ -48,7 +48,7 @@ public class JournalService {
   }
 
   @Nonnull
-  private Journal createJournal(@Nonnull final String employeeId, @Nonnull final Integer year, @Nonnull final Integer month) {
+  public Journal createJournal(@Nonnull final String employeeId, @Nonnull final Integer year, @Nonnull final Integer month) {
     final Employee employee = EMPLOYEE_REPOSITORY.findEmployeeByEmployeeId(employeeId);
     final List<Absence> absences = ABSENCE_REPOSITORY.findAbsencesByEmployeeId(employeeId, year, month);
     final List<Correction> corrections = CORRECTION_REPOSITORY.findCorrectionsByEmployeeId(employeeId, year, month);
