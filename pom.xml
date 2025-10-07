@@ -5,7 +5,7 @@
   <description>Work time tracking by RFID</description>
   <groupId>de.zaehlermann.timetracker</groupId>
   <artifactId>timetracker-parent</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <url>https://github.com/zaehlermann/WorkTimeTracker</url>
   <packaging>pom</packaging>
 
