@@ -51,30 +51,46 @@ public class Journal {
 
   @Nonnull
   public String printJournalTxt() {
-    final BigDecimal saldoSum = workdays.stream()
-      .map(Workday::getSaldo)
-      .reduce(BigDecimal.ZERO, BigDecimal::add);
-    return employee.toJournalHeader() + System.lineSeparator() +
+    final BigDecimal saldoTotal = calcSaldoTotal();
+    final long hoursTotal = calcHoursTotal();
+
+    return employee.toJournalTxtHeader() + System.lineSeparator() +
            SPLIT_LINE +
            Workday.HEADER_LINE_TXT + System.lineSeparator() +
            workdays.stream()
              .map(Workday::toTxtLine)
              .collect(Collectors.joining()) +
            SPLIT_LINE +
-           "                                 " + saldoSum;
+           //"2025-08-31  7  WE                 " +
+           "                                  " + hoursTotal + "  " + saldoTotal;
   }
 
+  @Nonnull
   public String printJournalCsv() {
-    final BigDecimal saldoSum = workdays.stream()
-      .map(Workday::getSaldo)
-      .reduce(BigDecimal.ZERO, BigDecimal::add);
-    return employee.toJournalHeader() + System.lineSeparator() +
+    final BigDecimal saldoTotal = calcSaldoTotal();
+    final long hoursTotal = calcHoursTotal();
+    return employee.toJournalTxtHeader() + System.lineSeparator() +
            SPLIT_LINE +
            Workday.HEADER_LINE_CSV + System.lineSeparator() +
            workdays.stream()
              .map(Workday::toCsvLine)
              .collect(Collectors.joining()) +
            SPLIT_LINE +
-           "Total Saldo:" + saldoSum;
+           "Total Hours:" + hoursTotal + System.lineSeparator() +
+           "Total Saldo:" + saldoTotal;
+  }
+
+  private long calcHoursTotal() {
+    return workdays.stream()
+             .map(workday -> workday.getHoursDayInPlace().toMinutes())
+             .mapToLong(value -> value)
+             .sum() / 60;
+  }
+
+  @Nonnull
+  private BigDecimal calcSaldoTotal() {
+    return workdays.stream()
+      .map(Workday::getSaldo)
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 }

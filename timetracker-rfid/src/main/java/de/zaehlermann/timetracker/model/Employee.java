@@ -2,6 +2,8 @@ package de.zaehlermann.timetracker.model;
 
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
+
 public class Employee implements AbstractCsvEntity<Employee> {
 
   public static final String HEADER_LINE = "EMPLOYEE_ID;RFID;FIRSTNAME;LASTNAME";
@@ -18,17 +20,20 @@ public class Employee implements AbstractCsvEntity<Employee> {
     this.lastName = lastName;
   }
 
-  public String toJournalHeader() {
+  @Nonnull
+  public String toJournalTxtHeader() {
     return "EmployeeID: " + employeeId + System.lineSeparator() +
            "RFID: " + rfid + System.lineSeparator() +
            "Name: " + firstName + " " + lastName;
   }
 
+  @Nonnull
   public static Employee fromCsvLine(final String csvLine) {
-    final String[] split = csvLine.split(";",-1);
+    final String[] split = csvLine.split(";", -1);
     return new Employee(split[0], split[1], split[2], split[3]);
   }
 
+  @Nonnull
   @Override
   public String toCsvLine() {
     return employeeId + ";" + rfid + ";" + firstName + ";" + lastName + System.lineSeparator();
