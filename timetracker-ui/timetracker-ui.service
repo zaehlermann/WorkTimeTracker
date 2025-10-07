@@ -3,9 +3,8 @@ Description=WorkTimeTracker Web User Interface
 After=network.target
 
 [Service]
-User=mike
-ExecStart=sudo /usr/bin/java -jar /home/mike/timetracker/timetracker-ui.jar
+ExecStart=/usr/bin/java -jar /home/mike/timetracker/timetracker-ui.jar
 Restart=always
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target

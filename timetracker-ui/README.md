@@ -31,12 +31,12 @@ docker build -t my-application:latest .
 
 # Deploy to Raspberry Pi
 
-(My raspberry pi has the dnc timetracker.local)
+My raspberry pi has the dnc timetracker.local. The UI service must run under the same user as the timetracker-rfid service.
 
 1. Transfer jar file and autostart service file to the raspberry pi
 
 ```bash
-scp target/timetracker-ui-1.0-SNAPSHOT.jar mike@timetracker.local:/home/mike/timetrackercd timetracker
+scp target/timetracker-ui-1.0-SNAPSHOT.jar mike@timetracker.local:/home/mike/timetracker
 scp timetracker-ui.service mike@timetracker.local:/home/mike/timetracker
 ```
 
@@ -46,15 +46,20 @@ scp timetracker-ui.service mike@timetracker.local:/home/mike/timetracker
 ssh mike@timetracker.local
 cd timetracker
 mv timetracker-ui-1.0-SNAPSHOT.jar timetracker-ui.jar
-sudo cp timetracker-ui.service /etc/systemd/system
+cp timetracker-ui.service /home/mike/.config/systemd/user
 ```
 
 3. Enable and start the service:
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable timetracker-ui
-sudo systemctl start timetracker-ui
-sudo systemctl status timetracker-ui
-watch -n 2 sudo systemctl status timetracker-ui
+systemctl --user daemon-reload
+systemctl --user enable timetracker-ui
+systemctl --user start timetracker-ui
+```
+
+4. Check the logs
+
+```bash
+systemctl status timetracker-ui
+watch -n 1 systemctl --user status timetracker-ui
 ```
