@@ -73,7 +73,7 @@ public class Correction implements AbstractCsvEntity<Correction> {
   }
 
   @Nonnull
-  public static Correction fromCsvLine(final String csvLine) {
+  public static Correction fromCsvLine(@Nonnull final String csvLine) {
     final String[] split = csvLine.split(";", -1);
     return new Correction(split[0], split[1], split[2], split[3]);
   }
