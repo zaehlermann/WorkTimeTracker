@@ -1,5 +1,6 @@
 package de.zaehlermann.timetracker;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 import de.zaehlermann.timetracker.log.Logger;
@@ -25,7 +26,7 @@ public class JournalCreator {
         break;
       }
 
-      LOG.info(JOURNAL_SERVICE.createJournal(input, null, null));
+      LOG.info(JOURNAL_SERVICE.createAndSaveJournalTxt(input, LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
     }
   }
 }

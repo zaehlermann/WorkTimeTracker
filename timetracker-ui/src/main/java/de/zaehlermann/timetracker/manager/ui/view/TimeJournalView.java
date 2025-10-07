@@ -2,13 +2,18 @@ package de.zaehlermann.timetracker.manager.ui.view;
 
 import static java.util.Arrays.asList;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -16,6 +21,9 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.DownloadResponse;
+import com.vaadin.flow.server.streams.InputStreamDownloadCallback;
 
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.service.JournalService;
@@ -55,20 +63,53 @@ public class TimeJournalView extends Main {
     textArea.addClassName("journal-font");
     add(textArea);
 
-    final Button button = new Button("Create Journal");
-    button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    final Button btnShowJournal = new Button("Show Journal");
+    btnShowJournal.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    btnShowJournal.addClickListener(clickEvent -> displayJournal(selectEmployee, selectYear, selectMonth, textArea));
 
-    button.addClickListener(clickEvent -> {
-      final String journal = JOURNAL_SERVICE.createJournal(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
-      textArea.setValue(journal);
-    });
+    final Anchor downloadJournalTxt = new Anchor(downloadTxt(selectEmployee, selectYear, selectMonth), "Download Journal as TXT");
+    final Anchor downloadJournalCsv = new Anchor(downloadCsv(selectEmployee, selectYear, selectMonth), "Download Journal as CSV");
+    //final Anchor downloadJournalBackup = new Anchor(DownloadHandler.forFile(JOURNAL_SERVICE.downloadBackup()), "Download FullBackup");
 
-    final FormLayout formLayout = new FormLayout(selectEmployee, selectYear, selectMonth, button);
-    final VerticalLayout verticalLayout = new VerticalLayout(formLayout, textArea);
+    final FormLayout formLayout = new FormLayout(selectEmployee, selectYear, selectMonth, btnShowJournal);
+    final FormLayout downloadLayout = new FormLayout(downloadJournalTxt, downloadJournalCsv);
+
+    final VerticalLayout verticalLayout = new VerticalLayout(formLayout, textArea, downloadLayout);
     verticalLayout.setSizeFull();
 
     setSizeFull();
     add(new ViewToolbar("Time Journal"));
     add(verticalLayout);
+  }
+
+  @Nonnull
+  private static DownloadHandler downloadTxt(@Nonnull final Select<String> selectEmployee,
+                                             @Nonnull final Select<Integer> selectYear,
+                                             @Nonnull final Select<Integer> selectMonth) {
+
+    return DownloadHandler.fromInputStream((InputStreamDownloadCallback) downloadEvent -> {
+      final File file = JOURNAL_SERVICE.downloadTxt(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
+      final FileInputStream fileInputStream = new FileInputStream(file);
+      return new DownloadResponse(fileInputStream, file.getName(), "text/plain", file.length());
+    });
+  }
+
+  @Nonnull
+  private static DownloadHandler downloadCsv(@Nonnull final Select<String> selectEmployee,
+                                             @Nonnull final Select<Integer> selectYear,
+                                             @Nonnull final Select<Integer> selectMonth) {
+    return DownloadHandler.fromInputStream((InputStreamDownloadCallback) downloadEvent -> {
+      final File file = JOURNAL_SERVICE.downloadCsv(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
+      final FileInputStream fileInputStream = new FileInputStream(file);
+      return new DownloadResponse(fileInputStream, file.getName(), "text/csv", file.length());
+    });
+  }
+
+  private static void displayJournal(@Nonnull final Select<String> selectEmployee,
+                                     @Nonnull final Select<Integer> selectYear,
+                                     @Nonnull final Select<Integer> selectMonth,
+                                     @Nonnull final TextArea textArea) {
+    final String journal = JOURNAL_SERVICE.createAndSaveJournalTxt(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
+    textArea.setValue(journal);
   }
 }
