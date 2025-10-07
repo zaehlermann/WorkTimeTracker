@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import de.zaehlermann.timetracker.globals.TimeFormat;
 
 public class Workday {
@@ -20,24 +23,35 @@ public class Workday {
   private final AbsenceType absenceType;
   private final BigDecimal saldo;
 
-  public Workday(final LocalDate day, final LocalTime login, final LocalTime logout) {
+  public Workday(@Nonnull final LocalDate day,
+                 @Nullable final Absence absences,
+                 @Nullable final LocalTime login,
+                 @Nullable final LocalTime logout) {
     this.day = day;
+    this.absenceType = getAbsenceType(day, absences);
     this.login = login;
     this.logout = logout;
     this.hoursDayInPlace = calcHoursInPlace(login, logout);
-    this.absenceType = calcAbsenceType(day);
     final long saldoInMinutes = calcSaldoInMinutes(hoursDayInPlace);
     this.saldo = BigDecimal.valueOf(saldoInMinutes).divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
+  }
+
+  @Nullable
+  private static AbsenceType getAbsenceType(final LocalDate day, final Absence absences) {
+    if(isWeekend(day)) {
+      return AbsenceType.WEEKEND;
+    }
+    return absences != null ? absences.type() : null;
+  }
+
+  private static boolean isWeekend(final LocalDate day) {
+    return List.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(day.getDayOfWeek());
   }
 
   private long calcSaldoInMinutes(final Duration hoursDayInPlace) {
     if(hoursDayInPlace == null) return 0;
     return absenceType != null ? this.hoursDayInPlace.toMinutes()
                                : (this.hoursDayInPlace.toMinutes() - MUST_WORK_MINUTES_A_DAY);
-  }
-
-  private static AbsenceType calcAbsenceType(final LocalDate day) {
-    return List.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(day.getDayOfWeek()) ? AbsenceType.WEEKEND : null;
   }
 
   private static Duration calcHoursInPlace(final LocalTime login, final LocalTime logout) {

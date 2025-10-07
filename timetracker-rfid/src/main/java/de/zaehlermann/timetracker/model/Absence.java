@@ -4,16 +4,35 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * One closed period of absence.
  * a.k.a. Abwesenheit
- * @param endDay null means the full start day only
- * @param startTime Start/End null means the full day;
- * @param endTime Start/End null means the full day;
  */
 public record Absence(String employeeId, AbsenceType type, LocalDate startDay, LocalDate endDay, LocalTime startTime, LocalTime endTime)
-  implements AbstractCsvEntity<Employee> {
+  implements AbstractCsvEntity<Absence> {
   public static final String HEADER_LINE = "EMPLOYEE;TYPE;STARTDAY;ENDDAY;STARTTIME;ENDTIME";
+
+  /**
+   * @param endDay null means the full start day only
+   * @param startTime Start/End null means the full day;
+   * @param endTime Start/End null means the full day;
+   */
+  public Absence(@Nonnull final String employeeId,
+                 @Nonnull final AbsenceType type,
+                 @Nonnull final LocalDate startDay,
+                 @Nonnull final LocalDate endDay,
+                 @Nullable final LocalTime startTime,
+                 @Nullable final LocalTime endTime) {
+    this.employeeId = employeeId;
+    this.type = type;
+    this.startDay = startDay;
+    this.endDay = endDay;
+    this.startTime = startTime;
+    this.endTime = endTime;
+  }
 
   @Override
   public boolean equals(final Object o) {
@@ -39,7 +58,7 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
   }
 
   public static Absence fromCsvLine(final String csvLine) {
-    final String[] parts = csvLine.split(";",-1);
+    final String[] parts = csvLine.split(";", -1);
     final String employeeId = parts[0];
     final AbsenceType type = AbsenceType.valueOf(parts[1]);
     final LocalDate startDay = LocalDate.parse(parts[2]);
@@ -47,5 +66,31 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
     final LocalTime startTime = parts[4] == null || parts[4].isEmpty() ? null : LocalTime.parse(parts[4]);
     final LocalTime endTime = parts[5] == null || parts[5].isEmpty() ? null : LocalTime.parse(parts[5]);
     return new Absence(employeeId, type, startDay, endDay, startTime, endTime);
+  }
+
+  public boolean isInMonth(@Nullable final Integer year, @Nullable final Integer month) {
+    return true; // TODO implement this method
+  }
+
+  @Override
+  @Nonnull
+  public String toString() {
+    return "Absence[" +
+           "employeeId=" + employeeId + ", " +
+           "type=" + type + ", " +
+           "startDay=" + startDay + ", " +
+           "endDay=" + endDay + ", " +
+           "startTime=" + startTime + ", " +
+           "endTime=" + endTime + ']';
+  }
+
+  public boolean isInDay(@Nonnull final LocalDate day) {
+    return isDateInSpan(day, startDay, endDay == null ? startDay : endDay);
+  }
+
+  public static boolean isDateInSpan(final LocalDate date, final LocalDate start, final LocalDate end) {
+    if(date == null || start == null || end == null) return false;
+    return (date.isEqual(start) || date.isAfter(start)) &&
+           (date.isEqual(end) || date.isBefore(end));
   }
 }

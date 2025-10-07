@@ -13,23 +13,23 @@ public enum AbsenceType {
   /**
    * Krank
    */
-  SICKNESS("K"),
+  SICKNESS("S"),
   /**
    * Urlaub
    */
-  VACATION("U"),
+  VACATION("V"),
   /**
    * Entschuldigt abwesent, z.B. privater Termin mitten am Tag
    */
-  ALLOWED_ABSENCE("EA"),
+  ALLOWED_ABSENCE("AE"),
   /**
    * Feiertag
    */
-  PUBLIC_HOLIDAY("F"),
+  PUBLIC_HOLIDAY("PH"),
   /**
    * Betriebsferien
    */
-  COMPANY_HOLIDAY("BF");
+  COMPANY_HOLIDAY("CH");
 
   private final String printValue;
 
