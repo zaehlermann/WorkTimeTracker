@@ -18,7 +18,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.model.Employee;
@@ -27,8 +26,8 @@ import de.zaehlermann.timetracker.service.RfidScanService;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
-@Route("task-list")
-@PageTitle("Task List")
+@Route("employees")
+@PageTitle("Employees")
 @Menu(order = 0, icon = "vaadin:clipboard-check", title = "Employees")
 @PermitAll // When security is enabled, allow all authenticated users
 public class EmployeeView extends Main {
@@ -67,9 +66,6 @@ public class EmployeeView extends Main {
     employeeGrid.addColumn(Employee::getFirstName).setHeader("First Name");
     employeeGrid.addColumn(Employee::getLastName).setHeader("Last Name");
     employeeGrid.setSizeFull();
-
-    addClassNames(LumoUtility.BoxSizing.BORDER, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN,
-                  LumoUtility.Padding.MEDIUM, LumoUtility.Gap.SMALL);
 
     final FormLayout formLayout = new FormLayout(employeeId, rfid, firstName, lastName, saveBtn, deleteBtn);
 
