@@ -12,6 +12,7 @@ import javax.annotation.Nonnull;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Anchor;
@@ -51,12 +52,12 @@ public class TimeJournalView extends Main {
     selectEmployee.setValue(allEmployeeNames.getFirst());
 
     final Select<Integer> selectYear = new Select<>();
-    selectYear.setLabel("Year (Not implemented yet.)");
+    selectYear.setLabel("Year");
     selectYear.setItems(asList(2025, 2026, 2027, 2028, 2029, 2030)); // select from the employee file
     selectYear.setValue(LocalDate.now().getYear());
 
     final Select<Integer> selectMonth = new Select<>();
-    selectMonth.setLabel("Month (Not implemented yet.)");
+    selectMonth.setLabel("Month");
     selectMonth.setItems(asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
     selectMonth.setValue(LocalDate.now().getMonth().getValue());
 
@@ -64,8 +65,9 @@ public class TimeJournalView extends Main {
     textAreaSummary.setWidthFull();
     textAreaSummary.setLabel("Time Journal Summary:");
 
+
+
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
-    workdayGrid.setAriaLabel("Time Journal Summary:");
     workdayGrid.addColumn(Workday::getDay).setHeader("Date").setSortable(true);
     workdayGrid.addColumn(Workday::getWeekDay).setHeader("Weekday").setSortable(true);
     workdayGrid.addColumn(Workday::getAbsenceType).setHeader("Absence").setSortable(true);
@@ -78,6 +80,10 @@ public class TimeJournalView extends Main {
     workdayGrid.setAllRowsVisible(true);
     workdayGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
 
+    final Details workdayGridDetails = new Details("Time Journal Details", workdayGrid);
+    workdayGridDetails.setWidthFull();
+    workdayGridDetails.setOpened(true);
+
     final Button btnShowJournal = new Button("Show Journal");
     btnShowJournal.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     btnShowJournal.addClickListener(clickEvent -> displayJournal(selectEmployee, selectYear, selectMonth, textAreaSummary, workdayGrid));
@@ -87,11 +93,16 @@ public class TimeJournalView extends Main {
     final Anchor downloadJournalBackup = new Anchor(downloadFullBackup(), "Download FullBackup");
 
     final FormLayout formLayout = new FormLayout(selectEmployee, selectYear, selectMonth, btnShowJournal);
+    final Details formDetails = new Details("Select Journal", formLayout);
+    formDetails.setOpened(true);
+
     final FormLayout downloadLayout = new FormLayout(downloadJournalTxt, downloadJournalCsv, downloadJournalBackup);
     downloadLayout.setMaxColumns(3);
     downloadLayout.setWidthFull();
 
-    final VerticalLayout verticalLayout = new VerticalLayout(formLayout, textAreaSummary, workdayGrid, downloadLayout);
+    final Details downloadDetails = new Details("Download Journal", downloadLayout);
+
+    final VerticalLayout verticalLayout = new VerticalLayout(formDetails, textAreaSummary, workdayGridDetails, downloadDetails);
     verticalLayout.setSizeFull();
 
     setSizeFull();
