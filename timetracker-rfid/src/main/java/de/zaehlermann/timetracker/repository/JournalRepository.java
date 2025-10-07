@@ -11,12 +11,17 @@ import de.zaehlermann.timetracker.globals.Defaults;
 
 public class JournalRepository {
 
-  public void writeNewFile(final String rfid, final String content) throws IOException {
+  public void writeNewFile(final String rfid, final String content) {
     final Path filePath = getJournalFilePath(rfid);
     filePath.getParent().toFile().mkdirs();
-    Files.writeString(filePath, content, UTF_8,
-                      StandardOpenOption.CREATE,
-                      StandardOpenOption.TRUNCATE_EXISTING);
+    try {
+      Files.writeString(filePath, content, UTF_8,
+                        StandardOpenOption.CREATE,
+                        StandardOpenOption.TRUNCATE_EXISTING);
+    }
+    catch(final IOException e) {
+      throw new IllegalStateException("Error during writing new journal file to path: " + filePath, e);
+    }
   }
 
   private Path getJournalFilePath(final String rfid) {
