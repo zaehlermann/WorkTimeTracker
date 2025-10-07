@@ -82,13 +82,12 @@ class DevLoginView extends Main implements BeforeEnterObserver {
                     new DescriptionList.Description(SampleUsers.SAMPLE_PASSWORD));
 
     // Make it easier to log in while still going through the normal authentication process.
-    final Button loginButton = new Button(VaadinIcon.SIGN_IN.create(), event -> {
+    final Button loginButton = new Button(VaadinIcon.SIGN_IN.create(), event ->
       login.getElement().executeJs("""
                                      document.getElementById("vaadinLoginUsername").value = $0;
                                      document.getElementById("vaadinLoginPassword").value = $1;
                                      document.forms[0].submit();
-                                     """, user.getUsername(), SampleUsers.SAMPLE_PASSWORD);
-    });
+                                     """, user.getUsername(), SampleUsers.SAMPLE_PASSWORD));
     loginButton.addThemeVariants(ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_TERTIARY);
 
     card.add(new Div(fullName, credentials));

@@ -17,6 +17,12 @@ To build the application in production mode, run:
 ./mvnw -Pproduction package
 ```
 
+Start the application with:
+
+```bash
+java -jar target/timetracker-ui-1.0.0.jar
+```
+
 To also build a Docker image, continue by running:
 
 ```bash
