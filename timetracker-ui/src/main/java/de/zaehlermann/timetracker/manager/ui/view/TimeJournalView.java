@@ -69,10 +69,12 @@ public class TimeJournalView extends Main {
 
     final Anchor downloadJournalTxt = new Anchor(downloadTxt(selectEmployee, selectYear, selectMonth), "Download Journal as TXT");
     final Anchor downloadJournalCsv = new Anchor(downloadCsv(selectEmployee, selectYear, selectMonth), "Download Journal as CSV");
-    //final Anchor downloadJournalBackup = new Anchor(DownloadHandler.forFile(JOURNAL_SERVICE.downloadBackup()), "Download FullBackup");
+    final Anchor downloadJournalBackup = new Anchor(downloadFullBackup(), "Download FullBackup");
 
     final FormLayout formLayout = new FormLayout(selectEmployee, selectYear, selectMonth, btnShowJournal);
-    final FormLayout downloadLayout = new FormLayout(downloadJournalTxt, downloadJournalCsv);
+    final FormLayout downloadLayout = new FormLayout(downloadJournalTxt, downloadJournalCsv, downloadJournalBackup);
+    downloadLayout.setMaxColumns(3);
+    downloadLayout.setWidthFull();
 
     final VerticalLayout verticalLayout = new VerticalLayout(formLayout, textArea, downloadLayout);
     verticalLayout.setSizeFull();
@@ -102,6 +104,15 @@ public class TimeJournalView extends Main {
       final File file = JOURNAL_SERVICE.downloadCsv(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
       final FileInputStream fileInputStream = new FileInputStream(file);
       return new DownloadResponse(fileInputStream, file.getName(), "text/csv", file.length());
+    });
+  }
+
+  @Nonnull
+  private DownloadHandler downloadFullBackup() {
+    return DownloadHandler.fromInputStream((InputStreamDownloadCallback) downloadEvent -> {
+      final File file = JOURNAL_SERVICE.downloadBackup();
+      final FileInputStream fileInputStream = new FileInputStream(file);
+      return new DownloadResponse(fileInputStream, file.getName(), "application/zip", file.length());
     });
   }
 
