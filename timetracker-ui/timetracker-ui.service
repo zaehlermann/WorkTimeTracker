@@ -1,5 +1,5 @@
 [Unit]
-Description=WorkTimeTracker User Interface
+Description=WorkTimeTracker Web User Interface
 After=network.target
 
 [Service]

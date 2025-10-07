@@ -1,11 +1,14 @@
 [Unit]
-Description=WorkTimeTracker RFID Serv´vice
-After=network.target
+Description=WorkTimeTracker RFID Service
+After=default.target
 
 [Service]
-User=mike
 ExecStart=/usr/bin/java -jar /home/mike/timetracker/timetracker-rfid.jar
+WorkingDirectory=/home/mike/timetracker
 Restart=always
+RestartSec=5
+StandardInput=tty
+TTYPath=/dev/tty1
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target

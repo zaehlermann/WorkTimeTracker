@@ -12,21 +12,25 @@ public class DataTracker {
 
   public static void main(final String[] args) {
 
-    LOG.info("============================");
-    LOG.info("Welcome to Work-Time-Tracker");
-    LOG.info("============================");
+    LOG.info("==================================");
+    LOG.info("Welcome to Work-Time-Tracker v.1.0");
+    LOG.info("==================================");
+    try {
+      final Scanner scanner = new Scanner(System.in);
+      while(true) {
+        LOG.info("Waiting for input..");
+        final String input = scanner.nextLine();
+        if(input.equals("exit")) {
+          LOG.info("Exit");
+          scanner.close();
+          break;
+        }
 
-    final Scanner scanner = new Scanner(System.in);
-    while(true) {
-      LOG.info("Waiting for input..");
-      final String input = scanner.nextLine();
-      if(input.equals("exit")) {
-        LOG.info("Exit");
-        scanner.close();
-        break;
+        LOG.info(RFID_SCAN_REPOSITORY.saveScan(input));
       }
-
-      LOG.info(RFID_SCAN_REPOSITORY.saveScan(input));
+    }
+    catch(final Exception e) {
+      LOG.error("Exception before waiting for input: " + e);
     }
   }
 
