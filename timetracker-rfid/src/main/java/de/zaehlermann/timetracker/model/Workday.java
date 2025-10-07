@@ -19,6 +19,7 @@ public class Workday {
   private final LocalDate day;
   private final LocalTime login;
   private final LocalTime logout;
+  private final boolean corrected;
   private final Duration hoursDayInPlace;
   private final AbsenceType absenceType;
   private final BigDecimal saldo;
@@ -26,11 +27,14 @@ public class Workday {
   public Workday(@Nonnull final LocalDate day,
                  @Nullable final Absence absences,
                  @Nullable final LocalTime login,
-                 @Nullable final LocalTime logout) {
+                 @Nullable final LocalTime logout,
+                 final boolean corrected) {
     this.day = day;
+
     this.absenceType = getAbsenceType(day, absences);
     this.login = login;
     this.logout = logout;
+    this.corrected = corrected;
     this.hoursDayInPlace = calcHoursInPlace(login, logout);
     final long saldoInMinutes = calcSaldoInMinutes(hoursDayInPlace);
     this.saldo = BigDecimal.valueOf(saldoInMinutes).divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
@@ -59,8 +63,8 @@ public class Workday {
     return login != null && logout != null ? Duration.between(login, logout) : Duration.ZERO;
   }
 
-  public static final String HEADER_LINE_TXT = "DATE        D  OFF  LOGIN  LOGOUT  HOURS  SALDO";
-  public static final String HEADER_LINE_CSV = "DATE;D;OFF;LOGIN;LOGOUT;HOURS;SALDO";
+  public static final String HEADER_LINE_TXT = "DATE        D  OFF  LOGIN  LOGOUT  C  HOURS  SALDO";
+  public static final String HEADER_LINE_CSV = "DATE;D;OFF;LOGIN;LOGOUT;C;HOURS;SALDO";
 
   @Nonnull
   public String toTxtLine() {
@@ -69,6 +73,7 @@ public class Workday {
            String.format("%-3s", absenceType != null ? absenceType.getPrintValue() : "") + "  " +
            String.format("%-5s", login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + "  " +
            String.format("%-6s", logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + "  " +
+           String.format("%-1s", corrected ? "X" : "") + "  " +
            String.format("%02d", hoursDayInPlace.toHoursPart()) + ":" + String.format("%02d", hoursDayInPlace.toMinutesPart()) + "  " +
            String.format("%+.2f", saldo) +
            System.lineSeparator();
@@ -81,6 +86,7 @@ public class Workday {
            (absenceType != null ? absenceType.getPrintValue() : "") + ";" +
            (login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + ";" +
            (logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + ";" +
+           (corrected ? "X" : "") + ";" +
            String.format("%02d", hoursDayInPlace.toHoursPart()) + ":" + String.format("%02d", hoursDayInPlace.toMinutesPart()) + ";" +
            String.format("%+.2f", saldo) +
            System.lineSeparator();

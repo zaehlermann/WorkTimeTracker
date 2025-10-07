@@ -1,13 +1,17 @@
 package de.zaehlermann.timetracker.model;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class Journal {
 
@@ -17,43 +21,75 @@ public class Journal {
 
   public Journal(@Nonnull final Employee employee,
                  @Nonnull final List<Absence> absences,
+                 @Nonnull final List<Correction> corrections,
                  @Nonnull final List<RfidScan> allScans,
                  @Nonnull final Integer year,
                  @Nonnull final Integer month) {
     this.employee = employee;
 
-    final Map<LocalDate, List<RfidScan>> scansOfTheDay = allScans.stream()
+    final Map<LocalDate, List<RfidScan>> scanByDay = allScans.stream()
       .collect(Collectors.groupingBy(RfidScan::getWorkday));
+
+    final Map<LocalDate, List<Correction>> correctionsByDay = corrections.stream()
+      .collect(Collectors.groupingBy(Correction::getWorkday));
 
     // Ensure all days of the month are represented, even if there are no scans
     final LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
     final LocalDate endOfTheMonth = LocalDate.of(year, month + 1, 1);
-    firstDayOfMonth.datesUntil(endOfTheMonth).forEach(d -> scansOfTheDay.putIfAbsent(d, List.of()));
+    firstDayOfMonth.datesUntil(endOfTheMonth).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
 
-    this.workdays = scansOfTheDay.entrySet().stream()
-      .map(e -> createWorkDay(e, absences))
+    this.workdays = scanByDay.entrySet().stream()
+      .map(dailyScans -> createWorkDay(dailyScans, absences, correctionsByDay))
       .sorted(Comparator.comparing(Workday::getDay))
       .toList();
   }
 
   @Nonnull
-  private static Workday createWorkDay(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> e, @Nonnull final List<Absence> absences) {
-    final boolean hasNoScans = e.getValue().isEmpty();
-    final LocalDate day = e.getKey();
+  private static Workday createWorkDay(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
+                                       @Nonnull final List<Absence> absences,
+                                       @Nonnull final Map<LocalDate, List<Correction>> correctionsByDay) {
+
+    final LocalDate day = dailyScans.getKey();
     final Absence absenceForDay = absences.stream()
       .filter(a -> a.isInDay(day))
       .findFirst()
       .orElse(null);
-    return new Workday(day, absenceForDay,
-                       hasNoScans ? null : e.getValue().getFirst().getScanTime(),
-                       hasNoScans ? null : e.getValue().getLast().getScanTime());
+
+    final Correction correctionOfTheDay = getCorrectionOfTheDay(correctionsByDay, day); //there should be only one correction per day
+    final LocalTime login = getLogin(dailyScans, correctionOfTheDay);
+    final LocalTime logout = getLogout(dailyScans, correctionOfTheDay);
+    return new Workday(day, absenceForDay, login, logout, correctionOfTheDay != null);
+  }
+
+  @Nullable
+  private static Correction getCorrectionOfTheDay(@Nonnull final Map<LocalDate, List<Correction>> correctionsByDay,
+                                                  @Nonnull final LocalDate day) {
+    final List<Correction> dailyCorrection = correctionsByDay.getOrDefault(day, List.of());
+    return dailyCorrection.isEmpty() ? null : dailyCorrection.getLast();
+  }
+
+  private static LocalTime getLogin(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
+                                    @Nullable final Correction correctionOfTheDay) {
+
+    if(correctionOfTheDay != null && correctionOfTheDay.getLogin() != null) {
+      return correctionOfTheDay.getLogin();
+    }
+    return dailyScans.getValue().isEmpty() ? null : dailyScans.getValue().getFirst().getScanTime();
+  }
+
+  private static LocalTime getLogout(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
+                                     @Nullable final Correction correctionOfTheDay) {
+
+    if(correctionOfTheDay != null && correctionOfTheDay.getLogout() != null) {
+      return correctionOfTheDay.getLogout();
+    }
+    return dailyScans.getValue().isEmpty() ? null : dailyScans.getValue().getLast().getScanTime();
   }
 
   @Nonnull
   public String printJournalTxt() {
-    final BigDecimal saldoTotal = calcSaldoTotal();
-    final long hoursTotal = calcHoursTotal();
-
+    final String saldoTotal = calcSaldoTotal();
+    final String hoursTotal = calcHoursTotal();
     return employee.toJournalTxtHeader() + System.lineSeparator() +
            SPLIT_LINE +
            Workday.HEADER_LINE_TXT + System.lineSeparator() +
@@ -61,14 +97,13 @@ public class Journal {
              .map(Workday::toTxtLine)
              .collect(Collectors.joining()) +
            SPLIT_LINE +
-           //"2025-08-31  7  WE                 " +
-           "                                  " + hoursTotal + "  " + saldoTotal;
+           "                                     " + hoursTotal + "  " + saldoTotal;
   }
 
   @Nonnull
   public String printJournalCsv() {
-    final BigDecimal saldoTotal = calcSaldoTotal();
-    final long hoursTotal = calcHoursTotal();
+    final String saldoTotal = calcSaldoTotal();
+    final String hoursTotal = calcHoursTotal();
     return employee.toJournalTxtHeader() + System.lineSeparator() +
            SPLIT_LINE +
            Workday.HEADER_LINE_CSV + System.lineSeparator() +
@@ -80,17 +115,27 @@ public class Journal {
            "Total Saldo:" + saldoTotal;
   }
 
-  private long calcHoursTotal() {
-    return workdays.stream()
-             .map(workday -> workday.getHoursDayInPlace().toMinutes())
-             .mapToLong(value -> value)
-             .sum() / 60;
+  @Nonnull
+  private String calcHoursTotal() {
+    final Duration duration = Duration.of(workdays.stream()
+                                            .map(workday -> workday.getHoursDayInPlace().toMinutes())
+                                            .mapToLong(value -> value)
+                                            .sum(), ChronoUnit.MINUTES);
+    return formatDurationHHHmm(duration);
   }
 
   @Nonnull
-  private BigDecimal calcSaldoTotal() {
-    return workdays.stream()
+  private String calcSaldoTotal() {
+    final BigDecimal totalSaldo = workdays.stream()
       .map(Workday::getSaldo)
       .reduce(BigDecimal.ZERO, BigDecimal::add);
+    return String.format("%+.2f", totalSaldo);
+  }
+
+  @Nonnull
+  public static String formatDurationHHHmm(@Nonnull final Duration duration) {
+    final long hours = duration.toHours();
+    final long minutes = duration.minusHours(hours).toMinutes();
+    return String.format("%03d:%02d", hours, minutes);
   }
 }
