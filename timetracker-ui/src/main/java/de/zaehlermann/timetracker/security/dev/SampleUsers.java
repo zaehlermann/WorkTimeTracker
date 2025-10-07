@@ -62,7 +62,7 @@ public final class SampleUsers {
   /**
    * The raw, unencoded password used by all sample users.
    */
-  static final String SAMPLE_PASSWORD = "123";
+  static final String SAMPLE_PASSWORD = "TimeIsMoney!";
 
   /**
    * The user ID for the admin sample user.
