@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import de.zaehlermann.timetracker.model.Absence;
 import de.zaehlermann.timetracker.repository.AbsenceRepository;
 
@@ -11,11 +13,13 @@ public class AbsenceService {
 
   private static final AbsenceRepository ABSENCE_REPOSITORY = new AbsenceRepository();
 
+  @Nonnull
   public List<Absence> findAll() {
     return ABSENCE_REPOSITORY.findAll();
   }
 
-  public List<Absence> delete(final Set<Absence> selected) {
+  @Nonnull
+  public List<Absence> delete(@Nonnull final Set<Absence> selected) {
     final List<Absence> existing = ABSENCE_REPOSITORY.findAll();
     final List<Absence> toModified = new ArrayList<>(existing);
     toModified.removeAll(selected);
@@ -23,7 +27,7 @@ public class AbsenceService {
     return toModified;
   }
 
-  public void save(final Absence newAbsence) {
+  public void save(@Nonnull final Absence newAbsence) {
     ABSENCE_REPOSITORY.appendToFile(newAbsence);
   }
 }

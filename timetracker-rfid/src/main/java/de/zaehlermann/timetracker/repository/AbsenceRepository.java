@@ -21,22 +21,23 @@ public class AbsenceRepository extends AbstractCsvRepository {
     }
   }
 
-  public void appendToFile(final Absence absence) {
+  public void appendToFile(@Nonnull final Absence absence) {
     appendToFile(absence.toCsvLine(), getFilePath());
   }
 
-  public void saveToFile(final List<Absence> absences) {
+  public void saveToFile(@Nonnull final List<Absence> absences) {
     final Path filePath = getFilePath();
     saveToFile(Absence.HEADER_LINE + System.lineSeparator(), filePath);
     absences.forEach(this::appendToFile);
   }
 
+  @Nonnull
   private Path getFilePath() {
     return Path.of(DefaultDirs.EMPLOYEE_DIR, "absence.csv");
   }
 
   @Nonnull
-  public List<Absence> findAbsencesByEmployeeId(final String employeeId, final Integer year, final Integer month) {
+  public List<Absence> findAbsencesByEmployeeId(@Nonnull final String employeeId, final Integer year, final Integer month) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       return lines
@@ -52,6 +53,7 @@ public class AbsenceRepository extends AbstractCsvRepository {
     }
   }
 
+  @Nonnull
   public List<Absence> findAll() {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {

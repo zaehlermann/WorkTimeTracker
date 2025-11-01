@@ -57,7 +57,8 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
            System.lineSeparator();
   }
 
-  public static Absence fromCsvLine(final String csvLine) {
+  @Nonnull
+  public static Absence fromCsvLine(@Nonnull final String csvLine) {
     final String[] parts = csvLine.split(";", -1);
     final String employeeId = parts[0];
     final AbsenceType type = AbsenceType.valueOf(parts[1]);

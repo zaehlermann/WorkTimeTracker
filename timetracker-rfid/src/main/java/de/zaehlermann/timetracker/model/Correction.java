@@ -17,8 +17,10 @@ public class Correction implements AbstractCsvEntity<Correction> {
   private final LocalTime login;
   private final LocalTime logout;
 
-  public Correction(@Nonnull final String employeeId, @Nonnull final LocalDate workday,
-                    @Nullable final LocalTime login, @Nonnull final LocalTime logout) {
+  public Correction(@Nonnull final String employeeId,
+                    @Nonnull final LocalDate workday,
+                    @Nullable final LocalTime login,
+                    @Nonnull final LocalTime logout) {
     this.employeeId = employeeId;
     this.workday = workday;
     this.login = login;
