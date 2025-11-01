@@ -26,21 +26,24 @@ public class Employee implements AbstractCsvEntity<Employee> {
   }
 
   @Nonnull
-  public String toJournalTxtHeader() {
+  public String toJournalTxtHeader(@Nonnull final List<WorkModel> workModel) {
     return "EmployeeID: " + employeeId + System.lineSeparator() +
            "Name: " + firstName + " " + lastName + System.lineSeparator() +
            "RFID: " + rfid + System.lineSeparator() +
-           "Daily worktime: " + LocalTime.of(Workday.WORKTIME_A_DAY_IN_HOURS, 0).toString() + "h " + System.lineSeparator() +
-           "Daily breaktime: " + LocalTime.of(0, Workday.BREAKTIME_A_DAY_IN_MIN).toString() + "h";
+           "Daily worktime: " + LocalTime.ofSecondOfDay(workModel.getLast().getBreaktimeADayInMin() * 60L).toString() + "h " +
+           System.lineSeparator() +
+           "Daily breaktime: " + LocalTime.ofSecondOfDay(workModel.getLast().getBreaktimeADayInMin() * 60L).toString() + "h";
   }
 
   @Nonnull
-  public List<JournalSummaryItem> toJournalSummaryHeaders() {
+  public List<JournalSummaryItem> toJournalSummaryHeaders(@Nonnull final List<WorkModel> workModels) {
     return List.of(new JournalSummaryItem("EmployeeID", employeeId),
                    new JournalSummaryItem("Name", firstName + " " + lastName),
                    new JournalSummaryItem("RFID", rfid),
-                   new JournalSummaryItem("Daily worktime", LocalTime.of(Workday.WORKTIME_A_DAY_IN_HOURS, 0).toString() + "h "),
-                   new JournalSummaryItem("Daily breaktime", LocalTime.of(0, Workday.BREAKTIME_A_DAY_IN_MIN).toString() + "h"));
+                   new JournalSummaryItem("Daily worktime",
+                                          LocalTime.ofSecondOfDay(workModels.getLast().getBreaktimeADayInMin() * 60L).toString() + "h "),
+                   new JournalSummaryItem("Daily breaktime",
+                                          LocalTime.ofSecondOfDay(workModels.getLast().getBreaktimeADayInMin() * 60L).toString() + "h"));
   }
 
   @Nonnull

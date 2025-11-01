@@ -20,14 +20,17 @@ public class Journal {
   public static final String SPLIT_LINE = "==================================================" + System.lineSeparator();
   private final Employee employee;
   private final List<Workday> workdays;
+  private final List<WorkModel> workModels;
 
   public Journal(@Nonnull final Employee employee,
+                 @Nonnull final List<WorkModel> workModels,
                  @Nonnull final List<Absence> absences,
                  @Nonnull final List<Correction> corrections,
                  @Nonnull final List<RfidScan> allScans,
                  @Nonnull final Integer year,
                  @Nonnull final Integer month) {
     this.employee = employee;
+    this.workModels = workModels;
 
     final Map<LocalDate, List<RfidScan>> scanByDay = allScans.stream()
       .collect(Collectors.groupingBy(RfidScan::getWorkday));
@@ -41,7 +44,7 @@ public class Journal {
     firstDayOfMonth.datesUntil(endOfTheMonth).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
 
     this.workdays = scanByDay.entrySet().stream()
-      .map(dailyScans -> createWorkDay(dailyScans, absences, correctionsByDay))
+      .map(dailyScans -> createWorkDay(dailyScans, absences, correctionsByDay, workModels))
       .sorted(Comparator.comparing(Workday::getDay))
       .toList();
   }
@@ -49,9 +52,16 @@ public class Journal {
   @Nonnull
   private static Workday createWorkDay(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
                                        @Nonnull final List<Absence> absences,
-                                       @Nonnull final Map<LocalDate, List<Correction>> correctionsByDay) {
+                                       @Nonnull final Map<LocalDate, List<Correction>> correctionsByDay,
+                                       @Nonnull final List<WorkModel> workModels) {
 
     final LocalDate day = dailyScans.getKey();
+
+    final WorkModel workModelForTheDay = workModels.stream()
+      .filter(m -> m.isInEffectOnDay(day))
+      .findFirst()
+      .orElse(WorkModel.DEFAULT_WORKMODEL);
+
     final Absence absenceForDay = absences.stream()
       .filter(a -> a.isInDay(day))
       .findFirst()
@@ -60,7 +70,7 @@ public class Journal {
     final Correction correctionOfTheDay = getCorrectionOfTheDay(correctionsByDay, day); //there should be only one correction per day
     final LocalTime login = getLogin(dailyScans, correctionOfTheDay);
     final LocalTime logout = getLogout(dailyScans, correctionOfTheDay);
-    return new Workday(day, absenceForDay, login, logout, correctionOfTheDay != null);
+    return new Workday(day, absenceForDay, login, logout, correctionOfTheDay != null, workModelForTheDay);
   }
 
   @Nullable
@@ -70,6 +80,7 @@ public class Journal {
     return dailyCorrection.isEmpty() ? null : dailyCorrection.getLast();
   }
 
+  @Nullable
   private static LocalTime getLogin(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
                                     @Nullable final Correction correctionOfTheDay) {
 
@@ -91,7 +102,7 @@ public class Journal {
 
   @Nonnull
   public List<JournalSummaryItem> getJournalSummaryItems() {
-    final List<JournalSummaryItem> headers = new ArrayList<>(employee.toJournalSummaryHeaders());
+    final List<JournalSummaryItem> headers = new ArrayList<>(employee.toJournalSummaryHeaders(workModels));
     headers.add(new JournalSummaryItem("Hours Total", calcHoursTotal()));
     headers.add(new JournalSummaryItem("Saldo Total", calcSaldoTotal()));
     return headers;
@@ -101,7 +112,7 @@ public class Journal {
   public String printJournalTxt() {
     final String hoursTotal = calcHoursTotal();
     final String saldoTotal = calcSaldoTotal();
-    return employee.toJournalTxtHeader() + System.lineSeparator() +
+    return employee.toJournalTxtHeader(workModels) + System.lineSeparator() +
            SPLIT_LINE +
            Workday.HEADER_LINE_TXT + System.lineSeparator() +
            workdays.stream()
@@ -115,7 +126,7 @@ public class Journal {
   public String printJournalCsv() {
     final String hoursTotal = calcHoursTotal();
     final String saldoTotal = calcSaldoTotal();
-    return employee.toJournalTxtHeader() + System.lineSeparator() +
+    return employee.toJournalTxtHeader(workModels) + System.lineSeparator() +
            SPLIT_LINE +
            Workday.HEADER_LINE_CSV + System.lineSeparator() +
            workdays.stream()
