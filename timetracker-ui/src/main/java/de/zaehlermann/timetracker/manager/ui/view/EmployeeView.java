@@ -2,6 +2,7 @@ package de.zaehlermann.timetracker.manager.ui.view;
 
 import java.io.Serial;
 import java.util.List;
+import java.util.Set;
 
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
@@ -115,9 +116,14 @@ public class EmployeeView extends Main {
   }
 
   private void deleteEmployee() {
-    employeeGrid.setItems(EMPLOYEE_SERVICE.deleteByRfid(employeeGrid.getSelectedItems()));
-    Notification.show("Employee deleted", 3000, Notification.Position.BOTTOM_END)
-      .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    final Set<Employee> selectedItems = employeeGrid.getSelectedItems();
+    if(!selectedItems.isEmpty()) {
+      employeeGrid.setItems(EMPLOYEE_SERVICE.deleteByRfid(selectedItems));
+      Notification.show(selectedItems.size() + " items deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    }
+    else {
+      Notification.show("No items selected for deletion").addThemeVariants(NotificationVariant.LUMO_ERROR);
+    }
   }
 
 }

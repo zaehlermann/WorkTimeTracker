@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -113,9 +114,14 @@ public class WorkModelView extends Main {
   }
 
   private void deleteWorkModel() {
-    workModelGrid.setItems(WORK_MODEL_SERVICE.deleteWorkModels(workModelGrid.getSelectedItems()));
-    Notification.show("Work models deleted", 3000, Notification.Position.BOTTOM_END)
-      .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    final Set<WorkModel> selectedItems = workModelGrid.getSelectedItems();
+    if(!selectedItems.isEmpty()) {
+      workModelGrid.setItems(WORK_MODEL_SERVICE.deleteWorkModels(selectedItems));
+      Notification.show(selectedItems.size() + " items deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    }
+    else {
+      Notification.show("No items selected for deletion").addThemeVariants(NotificationVariant.LUMO_ERROR);
+    }
   }
 
 }

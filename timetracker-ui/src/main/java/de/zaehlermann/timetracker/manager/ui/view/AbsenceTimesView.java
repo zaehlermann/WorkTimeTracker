@@ -79,7 +79,7 @@ public class AbsenceTimesView extends Main {
     add(new ViewToolbar("Absence times"));
     add(verticalLayout);
 
-    updateGrid();
+    grid.setItems(ABSENCE_SERVICE.findAll());
   }
 
   private void configureGrid() {
@@ -117,23 +117,18 @@ public class AbsenceTimesView extends Main {
                                            startTimeField.getValue(), endTimeField.getValue());
     ABSENCE_SERVICE.save(newAbsence);
     Notification.show("Absence saved").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-    updateGrid();
+    grid.setItems(ABSENCE_SERVICE.findAll());
   }
 
   private void deleteAbsence() {
-    final Set<Absence> selected = grid.getSelectedItems();
-    if(!selected.isEmpty()) {
-      ABSENCE_SERVICE.delete(selected);
-      Notification.show("Absence deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-      updateGrid();
+    final Set<Absence> selectedItems = grid.getSelectedItems();
+    if(!selectedItems.isEmpty()) {
+      grid.setItems(ABSENCE_SERVICE.delete(selectedItems));
+      Notification.show(selectedItems.size() + " items deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     }
     else {
-      Notification.show("No absence selected for deletion").addThemeVariants(NotificationVariant.LUMO_ERROR);
+      Notification.show("No items selected for deletion").addThemeVariants(NotificationVariant.LUMO_ERROR);
     }
-  }
-
-  private void updateGrid() {
-    grid.setItems(ABSENCE_SERVICE.findAll());
   }
 
 }

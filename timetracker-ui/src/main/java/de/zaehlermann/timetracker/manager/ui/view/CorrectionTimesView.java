@@ -111,14 +111,13 @@ public class CorrectionTimesView extends Main {
   }
 
   private void deleteAbsence() {
-    final Set<Correction> selected = grid.getSelectedItems();
-    if(!selected.isEmpty()) {
-      CORRECTION_SERVICE.delete(selected);
-      Notification.show("Absence deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-      updateGrid();
+    final Set<Correction> selectedItems = grid.getSelectedItems();
+    if(!selectedItems.isEmpty()) {
+      grid.setItems(CORRECTION_SERVICE.delete(selectedItems));
+      Notification.show(selectedItems.size() + " items deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     }
     else {
-      Notification.show("No absence selected for deletion").addThemeVariants(NotificationVariant.LUMO_ERROR);
+      Notification.show("No items selected for deletion").addThemeVariants(NotificationVariant.LUMO_ERROR);
     }
   }
 
