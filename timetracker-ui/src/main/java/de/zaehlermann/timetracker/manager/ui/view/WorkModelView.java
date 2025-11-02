@@ -7,7 +7,6 @@ import java.time.temporal.ChronoField;
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -23,6 +22,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
+import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
+import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.WorkModel;
 import de.zaehlermann.timetracker.service.JournalService;
 import de.zaehlermann.timetracker.service.WorkModelService;
@@ -66,9 +67,8 @@ public class WorkModelView extends Main {
     workTimePicker.setValue(LocalTime.of(8, 0));
     breakTimePicker.setValue(LocalTime.of(0, 30));
 
-    final Button saveBtn = new Button("Save", event -> saveEmployee());
-    saveBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    final Button deleteBtn = new Button("Delete", event -> deleteWorkModel());
+    final Button saveButton = new SaveButton(event -> saveEmployee());
+    final Button deleteButton = new DeleteButton(event -> deleteWorkModel());
 
     workModelGrid = new Grid<>();
     workModelGrid.setItems(WORK_MODEL_SERVICE.findAll());
@@ -90,7 +90,7 @@ public class WorkModelView extends Main {
     workModelGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
     workModelGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
-    final FormLayout formLayout = new FormLayout(validFromPicker, validUntilPicker, workTimePicker, breakTimePicker, saveBtn, deleteBtn);
+    final FormLayout formLayout = new FormLayout(validFromPicker, validUntilPicker, workTimePicker, breakTimePicker, saveButton, deleteButton);
 
     final VerticalLayout verticalLayout = new VerticalLayout(employeeSelect, formLayout, workModelGrid);
     verticalLayout.setSizeFull();

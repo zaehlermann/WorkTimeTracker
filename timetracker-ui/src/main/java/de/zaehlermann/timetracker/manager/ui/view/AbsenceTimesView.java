@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -22,6 +21,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
+import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
+import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Absence;
 import de.zaehlermann.timetracker.model.AbsenceType;
 import de.zaehlermann.timetracker.service.AbsenceService;
@@ -101,9 +102,8 @@ public class AbsenceTimesView extends Main {
   }
 
   private FormLayout createForm() {
-    final Button saveButton = new Button("Save", event -> saveAbsence());
-    saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    final Button deleteButton = new Button("Delete", event -> deleteAbsence());
+    final Button saveButton = new SaveButton(event -> saveAbsence());
+    final Button deleteButton = new DeleteButton(event -> deleteAbsence());
     return new FormLayout(selectEmployee, selectAbsenceType,
                           startDateField, startTimeField,
                           endDateField, endTimeField,

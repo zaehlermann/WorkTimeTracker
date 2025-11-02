@@ -20,6 +20,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Main;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -115,15 +116,16 @@ public class TimeJournalView extends Main {
     workdayGridDetails.setOpened(true);
     workdayGridDetails.setWidthFull();
 
-    final Button btnShowJournal = new Button("Show Journal");
-    btnShowJournal.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    btnShowJournal.addClickListener(clickEvent -> displayJournal(selectEmployee, selectYear, selectMonth, journalSummaryGrid, workdayGrid));
+    final Button showJournalButton = new Button("Show Journal");
+    showJournalButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    showJournalButton.setIcon(VaadinIcon.CHART.create());
+    showJournalButton.addClickListener(clickEvent -> displayJournal(selectEmployee, selectYear, selectMonth, journalSummaryGrid, workdayGrid));
 
     final Anchor downloadJournalTxt = new Anchor(downloadTxt(selectEmployee, selectYear, selectMonth), "Download Journal as TXT");
     final Anchor downloadJournalCsv = new Anchor(downloadCsv(selectEmployee, selectYear, selectMonth), "Download Journal as CSV");
     final Anchor downloadJournalBackup = new Anchor(downloadFullBackup(), "Download FullBackup");
 
-    final FormLayout formLayout = new FormLayout(selectEmployee, selectYear, selectMonth, btnShowJournal);
+    final FormLayout formLayout = new FormLayout(selectEmployee, selectYear, selectMonth, showJournalButton);
     final Details formDetails = new Details("Select Journal", formLayout);
     formDetails.setOpened(true);
 

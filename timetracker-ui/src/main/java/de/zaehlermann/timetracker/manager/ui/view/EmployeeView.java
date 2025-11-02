@@ -1,8 +1,10 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
+import java.io.Serial;
+import java.util.List;
+
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -16,16 +18,16 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
+import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
+import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Employee;
 import de.zaehlermann.timetracker.service.EmployeeService;
 import de.zaehlermann.timetracker.service.RfidScanService;
 import de.zaehlermann.timetracker.validate.ValidateUtils;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
-
-import java.io.Serial;
-import java.util.List;
 
 @Route("employees")
 @PageTitle("Employees")
@@ -54,9 +56,8 @@ public class EmployeeView extends Main {
     firstName.setRequired(true);
     lastName.setRequired(true);
 
-    final Button saveBtn = new Button("Save", event -> saveEmployee());
-    saveBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    final Button deleteBtn = new Button("Delete", event -> deleteEmployee());
+    final Button saveButton = new SaveButton(event -> saveEmployee());
+    final Button deleteButton = new DeleteButton(event -> deleteEmployee());
 
     employeeGrid = new Grid<>();
     employeeGrid.setItems(EMPLOYEE_SERVICE.findAll());
@@ -77,7 +78,7 @@ public class EmployeeView extends Main {
     employeeGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
     employeeGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
-    final FormLayout formLayout = new FormLayout(employeeId, rfid, firstName, lastName, saveBtn, deleteBtn);
+    final FormLayout formLayout = new FormLayout(employeeId, rfid, firstName, lastName, saveButton, deleteButton);
 
     final VerticalLayout verticalLayout = new VerticalLayout(formLayout, employeeGrid);
     verticalLayout.setSizeFull();
@@ -118,7 +119,5 @@ public class EmployeeView extends Main {
     Notification.show("Employee deleted", 3000, Notification.Position.BOTTOM_END)
       .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
   }
-
-
 
 }
