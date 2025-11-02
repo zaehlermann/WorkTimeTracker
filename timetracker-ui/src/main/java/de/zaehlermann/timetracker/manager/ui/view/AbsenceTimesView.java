@@ -41,7 +41,7 @@ public class AbsenceTimesView extends Main {
 
   // Form fields
   private final Select<String> selectEmployee = new Select<>();
-  private final Select<AbsenceType> selectType = new Select<>();
+  private final Select<AbsenceType> selectAbsenceType = new Select<>();
   private final DatePicker startDateField = new DatePicker("Start Date");
   private final TimePicker startTimeField = new TimePicker("Start Time");
   private final DatePicker endDateField = new DatePicker("End Date");
@@ -62,9 +62,9 @@ public class AbsenceTimesView extends Main {
     }
 
     final List<AbsenceType> absenceTypes = AbsenceType.getSelectableValues();
-    selectType.setLabel("Type");
-    selectType.setItems(absenceTypes);
-    selectType.setValue(absenceTypes.getFirst());
+    selectAbsenceType.setLabel("Type");
+    selectAbsenceType.setItems(absenceTypes);
+    selectAbsenceType.setValue(absenceTypes.getFirst());
 
     startDateField.setValue(LocalDate.now());
 
@@ -104,7 +104,7 @@ public class AbsenceTimesView extends Main {
     final Button saveButton = new Button("Save", event -> saveAbsence());
     saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     final Button deleteButton = new Button("Delete", event -> deleteAbsence());
-    return new FormLayout(selectEmployee, selectType,
+    return new FormLayout(selectEmployee, selectAbsenceType,
                           startDateField, startTimeField,
                           endDateField, endTimeField,
                           saveButton, deleteButton);
@@ -112,7 +112,7 @@ public class AbsenceTimesView extends Main {
 
   private void saveAbsence() {
 
-    final Absence newAbsence = new Absence(selectEmployee.getValue(), selectType.getValue(),
+    final Absence newAbsence = new Absence(selectEmployee.getValue(), selectAbsenceType.getValue(),
                                            startDateField.getValue(), endDateField.getValue(),
                                            startTimeField.getValue(), endTimeField.getValue());
     ABSENCE_SERVICE.save(newAbsence);
