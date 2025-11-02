@@ -30,7 +30,7 @@ import jakarta.annotation.security.PermitAll;
 
 @Route("absence-times")
 @PageTitle("Absence times")
-@Menu(order = 1, icon = "vaadin:user-clock", title = "Absence times")
+@Menu(order = 2, icon = "vaadin:user-clock", title = "Absence times")
 @PermitAll // When security is enabled, allow all authenticated users
 public class AbsenceTimesView extends Main {
   @Serial

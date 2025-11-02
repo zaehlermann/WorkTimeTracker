@@ -35,7 +35,7 @@ public class WorkModelRepository extends AbstractCsvRepository {
 
   @Nonnull
   private Path getFilePath() {
-    return Path.of(DefaultDirs.EMPLOYEE_DIR, "workmodels.csv");
+    return Path.of(DefaultDirs.EMPLOYEE_DIR, "work-models.csv");
   }
 
   @Nonnull
