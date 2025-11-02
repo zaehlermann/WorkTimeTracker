@@ -29,7 +29,7 @@ import java.util.List;
 
 @Route("employees")
 @PageTitle("Employees")
-@Menu(order = 0, icon = "vaadin:clipboard-check", title = "Employees")
+@Menu(order = 0, icon = "vaadin:user-card", title = "Employees")
 @PermitAll // When security is enabled, allow all authenticated users
 public class EmployeeView extends Main {
 

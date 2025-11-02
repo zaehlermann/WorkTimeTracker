@@ -56,17 +56,16 @@ public final class MainLayout extends AppLayout {
   }
 
   private VerticalLayout createHeader() {
-    final Icon appLogo = VaadinIcon.CUBES.create();
+    final Icon appLogo = VaadinIcon.TIME_FORWARD.create();
     appLogo.addClassNames(TextColor.PRIMARY, IconSize.LARGE);
 
-    final Span appName = new Span("TimeTrackerManager");
+    final Span appName = new Span("Time Tracker");
     appName.addClassNames(FontWeight.SEMIBOLD, FontSize.LARGE);
 
     final Div header = new Div(appLogo, appName);
     header.addClassNames(Display.FLEX, Padding.MEDIUM, Gap.MEDIUM, AlignItems.CENTER);
 
     final Div divVersion = new Div(INFO_SERVICE.getAppVersion());
-
     return new VerticalLayout(header, divVersion);
   }
 

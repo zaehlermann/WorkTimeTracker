@@ -41,7 +41,7 @@ import jakarta.annotation.security.PermitAll;
 
 @Route("time-journal")
 @PageTitle("Time journal")
-@Menu(order = 3, icon = "vaadin:clipboard-check", title = "Time journal")
+@Menu(order = 3, icon = "vaadin:chart", title = "Time journal")
 @PermitAll // When security is enabled, allow all authenticated users
 public class TimeJournalView extends Main {
 

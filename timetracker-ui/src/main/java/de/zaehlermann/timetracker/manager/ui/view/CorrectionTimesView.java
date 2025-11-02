@@ -30,7 +30,7 @@ import jakarta.annotation.security.PermitAll;
 
 @Route("correction-times")
 @PageTitle("Correction times")
-@Menu(order = 2, icon = "vaadin:clipboard-check", title = "Correction times")
+@Menu(order = 2, icon = "vaadin:user-check", title = "Correction times")
 @PermitAll // When security is enabled, allow all authenticated users
 public class CorrectionTimesView extends Main {
   @Serial
