@@ -186,8 +186,7 @@ public class TimeJournalView extends Main {
 
     final boolean isValid = ValidateUtils.validateSelects(List.of(selectEmployee, selectYear, selectMonth));
     if(!isValid) {
-      Notification.show("Please fill all required fields", 3000, Notification.Position.BOTTOM_END)
-          .addThemeVariants(NotificationVariant.LUMO_ERROR);
+      Notification.show("Please fill all required fields").addThemeVariants(NotificationVariant.LUMO_ERROR);
       return;
     }
 

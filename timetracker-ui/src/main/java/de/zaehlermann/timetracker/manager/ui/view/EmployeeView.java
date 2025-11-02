@@ -93,17 +93,14 @@ public class EmployeeView extends Main {
 
     final boolean isValid = ValidateUtils.validateTextFields(List.of(rfid, firstName, lastName, employeeId));
     if(!isValid) {
-      Notification.show("Please fill all required fields", 3000, Notification.Position.BOTTOM_END)
-        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+      Notification.show("Please fill all required fields").addThemeVariants(NotificationVariant.LUMO_ERROR);
       return;
     }
 
     EMPLOYEE_SERVICE.addEmployee(new Employee(employeeId.getValue(), rfid.getValue(), firstName.getValue(), lastName.getValue()));
     employeeGrid.setItems(EMPLOYEE_SERVICE.findAll());
     clearTextFields(List.of(rfid, firstName, lastName, employeeId));
-
-    Notification.show("Employee added", 3000, Notification.Position.BOTTOM_END)
-      .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    Notification.show("Employee added").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
   }
 
   private void clearTextFields(@Nonnull final List<? extends HasValue<?, String>> textFields) {

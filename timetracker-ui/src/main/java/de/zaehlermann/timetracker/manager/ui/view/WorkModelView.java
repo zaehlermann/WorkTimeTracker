@@ -108,9 +108,7 @@ public class WorkModelView extends Main {
                                                   workTimePicker.getValue().get(ChronoField.MINUTE_OF_DAY),
                                                   breakTimePicker.getValue().get(ChronoField.MINUTE_OF_DAY)));
     workModelGrid.setItems(WORK_MODEL_SERVICE.findAll());
-
-    Notification.show("Work model added", 3000, Notification.Position.BOTTOM_END)
-      .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    Notification.show("Work model added").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
   }
 
   private void deleteWorkModel() {
