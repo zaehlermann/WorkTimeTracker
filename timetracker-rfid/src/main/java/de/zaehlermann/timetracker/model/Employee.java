@@ -37,6 +37,7 @@ public class Employee implements AbstractCsvEntity<Employee> {
 
   @Nonnull
   public List<JournalSummaryItem> toJournalSummaryHeaders(@Nonnull final List<WorkModel> workModels) {
+    //TODO pull work model header out here
     return List.of(new JournalSummaryItem("EmployeeID", employeeId),
                    new JournalSummaryItem("Name", firstName + " " + lastName),
                    new JournalSummaryItem("RFID", rfid),

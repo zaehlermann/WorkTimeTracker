@@ -3,6 +3,7 @@ package de.zaehlermann.timetracker.model;
 import static java.util.Objects.requireNonNull;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -88,4 +89,14 @@ public class WorkModel implements AbstractCsvEntity<WorkModel> {
     return new WorkModel(employeeId, validFrom, validUntil, worktimeADayInMin, breakTimeADayInMin);
   }
 
+  @Override
+  public boolean equals(final Object o) {
+    if(!(o instanceof final WorkModel workModel)) return false;
+    return Objects.equals(employeeId, workModel.employeeId) && Objects.equals(validFrom, workModel.validFrom);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(employeeId, validFrom);
+  }
 }

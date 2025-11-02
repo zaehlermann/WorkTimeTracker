@@ -6,7 +6,6 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoField;
 import java.util.List;
 
-import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -18,7 +17,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.shared.HasValidationProperties;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -28,7 +26,6 @@ import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.model.WorkModel;
 import de.zaehlermann.timetracker.service.JournalService;
 import de.zaehlermann.timetracker.service.WorkModelService;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
 @Route("work-models")
@@ -104,33 +101,15 @@ public class WorkModelView extends Main {
   }
 
   private void saveEmployee() {
-
-    //    final boolean isValid = ValidateUtils.validateTextFields(List.of(employeeSelect, validFromPicker, validUntilPicker, workTimePicker, breakTimePicker));
-    //    if(!isValid) {
-    //      Notification.show("Please fill all required fields", 3000, Notification.Position.BOTTOM_END)
-    //        .addThemeVariants(NotificationVariant.LUMO_ERROR);
-    //      return;
-    //    }
-
     WORK_MODEL_SERVICE.addWorkModel(new WorkModel(employeeSelect.getValue(),
                                                   validFromPicker.getValue(),
                                                   validUntilPicker.getValue(),
                                                   workTimePicker.getValue().get(ChronoField.MINUTE_OF_DAY),
                                                   breakTimePicker.getValue().get(ChronoField.MINUTE_OF_DAY)));
     workModelGrid.setItems(WORK_MODEL_SERVICE.findAll());
-    //clearTextFields(List.of(rfid, firstName, lastName, employeeId));
 
     Notification.show("Work model added", 3000, Notification.Position.BOTTOM_END)
       .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-  }
-
-  private void clearTextFields(@Nonnull final List<? extends HasValue<?, String>> textFields) {
-    textFields.forEach(HasValue::clear);
-    for(final HasValue<?, String> textField : textFields) {
-      if(textField instanceof final HasValidationProperties hasValidationProperties) {
-        hasValidationProperties.setInvalid(false);
-      }
-    }
   }
 
   private void deleteWorkModel() {

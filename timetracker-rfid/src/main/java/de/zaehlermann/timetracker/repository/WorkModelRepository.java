@@ -11,7 +11,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.zaehlermann.timetracker.globals.DefaultDirs;
-import de.zaehlermann.timetracker.model.Absence;
 import de.zaehlermann.timetracker.model.WorkModel;
 
 public class WorkModelRepository extends AbstractCsvRepository {
@@ -57,13 +56,14 @@ public class WorkModelRepository extends AbstractCsvRepository {
   public List<WorkModel> findAllWorkModelsByEmployeeId(@Nonnull final String employeeId, @Nullable final Integer year, @Nonnull final Integer month) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
-      return lines
+      final List<WorkModel> savedModels = lines
         .filter(line -> !line.isEmpty())
         .filter(line -> !line.equals(WorkModel.HEADER_LINE))
         .map(WorkModel::fromCsvLine)
         .filter(e -> employeeId.equals(e.getEmployeeId()))
         .filter(e -> e.isInMonth(year, month))
         .toList();
+      return savedModels.isEmpty() ? List.of(WorkModel.DEFAULT_WORKMODEL) : savedModels;
     }
     catch(final IOException e) {
       throw new IllegalStateException("Error during reading file from path " + filePath, e);
