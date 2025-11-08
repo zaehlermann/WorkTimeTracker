@@ -1,4 +1,4 @@
-Timetracker UI - update me on Raspberry
+Time Tracker UI - update me on Raspberry
 =======================================
 
 # Building
@@ -16,7 +16,9 @@ Login first to the existing service and do a backup of the files.
 1. Transfer jar file to the raspberry pi
 
 ```bash
-scp target/timetracker-ui-1.1.0.jar mike@timetracker.local:/home/mike/timetracker
+scp target/timetracker-ui-1.2.0.jar mike@timetracker.local:/home/mike/timetracker
+or
+scp target/timetracker-ui-1.2.0.jar mike@192.168.188.83:/home/mike/timetracker
 ```
 
 2.
@@ -30,8 +32,8 @@ scp target/timetracker-ui-1.1.0.jar mike@timetracker.local:/home/mike/timetracke
 ssh mike@timetracker.local
 cd timetracker
 systemctl --user stop timetracker-ui
-mv timetracker-ui.jar timetracker-ui-1.0.0-backup.jar
-mv timetracker-ui-1.1.0.jar timetracker-ui.jar
+mv timetracker-ui.jar timetracker-ui-1.1.0-backup.jar
+mv timetracker-ui-1.2.0.jar timetracker-ui.jar
 systemctl --user start timetracker-ui
 ```
 
