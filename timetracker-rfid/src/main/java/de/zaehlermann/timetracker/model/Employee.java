@@ -42,7 +42,7 @@ public class Employee implements AbstractCsvEntity<Employee> {
                    new JournalSummaryItem("Name", firstName + " " + lastName),
                    new JournalSummaryItem("RFID", rfid),
                    new JournalSummaryItem("Daily worktime",
-                                          LocalTime.ofSecondOfDay(workModels.getLast().getBreaktimeADayInMin() * 60L).toString() + "h "),
+                                          LocalTime.ofSecondOfDay(workModels.getLast().getWorktimeADayInMin() * 60L).toString() + "h "),
                    new JournalSummaryItem("Daily breaktime",
                                           LocalTime.ofSecondOfDay(workModels.getLast().getBreaktimeADayInMin() * 60L).toString() + "h"));
   }
