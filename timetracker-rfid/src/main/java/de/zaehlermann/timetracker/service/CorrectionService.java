@@ -26,6 +26,7 @@ public class CorrectionService {
     return toModified;
   }
 
+  @Nonnull
   public List<Correction> findAll() {
     return CORRECTION_REPOSITORY.findAll();
   }

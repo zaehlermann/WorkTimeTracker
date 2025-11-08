@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -22,6 +21,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
+import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
+import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Correction;
 import de.zaehlermann.timetracker.service.CorrectionService;
 import de.zaehlermann.timetracker.service.JournalService;
@@ -30,7 +31,7 @@ import jakarta.annotation.security.PermitAll;
 
 @Route("correction-times")
 @PageTitle("Correction times")
-@Menu(order = 2, icon = "vaadin:clipboard-check", title = "Correction times")
+@Menu(order = 3, icon = "vaadin:user-check", title = "Correction times")
 @PermitAll // When security is enabled, allow all authenticated users
 public class CorrectionTimesView extends Main {
   @Serial
@@ -93,9 +94,8 @@ public class CorrectionTimesView extends Main {
 
   @Nonnull
   private FormLayout createForm() {
-    final Button saveButton = new Button("Save", event -> saveAbsence());
-    saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    final Button deleteButton = new Button("Delete", event -> deleteAbsence());
+    final Button saveButton = new SaveButton(event -> saveAbsence());
+    final Button deleteButton = new DeleteButton(event -> deleteAbsence());
     return new FormLayout(selectEmployee, workdayField,
                           loginTimeField, logoutTimeField,
                           saveButton, deleteButton);
@@ -111,14 +111,13 @@ public class CorrectionTimesView extends Main {
   }
 
   private void deleteAbsence() {
-    final Set<Correction> selected = grid.getSelectedItems();
-    if(!selected.isEmpty()) {
-      CORRECTION_SERVICE.delete(selected);
-      Notification.show("Absence deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-      updateGrid();
+    final Set<Correction> selectedItems = grid.getSelectedItems();
+    if(!selectedItems.isEmpty()) {
+      grid.setItems(CORRECTION_SERVICE.delete(selectedItems));
+      Notification.show(selectedItems.size() + " items deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     }
     else {
-      Notification.show("No absence selected for deletion").addThemeVariants(NotificationVariant.LUMO_ERROR);
+      Notification.show("No items selected for deletion").addThemeVariants(NotificationVariant.LUMO_ERROR);
     }
   }
 

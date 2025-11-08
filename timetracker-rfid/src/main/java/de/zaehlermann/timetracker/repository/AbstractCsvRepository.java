@@ -27,7 +27,7 @@ public abstract class AbstractCsvRepository {
                         StandardOpenOption.CREATE,
                         StandardOpenOption.APPEND);
     }
-    catch(IOException e) {
+    catch(final IOException e) {
       throw new IllegalStateException("Error during appending file content to path: " + filePath, e);
     }
   }

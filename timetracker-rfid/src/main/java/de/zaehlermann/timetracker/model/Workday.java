@@ -17,9 +17,6 @@ import de.zaehlermann.timetracker.globals.TimeFormat;
 
 public class Workday {
 
-  public static final int WORKTIME_A_DAY_IN_HOURS = 8;
-  public static final int WORKTIME_A_DAY_IN_MIN = WORKTIME_A_DAY_IN_HOURS * 60;
-  public static final int BREAKTIME_A_DAY_IN_MIN = 30;
   private final LocalDate day;
   private final LocalTime login;
   private final LocalTime logout;
@@ -32,14 +29,15 @@ public class Workday {
                  @Nullable final Absence absences,
                  @Nullable final LocalTime login,
                  @Nullable final LocalTime logout,
-                 final boolean corrected) {
+                 final boolean corrected,
+                 @Nonnull final WorkModel currentContract) {
     this.day = day;
     this.absenceType = calcAbsenceType(day, absences);
     this.login = login;
     this.logout = logout;
     this.corrected = corrected;
     this.hoursDayInPlace = calcHoursInPlace(login, logout);
-    final long saldoInMinutes = calcSaldoInMinutes(hoursDayInPlace);
+    final long saldoInMinutes = calcSaldoInMinutes(hoursDayInPlace, currentContract);
     this.saldo = BigDecimal.valueOf(saldoInMinutes).divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
   }
 
@@ -55,10 +53,10 @@ public class Workday {
     return List.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(day.getDayOfWeek());
   }
 
-  private long calcSaldoInMinutes(final Duration hoursDayInPlace) {
+  private long calcSaldoInMinutes(@Nullable final Duration hoursDayInPlace, @Nonnull final WorkModel currentContract) {
     if(hoursDayInPlace == null) return 0;
     return absenceType != null ? this.hoursDayInPlace.toMinutes()
-                               : (this.hoursDayInPlace.toMinutes() - WORKTIME_A_DAY_IN_MIN - BREAKTIME_A_DAY_IN_MIN);
+                               : (this.hoursDayInPlace.toMinutes() - currentContract.getExpectedPresenceTimeInMins());
   }
 
   @Nonnull
@@ -143,4 +141,4 @@ public class Workday {
     return saldo;
   }
 
-  }
+}

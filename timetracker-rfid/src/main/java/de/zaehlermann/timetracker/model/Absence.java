@@ -57,7 +57,8 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
            System.lineSeparator();
   }
 
-  public static Absence fromCsvLine(final String csvLine) {
+  @Nonnull
+  public static Absence fromCsvLine(@Nonnull final String csvLine) {
     final String[] parts = csvLine.split(";", -1);
     final String employeeId = parts[0];
     final AbsenceType type = AbsenceType.valueOf(parts[1]);
@@ -88,7 +89,9 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
     return isDateInSpan(day, startDay, endDay == null ? startDay : endDay);
   }
 
-  public static boolean isDateInSpan(final LocalDate date, final LocalDate start, final LocalDate end) {
+  public static boolean isDateInSpan(@Nullable final LocalDate date,
+                                     @Nullable final LocalDate start,
+                                     @Nullable final LocalDate end) {
     if(date == null || start == null || end == null) return false;
     return (date.isEqual(start) || date.isAfter(start)) &&
            (date.isEqual(end) || date.isBefore(end));

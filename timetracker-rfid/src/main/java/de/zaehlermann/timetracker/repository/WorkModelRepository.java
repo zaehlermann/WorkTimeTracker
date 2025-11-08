@@ -11,42 +11,40 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.zaehlermann.timetracker.globals.DefaultDirs;
-import de.zaehlermann.timetracker.model.Absence;
+import de.zaehlermann.timetracker.model.WorkModel;
 
-public class AbsenceRepository extends AbstractCsvRepository {
+public class WorkModelRepository extends AbstractCsvRepository {
 
-  public AbsenceRepository() {
+  public WorkModelRepository() {
     final Path filePath = getFilePath();
     if(!Files.exists(filePath)) {
-      saveToFile(Absence.HEADER_LINE + System.lineSeparator(), filePath);
+      saveToFile(WorkModel.HEADER_LINE + System.lineSeparator(), filePath);
     }
   }
 
-  public void appendToFile(@Nonnull final Absence absence) {
-    appendToFile(absence.toCsvLine(), getFilePath());
+  public void appendToFile(@Nonnull final WorkModel workModel) {
+    appendToFile(workModel.toCsvLine(), getFilePath());
   }
 
-  public void saveToFile(@Nonnull final List<Absence> absences) {
+  public void saveToFile(@Nonnull final List<WorkModel> workModels) {
     final Path filePath = getFilePath();
-    saveToFile(Absence.HEADER_LINE + System.lineSeparator(), filePath);
-    absences.forEach(this::appendToFile);
+    saveToFile(WorkModel.HEADER_LINE + System.lineSeparator(), filePath);
+    workModels.forEach(this::appendToFile);
   }
 
   @Nonnull
   private Path getFilePath() {
-    return Path.of(DefaultDirs.EMPLOYEE_DIR, "absence.csv");
+    return Path.of(DefaultDirs.EMPLOYEE_DIR, "work-models.csv");
   }
 
   @Nonnull
-  public List<Absence> findAbsencesByEmployeeId(@Nonnull final String employeeId, @Nullable final Integer year, @Nonnull final Integer month) {
+  public List<WorkModel> findAll() {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       return lines
         .filter(line -> !line.isEmpty())
-        .filter(line -> !line.equals(Absence.HEADER_LINE))
-        .map(Absence::fromCsvLine)
-        .filter(e -> employeeId.equals(e.employeeId()))
-        .filter(e -> e.isInMonth(year, month))
+        .filter(line -> !line.equals(WorkModel.HEADER_LINE))
+        .map(WorkModel::fromCsvLine)
         .toList();
     }
     catch(final IOException e) {
@@ -55,14 +53,17 @@ public class AbsenceRepository extends AbstractCsvRepository {
   }
 
   @Nonnull
-  public List<Absence> findAll() {
+  public List<WorkModel> findAllWorkModelsByEmployeeId(@Nonnull final String employeeId, @Nullable final Integer year, @Nonnull final Integer month) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
-      return lines
+      final List<WorkModel> savedModels = lines
         .filter(line -> !line.isEmpty())
-        .filter(line -> !line.equals(Absence.HEADER_LINE))
-        .map(Absence::fromCsvLine)
+        .filter(line -> !line.equals(WorkModel.HEADER_LINE))
+        .map(WorkModel::fromCsvLine)
+        .filter(e -> employeeId.equals(e.getEmployeeId()))
+        .filter(e -> e.isInMonth(year, month))
         .toList();
+      return savedModels.isEmpty() ? List.of(WorkModel.DEFAULT_WORKMODEL) : savedModels;
     }
     catch(final IOException e) {
       throw new IllegalStateException("Error during reading file from path " + filePath, e);

@@ -1,8 +1,11 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
+import java.io.Serial;
+import java.util.List;
+import java.util.Set;
+
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -16,7 +19,10 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
+import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
+import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Employee;
 import de.zaehlermann.timetracker.service.EmployeeService;
 import de.zaehlermann.timetracker.service.RfidScanService;
@@ -24,12 +30,9 @@ import de.zaehlermann.timetracker.validate.ValidateUtils;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
-import java.io.Serial;
-import java.util.List;
-
 @Route("employees")
 @PageTitle("Employees")
-@Menu(order = 0, icon = "vaadin:clipboard-check", title = "Employees")
+@Menu(order = 0, icon = "vaadin:user-card", title = "Employees")
 @PermitAll // When security is enabled, allow all authenticated users
 public class EmployeeView extends Main {
 
@@ -54,9 +57,8 @@ public class EmployeeView extends Main {
     firstName.setRequired(true);
     lastName.setRequired(true);
 
-    final Button saveBtn = new Button("Save", event -> saveEmployee());
-    saveBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    final Button deleteBtn = new Button("Delete", event -> deleteEmployee());
+    final Button saveButton = new SaveButton(event -> saveEmployee());
+    final Button deleteButton = new DeleteButton(event -> deleteEmployee());
 
     employeeGrid = new Grid<>();
     employeeGrid.setItems(EMPLOYEE_SERVICE.findAll());
@@ -77,7 +79,7 @@ public class EmployeeView extends Main {
     employeeGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
     employeeGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
-    final FormLayout formLayout = new FormLayout(employeeId, rfid, firstName, lastName, saveBtn, deleteBtn);
+    final FormLayout formLayout = new FormLayout(employeeId, rfid, firstName, lastName, saveButton, deleteButton);
 
     final VerticalLayout verticalLayout = new VerticalLayout(formLayout, employeeGrid);
     verticalLayout.setSizeFull();
@@ -91,17 +93,14 @@ public class EmployeeView extends Main {
 
     final boolean isValid = ValidateUtils.validateTextFields(List.of(rfid, firstName, lastName, employeeId));
     if(!isValid) {
-      Notification.show("Please fill all required fields", 3000, Notification.Position.BOTTOM_END)
-        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+      Notification.show("Please fill all required fields").addThemeVariants(NotificationVariant.LUMO_ERROR);
       return;
     }
 
     EMPLOYEE_SERVICE.addEmployee(new Employee(employeeId.getValue(), rfid.getValue(), firstName.getValue(), lastName.getValue()));
     employeeGrid.setItems(EMPLOYEE_SERVICE.findAll());
     clearTextFields(List.of(rfid, firstName, lastName, employeeId));
-
-    Notification.show("Employee added", 3000, Notification.Position.BOTTOM_END)
-      .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    Notification.show("Employee added").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
   }
 
   private void clearTextFields(@Nonnull final List<? extends HasValue<?, String>> textFields) {
@@ -114,11 +113,14 @@ public class EmployeeView extends Main {
   }
 
   private void deleteEmployee() {
-    employeeGrid.setItems(EMPLOYEE_SERVICE.deleteByRfid(employeeGrid.getSelectedItems()));
-    Notification.show("Employee deleted", 3000, Notification.Position.BOTTOM_END)
-      .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    final Set<Employee> selectedItems = employeeGrid.getSelectedItems();
+    if(!selectedItems.isEmpty()) {
+      employeeGrid.setItems(EMPLOYEE_SERVICE.deleteByRfid(selectedItems));
+      Notification.show(selectedItems.size() + " items deleted").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    }
+    else {
+      Notification.show("No items selected for deletion").addThemeVariants(NotificationVariant.LUMO_ERROR);
+    }
   }
-
-
 
 }
