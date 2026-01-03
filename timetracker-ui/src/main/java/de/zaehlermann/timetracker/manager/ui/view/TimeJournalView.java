@@ -6,8 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serial;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
@@ -59,7 +62,6 @@ public class TimeJournalView extends Main {
   public static final String COLUMN_LOGOUT = "Logout";
   public static final String TOTAL = "Total: ";
 
-
   final Select<String> selectEmployee = new Select<>();
 
   public TimeJournalView() {
@@ -76,7 +78,8 @@ public class TimeJournalView extends Main {
 
     final Select<Integer> selectMonth = new Select<>();
     selectMonth.setLabel("Month");
-    selectMonth.setItems(asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
+    selectMonth.setItemLabelGenerator(item -> item == -1 ? "All" : Month.of(item).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+    selectMonth.setItems(asList(-1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
     selectMonth.setValue(LocalDate.now().getMonth().getValue());
 
     final Grid<JournalSummaryItem> journalSummaryGrid = new Grid<>(JournalSummaryItem.class, false);
@@ -93,7 +96,7 @@ public class TimeJournalView extends Main {
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
     workdayGrid.addColumn(Workday::getDay).setKey(COLUMN_DATE).setHeader(COLUMN_DATE).setFooter("Total Days:");
     workdayGrid.addColumn(Workday::getWeekDayName).setKey(COLUMN_WEEKDAY).setHeader(COLUMN_WEEKDAY)
-        .setComparator(Comparator.comparing(Workday::getWeekDayValue));
+      .setComparator(Comparator.comparing(Workday::getWeekDayValue));
     workdayGrid.addColumn(Workday::getAbsenceType).setKey(COLUMN_ABSENCE).setHeader(COLUMN_ABSENCE);
     workdayGrid.addColumn(Workday::getLogin).setKey(COLUMN_LOGIN).setHeader(COLUMN_LOGIN);
     workdayGrid.addColumn(Workday::getLogout).setKey(COLUMN_LOGOUT).setHeader(COLUMN_LOGOUT);
