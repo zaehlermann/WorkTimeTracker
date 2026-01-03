@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import de.zaehlermann.timetracker.globals.DefaultDirs;
 import de.zaehlermann.timetracker.model.WorkModel;
@@ -53,7 +52,7 @@ public class WorkModelRepository extends AbstractCsvRepository {
   }
 
   @Nonnull
-  public List<WorkModel> findAllWorkModelsByEmployeeId(@Nonnull final String employeeId, @Nullable final Integer year, @Nonnull final Integer month) {
+  public List<WorkModel> findAllWorkModelsByEmployeeId(@Nonnull final String employeeId) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       final List<WorkModel> savedModels = lines
@@ -61,7 +60,6 @@ public class WorkModelRepository extends AbstractCsvRepository {
         .filter(line -> !line.equals(WorkModel.HEADER_LINE))
         .map(WorkModel::fromCsvLine)
         .filter(e -> employeeId.equals(e.getEmployeeId()))
-        .filter(e -> e.isInMonth(year, month))
         .toList();
       return savedModels.isEmpty() ? List.of(WorkModel.DEFAULT_WORKMODEL) : savedModels;
     }

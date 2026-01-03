@@ -78,8 +78,10 @@ public class TimeJournalView extends Main {
 
     final Select<Integer> selectMonth = new Select<>();
     selectMonth.setLabel("Month");
-    selectMonth.setItemLabelGenerator(item -> item == -1 ? "All" : Month.of(item).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
-    selectMonth.setItems(asList(-1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
+    selectMonth.setEmptySelectionAllowed(true);
+    selectMonth.setEmptySelectionCaption("All");
+    selectMonth.setItemLabelGenerator(item -> item == null ? "All" : Month.of(item).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+    selectMonth.setItems(asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
     selectMonth.setValue(LocalDate.now().getMonth().getValue());
 
     final Grid<JournalSummaryItem> journalSummaryGrid = new Grid<>(JournalSummaryItem.class, false);
@@ -187,7 +189,7 @@ public class TimeJournalView extends Main {
                                      @Nonnull final Grid<JournalSummaryItem> journalSummaryGrid,
                                      @Nonnull final Grid<Workday> workdayGrid) {
 
-    final boolean isValid = ValidateUtils.validateSelects(List.of(selectEmployee, selectYear, selectMonth));
+    final boolean isValid = ValidateUtils.validateSelects(List.of(selectEmployee, selectYear));
     if(!isValid) {
       Notification.show("Please fill all required fields").addThemeVariants(NotificationVariant.LUMO_ERROR);
       return;

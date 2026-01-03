@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import de.zaehlermann.timetracker.model.Absence;
 import de.zaehlermann.timetracker.model.Correction;
@@ -29,7 +30,7 @@ public class JournalService {
   private static final WorkModelRepository WORK_MODEL_REPOSITORY = new WorkModelRepository();
 
   @Nonnull
-  public String createAndSaveJournalTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nonnull final Integer month) {
+  public String createAndSaveJournalTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalTxt();
     JOURNAL_REPOSITORY.saveToTxtFile(employeeId, journalTxt);
@@ -37,24 +38,24 @@ public class JournalService {
   }
 
   @Nonnull
-  public File downloadCsv(@Nonnull final String employeeId, @Nonnull final Integer year, @Nonnull final Integer month) {
+  public File downloadCsv(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalCsv();
     return JOURNAL_REPOSITORY.saveToCsvFile(employeeId, journalTxt);
   }
 
   @Nonnull
-  public File downloadTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nonnull final Integer month) {
+  public File downloadTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalTxt();
     return JOURNAL_REPOSITORY.saveToTxtFile(employeeId, journalTxt);
   }
 
   @Nonnull
-  public Journal createJournal(@Nonnull final String employeeId, @Nonnull final Integer year, @Nonnull final Integer month) {
+  public Journal createJournal(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Employee employee = EMPLOYEE_REPOSITORY.findEmployeeByEmployeeId(employeeId);
-    final List<WorkModel> workModels = WORK_MODEL_REPOSITORY.findAllWorkModelsByEmployeeId(employeeId, year, month);
-    final List<Absence> absences = ABSENCE_REPOSITORY.findAbsencesByEmployeeId(employeeId, year, month);
+    final List<WorkModel> workModels = WORK_MODEL_REPOSITORY.findAllWorkModelsByEmployeeId(employeeId);
+    final List<Absence> absences = ABSENCE_REPOSITORY.findAbsencesByEmployeeId(employeeId);
     final List<Correction> corrections = CORRECTION_REPOSITORY.findCorrectionsByEmployeeId(employeeId, year, month);
     final List<RfidScan> allScans = RFID_SCAN_REPOSITORY.findAllRfIdScansByRfid(employee.getRfid(), year, month);
     return new Journal(employee, workModels, absences, corrections, allScans, year, month);

@@ -23,7 +23,7 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
   public Absence(@Nonnull final String employeeId,
                  @Nonnull final AbsenceType type,
                  @Nonnull final LocalDate startDay,
-                 @Nonnull final LocalDate endDay,
+                 @Nullable final LocalDate endDay,
                  @Nullable final LocalTime startTime,
                  @Nullable final LocalTime endTime) {
     this.employeeId = employeeId;
@@ -67,10 +67,6 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
     final LocalTime startTime = parts[4] == null || parts[4].isEmpty() ? null : LocalTime.parse(parts[4]);
     final LocalTime endTime = parts[5] == null || parts[5].isEmpty() ? null : LocalTime.parse(parts[5]);
     return new Absence(employeeId, type, startDay, endDay, startTime, endTime);
-  }
-
-  public boolean isInMonth(@Nullable final Integer year, @Nullable final Integer month) {
-    return true; // TODO implement this method
   }
 
   @Override
