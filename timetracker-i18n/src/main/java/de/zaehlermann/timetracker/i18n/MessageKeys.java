@@ -6,6 +6,11 @@ public enum MessageKeys {
 
   SALDO_BETWEEN("saldo.between"),
   EMPLOYEE_SUMMARY("employee.summary"),
+  EMPLOYEE_ID("employee.id"),
+  EMPLOYEE_NAME("employee.name"),
+  RFID("employee.rfid"),
+  EMPLOYEE_FIRSTNAME("employee.firstname"),
+  EMPLOYEE_LASTNAME("employee.lastname"),
   TIME_JOURNAL_SUMMARY("time.journal.summary"),
   TIME_JOURNAL_DETAILS("time.journal.details");
 

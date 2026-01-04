@@ -1,6 +1,8 @@
 package de.zaehlermann.timetracker.model;
 
-import java.time.LocalTime;
+import de.zaehlermann.timetracker.i18n.MessageKeys;
+import de.zaehlermann.timetracker.i18n.Messages;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -8,7 +10,10 @@ import javax.annotation.Nonnull;
 
 public class Employee implements AbstractCsvEntity<Employee> {
 
-  public static final String HEADER_LINE = "EMPLOYEE_ID;RFID;FIRSTNAME;LASTNAME";
+  public static final String HEADER_LINE = Messages.get(MessageKeys.EMPLOYEE_ID) + ";" +
+    Messages.get(MessageKeys.RFID) + ";" +
+    Messages.get(MessageKeys.EMPLOYEE_FIRSTNAME) + ";" +
+    Messages.get(MessageKeys.EMPLOYEE_LASTNAME);
 
   private final String employeeId;
   private final String rfid;
@@ -26,20 +31,11 @@ public class Employee implements AbstractCsvEntity<Employee> {
   }
 
   @Nonnull
-  public String toJournalTxtHeader(@Nonnull final List<WorkModel> workModel) {
-    return "EmployeeID: " + employeeId + System.lineSeparator() +
-           "Name: " + firstName + " " + lastName + System.lineSeparator() +
-           "RFID: " + rfid + System.lineSeparator() +
-           "Daily worktime: " + LocalTime.ofSecondOfDay(workModel.getLast().getWorktimeADayInMin() * 60L).toString() + "h " +
-           System.lineSeparator() +
-           "Daily breaktime: " + LocalTime.ofSecondOfDay(workModel.getLast().getBreaktimeADayInMin() * 60L).toString() + "h";
-  }
-
-  @Nonnull
   public List<JournalSummaryItem> getSummaryItems() {
-    return List.of(new JournalSummaryItem("EmployeeID", employeeId),
-                   new JournalSummaryItem("Name", firstName + " " + lastName),
-                   new JournalSummaryItem("RFID", rfid));
+    return List.of(
+      new JournalSummaryItem(Messages.get(MessageKeys.EMPLOYEE_ID), employeeId),
+      new JournalSummaryItem(Messages.get(MessageKeys.EMPLOYEE_NAME), firstName + " " + lastName),
+      new JournalSummaryItem(Messages.get(MessageKeys.RFID), rfid));
   }
 
   @Nonnull
@@ -76,7 +72,7 @@ public class Employee implements AbstractCsvEntity<Employee> {
 
   @Override
   public boolean equals(final Object o) {
-    if(!(o instanceof final Employee employee)) return false;
+    if (!(o instanceof final Employee employee)) return false;
     return Objects.equals(rfid, employee.rfid);
   }
 
