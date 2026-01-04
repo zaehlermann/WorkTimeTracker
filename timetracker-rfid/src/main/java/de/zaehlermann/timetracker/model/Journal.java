@@ -20,7 +20,6 @@ import javax.annotation.Nullable;
 
 public class Journal {
 
-  public static final String SPLIT_LINE = "==================================================" + System.lineSeparator();
   private final Employee employee;
   private final List<Workday> workdays;
   private final List<WorkModel> workModels;
@@ -128,25 +127,20 @@ public class Journal {
 
   @Nonnull
   public List<JournalSummaryItem> getJournalSummaryItems() {
-
     final LocalDate today = LocalDate.now();
     final LocalDate firstWorkingDay = workdays.getFirst().getDay();
-
     final LocalDate firstOfSelectedMonth = LocalDate.of(selectedYear, selectedMonth == null ? 1 : selectedMonth, 1);
     final LocalDate endOfSelectedMonth = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth();
+    final String selectedRange = selectedYear
+                                 + (selectedMonth == null ? "" : "-" + Month.of(selectedMonth).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
 
-    final String selectedRange = selectedYear + "-"
-                                 + (selectedMonth == null ? "" : Month.of(selectedMonth).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
-
-    return List.of(
-      new JournalSummaryItem("Hours " + selectedRange, calcHoursTotalSelected(selectedYear, selectedMonth)),
-      new JournalSummaryItem(getRangeDesc(firstOfSelectedMonth, endOfSelectedMonth) + " (Selected range)",
-                             calcSaldoTotalRange(firstOfSelectedMonth, endOfSelectedMonth)),
-      new JournalSummaryItem(getRangeDesc(firstWorkingDay, today) + " (Total until today)",
-                             calcSaldoTotalRange(firstWorkingDay, today)),
-      new JournalSummaryItem(getRangeDesc(firstWorkingDay, endOfSelectedMonth) + " (Total until end of selected range)",
-                             calcSaldoTotalRange(firstWorkingDay, endOfSelectedMonth))
-    );
+    return List.of(new JournalSummaryItem("Hours " + selectedRange, calcHoursTotalSelected(selectedYear, selectedMonth)),
+                   new JournalSummaryItem(getRangeDesc(firstOfSelectedMonth, endOfSelectedMonth) + " (Selected range)",
+                                          calcSaldoTotalRange(firstOfSelectedMonth, endOfSelectedMonth)),
+                   new JournalSummaryItem(getRangeDesc(firstWorkingDay, today) + " (Total until today)",
+                                          calcSaldoTotalRange(firstWorkingDay, today)),
+                   new JournalSummaryItem(getRangeDesc(firstWorkingDay, endOfSelectedMonth) + " (Total until end of selected range)",
+                                          calcSaldoTotalRange(firstWorkingDay, endOfSelectedMonth)));
   }
 
   @Nonnull
@@ -156,33 +150,42 @@ public class Journal {
 
   @Nonnull
   public String printJournalTxt() {
-    final String hoursTotal = calcHoursTotalSelected(selectedYear, selectedMonth);
-    final String saldoTotal = calcSaldoTotalSelected(selectedYear, selectedMonth);
-    return employee.toJournalTxtHeader(workModels) + System.lineSeparator() +
-           SPLIT_LINE +
+    return "# Employee Summary" + System.lineSeparator() +
+           getEmployeeWorkModelSummaryItems().stream()
+             .map(JournalSummaryItem::toTxtLine)
+             .collect(Collectors.joining()) +
+           System.lineSeparator() +
+           "# Time Journal Summary" + System.lineSeparator() +
+           getJournalSummaryItems().stream()
+             .map(JournalSummaryItem::toTxtLine)
+             .collect(Collectors.joining()) +
+           System.lineSeparator() +
+           "# Time Journal Details" + System.lineSeparator() +
            Workday.HEADER_LINE_TXT + System.lineSeparator() +
            workdays.stream()
              .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
              .map(Workday::toTxtLine)
-             .collect(Collectors.joining()) +
-           SPLIT_LINE +
-           "                                     " + hoursTotal + "  " + saldoTotal;
+             .collect(Collectors.joining());
   }
 
   @Nonnull
   public String printJournalCsv() {
-    final String hoursTotal = calcHoursTotalSelected(selectedYear, selectedMonth);
-    final String saldoTotal = calcSaldoTotalSelected(selectedYear, selectedMonth);
-    return employee.toJournalTxtHeader(workModels) + System.lineSeparator() +
-           SPLIT_LINE +
+    return "# Employee Summary" + System.lineSeparator() +
+           getEmployeeWorkModelSummaryItems().stream()
+             .map(JournalSummaryItem::toTxtLine)
+             .collect(Collectors.joining()) +
+           System.lineSeparator() +
+           "# Time Journal Summary" + System.lineSeparator() +
+           getJournalSummaryItems().stream()
+             .map(JournalSummaryItem::toTxtLine)
+             .collect(Collectors.joining()) +
+           System.lineSeparator() +
+           "# Time Journal Details" + System.lineSeparator() +
            Workday.HEADER_LINE_CSV + System.lineSeparator() +
            workdays.stream()
              .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
              .map(Workday::toCsvLine)
-             .collect(Collectors.joining()) +
-           SPLIT_LINE +
-           "Total Hours:" + hoursTotal + System.lineSeparator() +
-           "Total Saldo:" + saldoTotal;
+             .collect(Collectors.joining());
   }
 
   @Nonnull

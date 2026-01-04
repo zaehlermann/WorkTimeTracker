@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
  */
 public class JournalSummaryItem {
 
+  public static final String HEADER_LINE_CSV = "DESCRIPTION;VALUE";
   public final String key;
   public final String value;
 
@@ -38,5 +39,14 @@ public class JournalSummaryItem {
   @Nonnull
   public String getValue() {
     return value;
+  }
+
+  @Nonnull
+  public String toTxtLine() {
+    return key + ": " + value + System.lineSeparator();
+  }
+  @Nonnull
+  public String toCsvLine() {
+    return key + ";" + value + System.lineSeparator();
   }
 }

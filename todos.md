@@ -1,7 +1,6 @@
 # TODOs for upcoming v.1.x.x versions
 
-* add edit functionality for corrections
-* add more ui validation
+* add journal export in pdf format
 
 # Ideas for v.2.0.0
 
