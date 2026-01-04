@@ -13,6 +13,13 @@
   </parent>
 
   <dependencies>
+
+    <dependency>
+      <groupId>de.zaehlermann.timetracker</groupId>
+      <artifactId>timetracker-i18n</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>

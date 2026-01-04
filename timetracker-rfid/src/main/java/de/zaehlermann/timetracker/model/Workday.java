@@ -14,8 +14,21 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.zaehlermann.timetracker.globals.TimeFormat;
+import de.zaehlermann.timetracker.i18n.MessageKeys;
+import de.zaehlermann.timetracker.i18n.Messages;
 
 public class Workday {
+
+  public static final String HEADER_LINE_TXT = "DATE        D  OFF  LOGIN  LOGOUT  C  HOURS  SALDO";
+  public static final String HEADER_LINE_CSV =
+    Messages.get(MessageKeys.WORKDAY_DATE) + ";" +
+      Messages.get(MessageKeys.WORKDAY_WEEKDAY) + ";" +
+      Messages.get(MessageKeys.WORKDAY_ABSENCE) + ";" +
+      Messages.get(MessageKeys.WORKDAY_LOGIN) + ";" +
+      Messages.get(MessageKeys.WORKDAY_LOGOUT) + ";" +
+      Messages.get(MessageKeys.WORKDAY_CORRECTION) + ";" +
+      Messages.get(MessageKeys.WORKDAY_HOURS) + ";" +
+      Messages.get(MessageKeys.WORKDAY_SALDO);
 
   private final LocalDate day;
   private final LocalTime login;
@@ -43,7 +56,7 @@ public class Workday {
 
   @Nullable
   private static AbsenceType calcAbsenceType(final LocalDate day, final Absence absences) {
-    if(isWeekend(day)) {
+    if (isWeekend(day)) {
       return AbsenceType.WEEKEND;
     }
     return absences != null ? absences.type() : null;
@@ -54,9 +67,9 @@ public class Workday {
   }
 
   private long calcSaldoInMinutes(@Nullable final Duration hoursDayInPlace, @Nonnull final WorkModel currentContract) {
-    if(hoursDayInPlace == null) return 0;
+    if (hoursDayInPlace == null) return 0;
     return absenceType != null ? this.hoursDayInPlace.toMinutes()
-                               : (this.hoursDayInPlace.toMinutes() - currentContract.getExpectedPresenceTimeInMins());
+      : (this.hoursDayInPlace.toMinutes() - currentContract.getExpectedPresenceTimeInMins());
   }
 
   @Nonnull
@@ -64,33 +77,31 @@ public class Workday {
     return login != null && logout != null ? Duration.between(login, logout) : Duration.ZERO;
   }
 
-  public static final String HEADER_LINE_TXT = "DATE        D  OFF  LOGIN  LOGOUT  C  HOURS  SALDO";
-  public static final String HEADER_LINE_CSV = "DATE;D;OFF;LOGIN;LOGOUT;C;HOURS;SALDO";
 
   @Nonnull
   public String toTxtLine() {
     return day + "  " +
-           getWeekDayValue() + "  " +
-           String.format("%-3s", absenceType != null ? absenceType.getPrintValue() : "") + "  " +
-           String.format("%-5s", login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + "  " +
-           String.format("%-6s", logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + "  " +
-           String.format("%-1s", corrected ? "X" : "") + "  " +
-           getHoursDayInPlaceFormatted() + "  " +
-           String.format("%+.2f", saldo) +
-           System.lineSeparator();
+      getWeekDayValue() + "  " +
+      String.format("%-3s", absenceType != null ? absenceType.getPrintValueShort() : "") + "  " +
+      String.format("%-5s", login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + "  " +
+      String.format("%-6s", logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + "  " +
+      String.format("%-1s", corrected ? "X" : "") + "  " +
+      getHoursDayInPlaceFormatted() + "  " +
+      String.format("%+.2f", saldo) +
+      System.lineSeparator();
   }
 
   @Nonnull
   public String toCsvLine() {
     return day + ";" +
-           getWeekDayValue() + ";" +
-           (absenceType != null ? absenceType.getPrintValue() : "") + ";" +
-           (login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + ";" +
-           (logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + ";" +
-           (corrected ? "X" : "") + ";" +
-           getHoursDayInPlaceFormatted() + ";" +
-           String.format("%+.2f", saldo) +
-           System.lineSeparator();
+      getWeekDayValue() + ";" +
+      (absenceType != null ? absenceType.getPrintValueLong() : "") + ";" +
+      (login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + ";" +
+      (logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + ";" +
+      (corrected ? "X" : "") + ";" +
+      getHoursDayInPlaceFormatted() + ";" +
+      String.format("%+.2f", saldo) +
+      System.lineSeparator();
   }
 
   @Nonnull
@@ -143,7 +154,7 @@ public class Workday {
 
   public boolean isInSelectedRange(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
     return selectedMonth == null ? day.getYear() == selectedYear
-                                 : day.getYear() == selectedYear && day.getMonthValue() == selectedMonth;
+      : day.getYear() == selectedYear && day.getMonthValue() == selectedMonth;
   }
 
   public boolean isInDateRange(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {

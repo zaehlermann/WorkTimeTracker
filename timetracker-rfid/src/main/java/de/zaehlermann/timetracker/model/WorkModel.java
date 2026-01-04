@@ -1,5 +1,8 @@
 package de.zaehlermann.timetracker.model;
 
+import de.zaehlermann.timetracker.i18n.MessageKeys;
+import de.zaehlermann.timetracker.i18n.Messages;
+
 import static java.util.Objects.requireNonNull;
 
 import java.time.LocalDate;
@@ -100,7 +103,7 @@ public class WorkModel implements AbstractCsvEntity<WorkModel> {
 
   @Nonnull
   public List<JournalSummaryItem> getSummaryItems() {
-    return List.of(new JournalSummaryItem("Daily worktime", LocalTime.ofSecondOfDay(getWorktimeADayInMin() * 60L).toString() + "h "),
-                   new JournalSummaryItem("Daily breaktime", LocalTime.ofSecondOfDay(getBreaktimeADayInMin() * 60L).toString() + "h"));
+    return List.of(new JournalSummaryItem(Messages.get(MessageKeys.DAILY_WORKTIME), LocalTime.ofSecondOfDay(getWorktimeADayInMin() * 60L).toString() + "h "),
+                   new JournalSummaryItem(Messages.get(MessageKeys.DAILY_BREAKTIME), LocalTime.ofSecondOfDay(getBreaktimeADayInMin() * 60L).toString() + "h"));
   }
 }
