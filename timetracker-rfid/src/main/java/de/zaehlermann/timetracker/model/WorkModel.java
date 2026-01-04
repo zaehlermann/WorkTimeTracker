@@ -3,6 +3,8 @@ package de.zaehlermann.timetracker.model;
 import static java.util.Objects.requireNonNull;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -11,7 +13,7 @@ import javax.annotation.Nullable;
 public class WorkModel implements AbstractCsvEntity<WorkModel> {
 
   public static final String HEADER_LINE = "EMPLOYEE_ID;VALID_FROM;VALID_UNTIL;WORKTIME_A_DAY_IN_MIN;BREAKTIME_A_DAY_IN_MIN";
-  public static final WorkModel DEFAULT_WORKMODEL = new WorkModel("", LocalDate.MIN, null, 8 * 60, 30);
+  public static final WorkModel DEFAULT_WORKMODEL = new WorkModel("", LocalDate.of(2025, 1, 1), null, 8 * 60, 30);
 
   private final String employeeId;
   private final LocalDate validFrom;
@@ -94,5 +96,11 @@ public class WorkModel implements AbstractCsvEntity<WorkModel> {
   @Override
   public int hashCode() {
     return Objects.hash(employeeId, validFrom);
+  }
+
+  @Nonnull
+  public List<JournalSummaryItem> getSummaryItems() {
+    return List.of(new JournalSummaryItem("Daily worktime", LocalTime.ofSecondOfDay(getWorktimeADayInMin() * 60L).toString() + "h "),
+                   new JournalSummaryItem("Daily breaktime", LocalTime.ofSecondOfDay(getBreaktimeADayInMin() * 60L).toString() + "h"));
   }
 }

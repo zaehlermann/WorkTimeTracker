@@ -30,21 +30,16 @@ public class Employee implements AbstractCsvEntity<Employee> {
     return "EmployeeID: " + employeeId + System.lineSeparator() +
            "Name: " + firstName + " " + lastName + System.lineSeparator() +
            "RFID: " + rfid + System.lineSeparator() +
-           "Daily worktime: " + LocalTime.ofSecondOfDay(workModel.getLast().getBreaktimeADayInMin() * 60L).toString() + "h " +
+           "Daily worktime: " + LocalTime.ofSecondOfDay(workModel.getLast().getWorktimeADayInMin() * 60L).toString() + "h " +
            System.lineSeparator() +
            "Daily breaktime: " + LocalTime.ofSecondOfDay(workModel.getLast().getBreaktimeADayInMin() * 60L).toString() + "h";
   }
 
   @Nonnull
-  public List<JournalSummaryItem> toJournalSummaryHeaders(@Nonnull final List<WorkModel> workModels) {
-    //TODO pull work model header out here
+  public List<JournalSummaryItem> getSummaryItems() {
     return List.of(new JournalSummaryItem("EmployeeID", employeeId),
                    new JournalSummaryItem("Name", firstName + " " + lastName),
-                   new JournalSummaryItem("RFID", rfid),
-                   new JournalSummaryItem("Daily worktime",
-                                          LocalTime.ofSecondOfDay(workModels.getLast().getWorktimeADayInMin() * 60L).toString() + "h "),
-                   new JournalSummaryItem("Daily breaktime",
-                                          LocalTime.ofSecondOfDay(workModels.getLast().getBreaktimeADayInMin() * 60L).toString() + "h"));
+                   new JournalSummaryItem("RFID", rfid));
   }
 
   @Nonnull

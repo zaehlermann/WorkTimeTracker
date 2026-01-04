@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import de.zaehlermann.timetracker.globals.DefaultDirs;
 import de.zaehlermann.timetracker.model.Correction;
@@ -38,7 +37,7 @@ public class CorrectionRepository extends AbstractCsvRepository {
   }
 
   @Nonnull
-  public List<Correction> findCorrectionsByEmployeeId(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
+  public List<Correction> findCorrectionsByEmployeeId(@Nonnull final String employeeId) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       return lines
@@ -46,8 +45,6 @@ public class CorrectionRepository extends AbstractCsvRepository {
         .filter(line -> !line.equals(Correction.HEADER_LINE))
         .map(Correction::fromCsvLine)
         .filter(e -> e.getEmployeeId().equals(employeeId))
-        .filter(e -> e.getWorkday().getYear() == year)
-        .filter(e -> month == null || e.getWorkday().getMonthValue() == month)
         .toList();
     }
     catch(final IOException e) {

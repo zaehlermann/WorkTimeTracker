@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import de.zaehlermann.timetracker.globals.DefaultDirs;
 import de.zaehlermann.timetracker.model.RfidScan;
@@ -49,7 +48,7 @@ public class RfidScanRepository extends AbstractCsvRepository {
   }
 
   @Nonnull
-  public List<RfidScan> findAllRfIdScansByRfid(@Nonnull final String rfid, @Nullable final Integer year, @Nullable final Integer month) {
+  public List<RfidScan> findAllRfIdScansByRfid(@Nonnull final String rfid) {
     final Path trackingFilePath = getTrackingFilePath(rfid);
     if(!trackingFilePath.toFile().exists()) {
       return emptyList();
@@ -59,8 +58,6 @@ public class RfidScanRepository extends AbstractCsvRepository {
       return stream
         .filter(s -> !s.startsWith("RFID"))// skip header line
         .map(RfidScan::fromCsvLine)
-        .filter(scan -> (year == null || scan.getWorkday().getYear() == year) &&
-                        (month == null || scan.getWorkday().getMonthValue() == month))
         .distinct()
         .toList();
     }

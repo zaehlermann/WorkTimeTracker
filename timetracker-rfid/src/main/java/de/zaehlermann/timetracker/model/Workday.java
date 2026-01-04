@@ -141,4 +141,12 @@ public class Workday {
     return saldo;
   }
 
+  public boolean isInSelectedRange(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
+    return selectedMonth == null ? day.getYear() == selectedYear
+                                 : day.getYear() == selectedYear && day.getMonthValue() == selectedMonth;
+  }
+
+  public boolean isInDateRange(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
+    return (day.isEqual(start) || day.isAfter(start)) && (day.isEqual(end) || day.isBefore(end));
+  }
 }

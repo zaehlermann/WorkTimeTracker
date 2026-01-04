@@ -39,4 +39,13 @@ public class JournalSummaryItem {
   public String getValue() {
     return value;
   }
+
+  @Nonnull
+  public String toTxtLine() {
+    return key + ": " + value + System.lineSeparator();
+  }
+  @Nonnull
+  public String toCsvLine() {
+    return key + ";" + value + System.lineSeparator();
+  }
 }
