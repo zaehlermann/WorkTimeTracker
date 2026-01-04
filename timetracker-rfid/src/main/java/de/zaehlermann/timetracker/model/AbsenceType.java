@@ -15,37 +15,37 @@ public enum AbsenceType {
   /**
    * Wochenende
    */
-  WEEKEND("absensetype.weekend","WE"),
+  WEEKEND("absencetype.weekend","WE"),
 
   /**
    * Krank
    */
-  SICKNESS("absensetype.sickness","S"),
+  SICKNESS("absencetype.sickness","S"),
 
   /**
    * Urlaub
    */
-  VACATION("absensetype.vacation","V"),
+  VACATION("absencetype.vacation","V"),
 
   /**
    * Entschuldigt abwesend, z.B. privater Termin mitten am Tag
    */
-  ALLOWED_ABSENCE("absensetype.allowed_absence","AE"),
+  ALLOWED_ABSENCE("absencetype.allowed_absence","AE"),
 
   /**
    * Feiertag
    */
-  PUBLIC_HOLIDAY("absensetype.public_holiday","PH"),
+  PUBLIC_HOLIDAY("absencetype.public_holiday","PH"),
 
   /**
    * Betriebsferien
    */
-  COMPANY_HOLIDAY("absensetype.company_holiday","CH"),
+  COMPANY_HOLIDAY("absencetype.company_holiday","CH"),
 
   /**
    * Gleitzeit
    */
-  COMPENSATION_TIME("absensetype.compensation_time","CH");
+  COMPENSATION_TIME("absencetype.compensation_time","CH");
 
   @Nonnull
   private final String messageKey;

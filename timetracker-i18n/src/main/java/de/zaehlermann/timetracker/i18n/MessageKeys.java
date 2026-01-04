@@ -21,7 +21,10 @@ public enum MessageKeys {
   WORKDAY_LOGOUT("workday.logout"),
   WORKDAY_CORRECTION("workday.correction"),
   WORKDAY_HOURS("workday.hours"),
-  WORKDAY_SALDO("workday.saldo");
+  WORKDAY_SALDO("workday.saldo"),
+
+  DAILY_WORKTIME("workmodel.daily_worktime"),
+  DAILY_BREAKTIME("workmodel.daily_breaktime");
 
   private final String key;
 

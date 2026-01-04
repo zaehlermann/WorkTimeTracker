@@ -3,23 +3,16 @@ package de.zaehlermann.timetracker.model;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
-import java.time.YearMonth;
-import java.time.format.TextStyle;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class Journal {
 
@@ -135,14 +128,14 @@ public class Journal {
     final LocalDate firstOfSelectedMonth = LocalDate.of(selectedYear, selectedMonth == null ? 1 : selectedMonth, 1);
     final LocalDate endOfSelectedMonth = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth();
     final String selectedRange = selectedYear
-        + (selectedMonth == null ? "" : "-" + Month.of(selectedMonth).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+        + (selectedMonth == null ? "" : "-" + Month.of(selectedMonth).getValue());
 
-    return List.of(new JournalSummaryItem("Hours " + selectedRange, calcHoursTotalSelected(selectedYear, selectedMonth)),
-        new JournalSummaryItem(getRangeDesc(firstOfSelectedMonth, endOfSelectedMonth) + " (Selected range)",
+    return List.of(new JournalSummaryItem(Messages.get(MessageKeys.WORKDAY_HOURS)+" " + selectedRange, calcHoursTotalSelected(selectedYear, selectedMonth)),
+        new JournalSummaryItem(getRangeDesc(firstOfSelectedMonth, endOfSelectedMonth),
             calcSaldoTotalRange(firstOfSelectedMonth, endOfSelectedMonth)),
-        new JournalSummaryItem(getRangeDesc(firstWorkingDay, today) + " (Total until today)",
+        new JournalSummaryItem(getRangeDesc(firstWorkingDay, today),
             calcSaldoTotalRange(firstWorkingDay, today)),
-        new JournalSummaryItem(getRangeDesc(firstWorkingDay, endOfSelectedMonth) + " (Total until end of selected range)",
+        new JournalSummaryItem(getRangeDesc(firstWorkingDay, endOfSelectedMonth),
             calcSaldoTotalRange(firstWorkingDay, endOfSelectedMonth)));
   }
 
