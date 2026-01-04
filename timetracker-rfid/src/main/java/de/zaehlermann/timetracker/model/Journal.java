@@ -164,8 +164,9 @@ public class Journal {
   }
 
   @Nonnull
-  private String calcHoursTotalSelected(final Integer selectedYear, final Integer selectedMonth) {
+  private String calcHoursTotalSelected(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
     final Duration duration = Duration.of(workdays.stream()
+                                            .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
                                             .map(workday -> workday.getHoursDayInPlace().toMinutes())
                                             .mapToLong(value -> value)
                                             .sum(), ChronoUnit.MINUTES);
@@ -173,8 +174,9 @@ public class Journal {
   }
 
   @Nonnull
-  private String calcSaldoTotalSelected(final Integer selectedYear, final Integer selectedMonth) {
+  private String calcSaldoTotalSelected(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
     final BigDecimal totalSaldo = workdays.stream()
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
       .map(Workday::getSaldo)
       .reduce(BigDecimal.ZERO, BigDecimal::add);
     return String.format("%+.2f", totalSaldo);
@@ -188,44 +190,52 @@ public class Journal {
   }
 
   @Nonnull
-  public List<Workday> getWorkdays() {
-    return workdays;
+  public List<Workday> getSelectedWorkdays() {
+    return workdays.stream()
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .toList();
   }
 
-  public int getTotalDays() {
-    return workdays.size();
+  public long getSelectedTotalDays() {
+    return workdays.stream()
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .count();
   }
 
   @Nonnull
-  public String getTotalSaldo() {
+  public String getSelectedTotalSaldo() {
     return calcSaldoTotalSelected(selectedYear, selectedMonth);
   }
 
   @Nonnull
-  public String getTotalHours() {
+  public String getSelectedTotalHours() {
     return calcHoursTotalSelected(selectedYear, selectedMonth);
   }
 
-  public long getTotalAbsenceDays() {
+  public long getSelectedTotalAbsenceDays() {
     return workdays.stream()
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
       .filter(w -> w.getAbsenceType() != null)
       .count();
   }
 
-  public long getTotalCorrectedDays() {
+  public long getSelectedTotalCorrectedDays() {
     return workdays.stream()
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
       .filter(Workday::isCorrected)
       .count();
   }
 
-  public long getTotalLogins() {
+  public long getSelectedTotalLogins() {
     return workdays.stream()
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
       .filter(w -> w.getLogin() != null)
       .count();
   }
 
-  public long getTotalLogouts() {
+  public long getSelectedTotalLogouts() {
     return workdays.stream()
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
       .filter(w -> w.getLogout() != null)
       .count();
   }

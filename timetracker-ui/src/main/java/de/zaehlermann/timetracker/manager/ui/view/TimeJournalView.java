@@ -214,13 +214,13 @@ public class TimeJournalView extends Main {
     journalSummaryGrid.setItems(journal.getJournalSummaryItems());
     journalSummaryGrid.recalculateColumnWidths();
 
-    workdayGrid.setItems(journal.getWorkdays());
-    workdayGrid.getColumnByKey(COLUMN_DATE).setFooter(TOTAL + journal.getTotalDays());
-    workdayGrid.getColumnByKey(COLUMN_ABSENCE).setFooter(TOTAL + journal.getTotalAbsenceDays());
-    workdayGrid.getColumnByKey(COLUMN_CORRECTED).setFooter(TOTAL + journal.getTotalCorrectedDays());
-    workdayGrid.getColumnByKey(COLUMN_LOGIN).setFooter(TOTAL + journal.getTotalLogins());
-    workdayGrid.getColumnByKey(COLUMN_LOGOUT).setFooter(TOTAL + journal.getTotalLogouts());
-    workdayGrid.getColumnByKey(COLUMN_HOURS).setFooter(journal.getTotalHours());
-    workdayGrid.getColumnByKey(COLUMN_SALDO).setFooter(journal.getTotalSaldo());
+    workdayGrid.setItems(journal.getSelectedWorkdays());
+    workdayGrid.getColumnByKey(COLUMN_DATE).setFooter(TOTAL + journal.getSelectedTotalDays());
+    workdayGrid.getColumnByKey(COLUMN_ABSENCE).setFooter(TOTAL + journal.getSelectedTotalAbsenceDays());
+    workdayGrid.getColumnByKey(COLUMN_CORRECTED).setFooter(TOTAL + journal.getSelectedTotalCorrectedDays());
+    workdayGrid.getColumnByKey(COLUMN_LOGIN).setFooter(TOTAL + journal.getSelectedTotalLogins());
+    workdayGrid.getColumnByKey(COLUMN_LOGOUT).setFooter(TOTAL + journal.getSelectedTotalLogouts());
+    workdayGrid.getColumnByKey(COLUMN_HOURS).setFooter(journal.getSelectedTotalHours());
+    workdayGrid.getColumnByKey(COLUMN_SALDO).setFooter(journal.getSelectedTotalSaldo());
   }
 }
