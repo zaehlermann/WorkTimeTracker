@@ -162,6 +162,7 @@ public class Journal {
            SPLIT_LINE +
            Workday.HEADER_LINE_TXT + System.lineSeparator() +
            workdays.stream()
+             .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
              .map(Workday::toTxtLine)
              .collect(Collectors.joining()) +
            SPLIT_LINE +
@@ -176,6 +177,7 @@ public class Journal {
            SPLIT_LINE +
            Workday.HEADER_LINE_CSV + System.lineSeparator() +
            workdays.stream()
+             .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
              .map(Workday::toCsvLine)
              .collect(Collectors.joining()) +
            SPLIT_LINE +

@@ -30,7 +30,7 @@ public class Employee implements AbstractCsvEntity<Employee> {
     return "EmployeeID: " + employeeId + System.lineSeparator() +
            "Name: " + firstName + " " + lastName + System.lineSeparator() +
            "RFID: " + rfid + System.lineSeparator() +
-           "Daily worktime: " + LocalTime.ofSecondOfDay(workModel.getLast().getBreaktimeADayInMin() * 60L).toString() + "h " +
+           "Daily worktime: " + LocalTime.ofSecondOfDay(workModel.getLast().getWorktimeADayInMin() * 60L).toString() + "h " +
            System.lineSeparator() +
            "Daily breaktime: " + LocalTime.ofSecondOfDay(workModel.getLast().getBreaktimeADayInMin() * 60L).toString() + "h";
   }
