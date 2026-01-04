@@ -17,6 +17,7 @@
   </parent>
 
   <modules>
+    <module>timetracker-i18n</module>
     <module>timetracker-rfid</module>
     <module>timetracker-ui</module>
   </modules>
