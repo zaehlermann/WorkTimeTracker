@@ -11,7 +11,6 @@ import javax.annotation.Nonnull;
  */
 public class JournalSummaryItem {
 
-  public static final String HEADER_LINE_CSV = "DESCRIPTION;VALUE";
   public final String key;
   public final String value;
 
