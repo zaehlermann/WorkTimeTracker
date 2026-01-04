@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import de.zaehlermann.timetracker.globals.DefaultDirs;
 import de.zaehlermann.timetracker.model.Absence;
@@ -38,7 +37,7 @@ public class AbsenceRepository extends AbstractCsvRepository {
   }
 
   @Nonnull
-  public List<Absence> findAbsencesByEmployeeId(@Nonnull final String employeeId, @Nullable final Integer year, @Nonnull final Integer month) {
+  public List<Absence> findAbsencesByEmployeeId(@Nonnull final String employeeId) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       return lines
@@ -46,7 +45,6 @@ public class AbsenceRepository extends AbstractCsvRepository {
         .filter(line -> !line.equals(Absence.HEADER_LINE))
         .map(Absence::fromCsvLine)
         .filter(e -> employeeId.equals(e.employeeId()))
-        .filter(e -> e.isInMonth(year, month))
         .toList();
     }
     catch(final IOException e) {

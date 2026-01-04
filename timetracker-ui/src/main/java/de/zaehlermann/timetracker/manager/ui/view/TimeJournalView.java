@@ -6,8 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serial;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
@@ -59,7 +62,6 @@ public class TimeJournalView extends Main {
   public static final String COLUMN_LOGOUT = "Logout";
   public static final String TOTAL = "Total: ";
 
-
   final Select<String> selectEmployee = new Select<>();
 
   public TimeJournalView() {
@@ -76,6 +78,9 @@ public class TimeJournalView extends Main {
 
     final Select<Integer> selectMonth = new Select<>();
     selectMonth.setLabel("Month");
+    selectMonth.setEmptySelectionAllowed(true);
+    selectMonth.setEmptySelectionCaption("All");
+    selectMonth.setItemLabelGenerator(item -> item == null ? "All" : Month.of(item).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
     selectMonth.setItems(asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
     selectMonth.setValue(LocalDate.now().getMonth().getValue());
 
@@ -93,7 +98,7 @@ public class TimeJournalView extends Main {
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
     workdayGrid.addColumn(Workday::getDay).setKey(COLUMN_DATE).setHeader(COLUMN_DATE).setFooter("Total Days:");
     workdayGrid.addColumn(Workday::getWeekDayName).setKey(COLUMN_WEEKDAY).setHeader(COLUMN_WEEKDAY)
-        .setComparator(Comparator.comparing(Workday::getWeekDayValue));
+      .setComparator(Comparator.comparing(Workday::getWeekDayValue));
     workdayGrid.addColumn(Workday::getAbsenceType).setKey(COLUMN_ABSENCE).setHeader(COLUMN_ABSENCE);
     workdayGrid.addColumn(Workday::getLogin).setKey(COLUMN_LOGIN).setHeader(COLUMN_LOGIN);
     workdayGrid.addColumn(Workday::getLogout).setKey(COLUMN_LOGOUT).setHeader(COLUMN_LOGOUT);
@@ -184,7 +189,7 @@ public class TimeJournalView extends Main {
                                      @Nonnull final Grid<JournalSummaryItem> journalSummaryGrid,
                                      @Nonnull final Grid<Workday> workdayGrid) {
 
-    final boolean isValid = ValidateUtils.validateSelects(List.of(selectEmployee, selectYear, selectMonth));
+    final boolean isValid = ValidateUtils.validateSelects(List.of(selectEmployee, selectYear));
     if(!isValid) {
       Notification.show("Please fill all required fields").addThemeVariants(NotificationVariant.LUMO_ERROR);
       return;

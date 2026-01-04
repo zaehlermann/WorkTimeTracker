@@ -12,7 +12,7 @@ TimeTracker
 * The solution uses persistence based on CSV files, which can be saved and backed up from time to time (e.g., for
   monthly reporting) simply by downloading a file.
 
-The solution contains out of two sub projects:
+The solution contains out of two subprojects:
 
 ## Sub-projects
 

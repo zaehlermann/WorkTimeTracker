@@ -74,10 +74,6 @@ public class WorkModel implements AbstractCsvEntity<WorkModel> {
                                      (validUntil == null || validUntil.isEqual(day) || validUntil.isAfter(day));
   }
 
-  public boolean isInMonth(@Nullable final Integer year, @Nullable final Integer month) {
-    return true; // TODO implement if needed
-  }
-
   @Nonnull
   public static WorkModel fromCsvLine(@Nonnull final String csvLine) {
     final String[] split = csvLine.split(";", -1);

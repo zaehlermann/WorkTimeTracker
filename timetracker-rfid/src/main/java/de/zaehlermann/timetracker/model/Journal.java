@@ -28,7 +28,7 @@ public class Journal {
                  @Nonnull final List<Correction> corrections,
                  @Nonnull final List<RfidScan> allScans,
                  @Nonnull final Integer year,
-                 @Nonnull final Integer month) {
+                 @Nullable final Integer month) {
     this.employee = employee;
     this.workModels = workModels;
 
@@ -39,9 +39,9 @@ public class Journal {
       .collect(Collectors.groupingBy(Correction::getWorkday));
 
     // Ensure all days of the month are represented, even if there are no scans
-    final LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
-    final LocalDate endOfTheMonth = YearMonth.of(year, month).atEndOfMonth().plusDays(1);
-    firstDayOfMonth.datesUntil(endOfTheMonth).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
+    final LocalDate journalStart = LocalDate.of(year, month == null ? 1 : month, 1);
+    final LocalDate journalEnd = YearMonth.of(year, month == null ? 12 : month).atEndOfMonth().plusDays(1);
+    journalStart.datesUntil(journalEnd).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
 
     this.workdays = scanByDay.entrySet().stream()
       .map(dailyScans -> createWorkDay(dailyScans, absences, correctionsByDay, workModels))
