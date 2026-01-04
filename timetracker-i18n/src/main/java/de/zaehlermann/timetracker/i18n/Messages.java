@@ -8,6 +8,11 @@ import java.util.ResourceBundle;
 public class Messages {
 
   @Nonnull
+  public static String get(@Nonnull final MessageKeys key, @Nonnull final Object... args) {
+    return MessageFormat.format(get(key.key()), args);
+  }
+
+  @Nonnull
   public static String get(@Nonnull final String key, @Nonnull final Object... args) {
     return MessageFormat.format(get(key), args);
   }

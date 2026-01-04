@@ -1,5 +1,6 @@
 package de.zaehlermann.timetracker.model;
 
+import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
 
 import java.math.BigDecimal;
@@ -152,17 +153,7 @@ public class Journal {
 
   @Nonnull
   public String printJournalTxt() {
-    return "# Employee Summary" + System.lineSeparator() +
-        getEmployeeWorkModelSummaryItems().stream()
-            .map(JournalSummaryItem::toTxtLine)
-            .collect(Collectors.joining()) +
-        System.lineSeparator() +
-        "# Time Journal Summary" + System.lineSeparator() +
-        getJournalSummaryItems().stream()
-            .map(JournalSummaryItem::toTxtLine)
-            .collect(Collectors.joining()) +
-        System.lineSeparator() +
-        "# Time Journal Details" + System.lineSeparator() +
+    return printJournalHeader() +
         Workday.HEADER_LINE_TXT + System.lineSeparator() +
         workdays.stream()
             .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
@@ -172,22 +163,27 @@ public class Journal {
 
   @Nonnull
   public String printJournalCsv() {
-    return "# Employee Summary" + System.lineSeparator() +
-        getEmployeeWorkModelSummaryItems().stream()
-            .map(JournalSummaryItem::toTxtLine)
-            .collect(Collectors.joining()) +
-        System.lineSeparator() +
-        "# Time Journal Summary" + System.lineSeparator() +
-        getJournalSummaryItems().stream()
-            .map(JournalSummaryItem::toTxtLine)
-            .collect(Collectors.joining()) +
-        System.lineSeparator() +
-        "# Time Journal Details" + System.lineSeparator() +
+    return printJournalHeader() +
         Workday.HEADER_LINE_CSV + System.lineSeparator() +
         workdays.stream()
             .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
             .map(Workday::toCsvLine)
             .collect(Collectors.joining());
+  }
+
+  @Nonnull
+  private String printJournalHeader() {
+    return "# " + Messages.get(MessageKeys.EMPLOYEE_SUMMARY) + System.lineSeparator() +
+        getEmployeeWorkModelSummaryItems().stream()
+            .map(JournalSummaryItem::toTxtLine)
+            .collect(Collectors.joining()) +
+        System.lineSeparator() +
+        "# " + Messages.get(MessageKeys.TIME_JOURNAL_SUMMARY) + System.lineSeparator() +
+        getJournalSummaryItems().stream()
+            .map(JournalSummaryItem::toTxtLine)
+            .collect(Collectors.joining()) +
+        System.lineSeparator() +
+        "# " + Messages.get(MessageKeys.TIME_JOURNAL_DETAILS) + System.lineSeparator();
   }
 
   @Nonnull
