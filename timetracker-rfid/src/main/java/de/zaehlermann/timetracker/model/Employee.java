@@ -10,10 +10,7 @@ import javax.annotation.Nonnull;
 
 public class Employee implements AbstractCsvEntity<Employee> {
 
-  public static final String HEADER_LINE = Messages.get(MessageKeys.EMPLOYEE_ID) + ";" +
-    Messages.get(MessageKeys.RFID) + ";" +
-    Messages.get(MessageKeys.EMPLOYEE_FIRSTNAME) + ";" +
-    Messages.get(MessageKeys.EMPLOYEE_LASTNAME);
+  public static final String HEADER_LINE = "EMPLOYEE_ID;RFID;FIRSTNAME;LASTNAME";
 
   private final String employeeId;
   private final String rfid;
