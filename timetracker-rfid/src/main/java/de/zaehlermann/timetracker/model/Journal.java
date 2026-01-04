@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.YearMonth;
+import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -21,16 +24,22 @@ public class Journal {
   private final Employee employee;
   private final List<Workday> workdays;
   private final List<WorkModel> workModels;
+  @Nonnull
+  private final Integer selectedYear;
+  @Nullable
+  private final Integer selectedMonth;
 
   public Journal(@Nonnull final Employee employee,
                  @Nonnull final List<WorkModel> workModels,
                  @Nonnull final List<Absence> absences,
                  @Nonnull final List<Correction> corrections,
                  @Nonnull final List<RfidScan> allScans,
-                 @Nonnull final Integer year,
-                 @Nullable final Integer month) {
+                 @Nonnull final Integer selectedYear,
+                 @Nullable final Integer selectedMonth) {
     this.employee = employee;
     this.workModels = workModels;
+    this.selectedYear = selectedYear;
+    this.selectedMonth = selectedMonth;
 
     final Map<LocalDate, List<RfidScan>> scanByDay = allScans.stream()
       .collect(Collectors.groupingBy(RfidScan::getWorkday));
@@ -38,9 +47,9 @@ public class Journal {
     final Map<LocalDate, List<Correction>> correctionsByDay = corrections.stream()
       .collect(Collectors.groupingBy(Correction::getWorkday));
 
-    // Ensure all days of the month are represented, even if there are no scans
-    final LocalDate journalStart = LocalDate.of(year, month == null ? 1 : month, 1);
-    final LocalDate journalEnd = YearMonth.of(year, month == null ? 12 : month).atEndOfMonth().plusDays(1);
+    // Ensure all days of the selectedMonth are represented, even if there are no scans
+    final LocalDate journalStart = LocalDate.of(selectedYear, selectedMonth == null ? 1 : selectedMonth, 1);
+    final LocalDate journalEnd = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth().plusDays(1);
     journalStart.datesUntil(journalEnd).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
 
     this.workdays = scanByDay.entrySet().stream()
@@ -119,14 +128,16 @@ public class Journal {
 
   @Nonnull
   public List<JournalSummaryItem> getJournalSummaryItems() {
-    return List.of(new JournalSummaryItem("Hours Total", calcHoursTotal()),
-                   new JournalSummaryItem("Saldo Total", calcSaldoTotal()));
+    final String selectedRange = selectedYear + "-"
+                                 + (selectedMonth == null ? "All" : Month.of(selectedMonth).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+    return List.of(new JournalSummaryItem("Hours Total " + selectedRange, calcHoursTotalSelected(selectedYear, selectedMonth)),
+                   new JournalSummaryItem("Saldo Total " + selectedRange, calcSaldoTotalSelected(selectedYear, selectedMonth)));
   }
 
   @Nonnull
   public String printJournalTxt() {
-    final String hoursTotal = calcHoursTotal();
-    final String saldoTotal = calcSaldoTotal();
+    final String hoursTotal = calcHoursTotalSelected(selectedYear, selectedMonth);
+    final String saldoTotal = calcSaldoTotalSelected(selectedYear, selectedMonth);
     return employee.toJournalTxtHeader(workModels) + System.lineSeparator() +
            SPLIT_LINE +
            Workday.HEADER_LINE_TXT + System.lineSeparator() +
@@ -139,8 +150,8 @@ public class Journal {
 
   @Nonnull
   public String printJournalCsv() {
-    final String hoursTotal = calcHoursTotal();
-    final String saldoTotal = calcSaldoTotal();
+    final String hoursTotal = calcHoursTotalSelected(selectedYear, selectedMonth);
+    final String saldoTotal = calcSaldoTotalSelected(selectedYear, selectedMonth);
     return employee.toJournalTxtHeader(workModels) + System.lineSeparator() +
            SPLIT_LINE +
            Workday.HEADER_LINE_CSV + System.lineSeparator() +
@@ -153,7 +164,7 @@ public class Journal {
   }
 
   @Nonnull
-  private String calcHoursTotal() {
+  private String calcHoursTotalSelected(final Integer selectedYear, final Integer selectedMonth) {
     final Duration duration = Duration.of(workdays.stream()
                                             .map(workday -> workday.getHoursDayInPlace().toMinutes())
                                             .mapToLong(value -> value)
@@ -162,7 +173,7 @@ public class Journal {
   }
 
   @Nonnull
-  private String calcSaldoTotal() {
+  private String calcSaldoTotalSelected(final Integer selectedYear, final Integer selectedMonth) {
     final BigDecimal totalSaldo = workdays.stream()
       .map(Workday::getSaldo)
       .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -187,12 +198,12 @@ public class Journal {
 
   @Nonnull
   public String getTotalSaldo() {
-    return calcSaldoTotal();
+    return calcSaldoTotalSelected(selectedYear, selectedMonth);
   }
 
   @Nonnull
   public String getTotalHours() {
-    return calcHoursTotal();
+    return calcHoursTotalSelected(selectedYear, selectedMonth);
   }
 
   public long getTotalAbsenceDays() {
