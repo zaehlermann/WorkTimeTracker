@@ -101,11 +101,26 @@ public class Journal {
   }
 
   @Nonnull
+  public List<JournalSummaryItem> getEmployeeWorkModelSummaryItems() {
+    final List<JournalSummaryItem> items = new ArrayList<>(getEmployeeSummaryItems());
+    items.addAll(getLastWorkModelSummaryItems());
+    return items;
+  }
+
+  @Nonnull
+  public List<JournalSummaryItem> getEmployeeSummaryItems() {
+    return employee.getSummaryItems();
+  }
+
+  @Nonnull
+  public List<JournalSummaryItem> getLastWorkModelSummaryItems() {
+    return workModels.getLast().getSummaryItems();
+  }
+
+  @Nonnull
   public List<JournalSummaryItem> getJournalSummaryItems() {
-    final List<JournalSummaryItem> headers = new ArrayList<>(employee.toJournalSummaryHeaders(workModels));
-    headers.add(new JournalSummaryItem("Hours Total", calcHoursTotal()));
-    headers.add(new JournalSummaryItem("Saldo Total", calcSaldoTotal()));
-    return headers;
+    return List.of(new JournalSummaryItem("Hours Total", calcHoursTotal()),
+                   new JournalSummaryItem("Saldo Total", calcSaldoTotal()));
   }
 
   @Nonnull
