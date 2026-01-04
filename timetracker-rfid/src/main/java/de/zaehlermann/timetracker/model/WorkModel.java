@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 public class WorkModel implements AbstractCsvEntity<WorkModel> {
 
   public static final String HEADER_LINE = "EMPLOYEE_ID;VALID_FROM;VALID_UNTIL;WORKTIME_A_DAY_IN_MIN;BREAKTIME_A_DAY_IN_MIN";
-  public static final WorkModel DEFAULT_WORKMODEL = new WorkModel("", LocalDate.MIN, null, 8 * 60, 30);
+  public static final WorkModel DEFAULT_WORKMODEL = new WorkModel("", LocalDate.of(2025, 1, 1), null, 8 * 60, 30);
 
   private final String employeeId;
   private final LocalDate validFrom;

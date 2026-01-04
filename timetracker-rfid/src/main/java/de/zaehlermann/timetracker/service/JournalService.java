@@ -56,8 +56,8 @@ public class JournalService {
     final Employee employee = EMPLOYEE_REPOSITORY.findEmployeeByEmployeeId(employeeId);
     final List<WorkModel> workModels = WORK_MODEL_REPOSITORY.findAllWorkModelsByEmployeeId(employeeId);
     final List<Absence> absences = ABSENCE_REPOSITORY.findAbsencesByEmployeeId(employeeId);
-    final List<Correction> corrections = CORRECTION_REPOSITORY.findCorrectionsByEmployeeId(employeeId, year, month);
-    final List<RfidScan> allScans = RFID_SCAN_REPOSITORY.findAllRfIdScansByRfid(employee.getRfid(), year, month);
+    final List<Correction> corrections = CORRECTION_REPOSITORY.findCorrectionsByEmployeeId(employeeId);
+    final List<RfidScan> allScans = RFID_SCAN_REPOSITORY.findAllRfIdScansByRfid(employee.getRfid());
     return new Journal(employee, workModels, absences, corrections, allScans, year, month);
   }
 

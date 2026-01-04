@@ -27,7 +27,7 @@ class RfidScanRepositoryTest {
       }
     }
 
-    assertEquals(100, repo.findAllRfIdScansByRfid("1234567890", null, null).size());
+    assertEquals(100, repo.findAllRfIdScansByRfid("1234567890").size());
 
   }
 

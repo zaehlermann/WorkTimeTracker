@@ -47,8 +47,8 @@ public class Journal {
     final Map<LocalDate, List<Correction>> correctionsByDay = corrections.stream()
       .collect(Collectors.groupingBy(Correction::getWorkday));
 
-    // Ensure all days of the selectedMonth are represented, even if there are no scans
-    final LocalDate journalStart = LocalDate.of(selectedYear, selectedMonth == null ? 1 : selectedMonth, 1);
+    // Ensure all days are represented, even if there are no scans
+    final LocalDate journalStart = workModels.getFirst().getValidFrom();
     final LocalDate journalEnd = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth().plusDays(1);
     journalStart.datesUntil(journalEnd).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
 
@@ -128,10 +128,30 @@ public class Journal {
 
   @Nonnull
   public List<JournalSummaryItem> getJournalSummaryItems() {
+
+    final LocalDate today = LocalDate.now();
+    final LocalDate firstWorkingDay = workdays.getFirst().getDay();
+
+    final LocalDate firstOfSelectedMonth = LocalDate.of(selectedYear, selectedMonth == null ? 1 : selectedMonth, 1);
+    final LocalDate endOfSelectedMonth = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth();
+
     final String selectedRange = selectedYear + "-"
-                                 + (selectedMonth == null ? "All" : Month.of(selectedMonth).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
-    return List.of(new JournalSummaryItem("Hours Total " + selectedRange, calcHoursTotalSelected(selectedYear, selectedMonth)),
-                   new JournalSummaryItem("Saldo Total " + selectedRange, calcSaldoTotalSelected(selectedYear, selectedMonth)));
+                                 + (selectedMonth == null ? "" : Month.of(selectedMonth).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+
+    return List.of(
+      new JournalSummaryItem("Hours " + selectedRange, calcHoursTotalSelected(selectedYear, selectedMonth)),
+      new JournalSummaryItem(getRangeDesc(firstOfSelectedMonth, endOfSelectedMonth) + " (Selected range)",
+                             calcSaldoTotalRange(firstOfSelectedMonth, endOfSelectedMonth)),
+      new JournalSummaryItem(getRangeDesc(firstWorkingDay, today) + " (Total until today)",
+                             calcSaldoTotalRange(firstWorkingDay, today)),
+      new JournalSummaryItem(getRangeDesc(firstWorkingDay, endOfSelectedMonth) + " (Total until end of selected range)",
+                             calcSaldoTotalRange(firstWorkingDay, endOfSelectedMonth))
+    );
+  }
+
+  @Nonnull
+  private static String getRangeDesc(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
+    return "Saldo between " + start + " and " + end;
   }
 
   @Nonnull
@@ -171,6 +191,15 @@ public class Journal {
                                             .mapToLong(value -> value)
                                             .sum(), ChronoUnit.MINUTES);
     return formatDurationHHHmm(duration);
+  }
+
+  @Nonnull
+  private String calcSaldoTotalRange(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
+    final BigDecimal totalSaldo = workdays.stream()
+      .filter(w -> w.isInDateRange(start, end))
+      .map(Workday::getSaldo)
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
+    return String.format("%+.2f", totalSaldo);
   }
 
   @Nonnull

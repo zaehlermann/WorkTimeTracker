@@ -145,4 +145,8 @@ public class Workday {
     return selectedMonth == null ? day.getYear() == selectedYear
                                  : day.getYear() == selectedYear && day.getMonthValue() == selectedMonth;
   }
+
+  public boolean isInDateRange(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
+    return (day.isEqual(start) || day.isAfter(start)) && (day.isEqual(end) || day.isBefore(end));
+  }
 }
