@@ -95,7 +95,7 @@ public class Workday {
   public String toCsvLine() {
     return day + ";" +
       getWeekDayValue() + ";" +
-      (absenceType != null ? absenceType.getPrintValueShort() : "") + ";" +
+      (absenceType != null ? absenceType.getPrintValueLong() : "") + ";" +
       (login != null ? login.format(TimeFormat.TIME_FORMAT) : "") + ";" +
       (logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + ";" +
       (corrected ? "X" : "") + ";" +

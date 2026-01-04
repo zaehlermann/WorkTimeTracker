@@ -1,5 +1,7 @@
 package de.zaehlermann.timetracker.model;
 
+import de.zaehlermann.timetracker.i18n.Messages;
+
 import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
@@ -13,37 +15,49 @@ public enum AbsenceType {
   /**
    * Wochenende
    */
-  WEEKEND("WE"),
+  WEEKEND("absensetype.weekend","WE"),
 
   /**
    * Krank
    */
-  SICKNESS("S"),
+  SICKNESS("absensetype.sickness","S"),
 
   /**
    * Urlaub
    */
-  VACATION("V"),
+  VACATION("absensetype.vacation","V"),
 
   /**
    * Entschuldigt abwesend, z.B. privater Termin mitten am Tag
    */
-  ALLOWED_ABSENCE("AE"),
+  ALLOWED_ABSENCE("absensetype.allowed_absence","AE"),
 
   /**
    * Feiertag
    */
-  PUBLIC_HOLIDAY("PH"),
+  PUBLIC_HOLIDAY("absensetype.public_holiday","PH"),
 
   /**
    * Betriebsferien
    */
-  COMPANY_HOLIDAY("CH");
+  COMPANY_HOLIDAY("absensetype.company_holiday","CH"),
 
+  /**
+   * Gleitzeit
+   */
+  COMPENSATION_TIME("absensetype.compensation_time","CH");
+
+  @Nonnull
+  private final String messageKey;
+  @Nonnull
   private final String printValueShort;
 
-  AbsenceType(@Nonnull final String printValue) {
-    this.printValueShort = printValue;
+  AbsenceType(
+    @Nonnull final String messageKey,
+    @Nonnull final String printValueShort) {
+    this.messageKey = messageKey;
+    this.printValueShort = printValueShort;
+
   }
 
   @Nonnull
@@ -57,4 +71,10 @@ public enum AbsenceType {
   public String getPrintValueShort() {
     return printValueShort;
   }
+
+  @Nonnull
+  public String getPrintValueLong() {
+    return Messages.get(this.messageKey);
+  }
+
 }
