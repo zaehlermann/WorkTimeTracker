@@ -40,10 +40,10 @@ public enum AbsenceType {
    */
   COMPANY_HOLIDAY("CH");
 
-  private final String printValue;
+  private final String printValueShort;
 
   AbsenceType(@Nonnull final String printValue) {
-    this.printValue = printValue;
+    this.printValueShort = printValue;
   }
 
   @Nonnull
@@ -54,7 +54,7 @@ public enum AbsenceType {
   }
 
   @Nonnull
-  public String getPrintValue() {
-    return printValue;
+  public String getPrintValueShort() {
+    return printValueShort;
   }
 }
