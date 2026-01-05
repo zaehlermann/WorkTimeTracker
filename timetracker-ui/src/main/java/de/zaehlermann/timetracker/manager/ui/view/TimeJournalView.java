@@ -94,7 +94,7 @@ public class TimeJournalView extends Main {
 
     final Grid<JournalSummaryItem> journalSummaryGrid = new Grid<>(JournalSummaryItem.class, false);
     journalSummaryGrid.addColumn(JournalSummaryItem::getKey).setHeader("Description").setResizable(true).setAutoWidth(true);
-    journalSummaryGrid.addColumn(JournalSummaryItem::getValue).setHeader("Value").setResizable(true).setAutoWidth(true);
+    journalSummaryGrid.addColumn(JournalSummaryItem::getValue).setHeader("Value").setResizable(true).setAutoWidth(true).setTextAlign(ColumnTextAlign.END);
     journalSummaryGrid.setAllRowsVisible(true);
     journalSummaryGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
     journalSummaryGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
@@ -115,7 +115,7 @@ public class TimeJournalView extends Main {
     workdayGrid.addColumn(Workday::getLogout).setKey(COLUMN_LOGOUT).setHeader(COLUMN_LOGOUT);
     workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "").setKey(COLUMN_CORRECTED).setHeader(COLUMN_CORRECTED);
     workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted).setKey(COLUMN_HOURS).setHeader(COLUMN_HOURS).setTextAlign(ColumnTextAlign.END);
-    workdayGrid.addColumn(Workday::getSaldo).setKey(COLUMN_SALDO).setHeader(COLUMN_SALDO).setTextAlign(ColumnTextAlign.END);
+    workdayGrid.addColumn(Workday::getSaldoFormatted).setKey(COLUMN_SALDO).setHeader(COLUMN_SALDO).setTextAlign(ColumnTextAlign.END);
 
     workdayGrid.setColumnReorderingAllowed(true);
     workdayGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
@@ -203,7 +203,7 @@ public class TimeJournalView extends Main {
                                      @Nonnull final Grid<Workday> workdayGrid) {
 
     final boolean isValid = ValidateUtils.validateSelects(List.of(selectEmployee, selectYear));
-    if(!isValid) {
+    if (!isValid) {
       Notification.show("Please fill all required fields").addThemeVariants(NotificationVariant.LUMO_ERROR);
       return;
     }

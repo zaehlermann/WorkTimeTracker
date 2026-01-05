@@ -46,6 +46,7 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
     return Objects.hash(employeeId, startDay, endDay, startTime);
   }
 
+  @Nonnull
   @Override
   public String toCsvLine() {
     return employeeId + ";" +

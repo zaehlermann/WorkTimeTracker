@@ -6,13 +6,20 @@ import de.zaehlermann.timetracker.i18n.Messages;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
-import java.time.*;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static de.zaehlermann.timetracker.globals.TimeFormat.formatDurationHHHmm;
+import static de.zaehlermann.timetracker.globals.TimeFormat.formatHoursHHHmm;
 
 public class Journal {
 
@@ -37,20 +44,22 @@ public class Journal {
     this.selectedMonth = selectedMonth;
 
     final Map<LocalDate, List<RfidScan>> scanByDay = allScans.stream()
-        .collect(Collectors.groupingBy(RfidScan::getWorkday));
+      .collect(Collectors.groupingBy(RfidScan::getWorkday));
 
     final Map<LocalDate, List<Correction>> correctionsByDay = corrections.stream()
-        .collect(Collectors.groupingBy(Correction::getWorkday));
+      .collect(Collectors.groupingBy(Correction::getWorkday));
 
     // Ensure all days are represented, even if there are no scans
     final LocalDate journalStart = workModels.getFirst().getValidFrom();
-    final LocalDate journalEnd = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth().plusDays(1);
-    journalStart.datesUntil(journalEnd).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
+    final LocalDate selectedEnd = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth().plusDays(1);
+    if (journalStart.isBefore(selectedEnd)) {
+      journalStart.datesUntil(selectedEnd).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
+    }
 
     this.workdays = scanByDay.entrySet().stream()
-        .map(dailyScans -> createWorkDay(dailyScans, absences, correctionsByDay, workModels))
-        .sorted(Comparator.comparing(Workday::getDay))
-        .toList();
+      .map(dailyScans -> createWorkDay(dailyScans, absences, correctionsByDay, workModels))
+      .sorted(Comparator.comparing(Workday::getDay))
+      .toList();
   }
 
   @Nonnull
@@ -62,14 +71,14 @@ public class Journal {
     final LocalDate day = dailyScans.getKey();
 
     final WorkModel workModelForTheDay = workModels.stream()
-        .filter(m -> m.isInEffectOnDay(day))
-        .findFirst()
-        .orElse(WorkModel.DEFAULT_WORKMODEL);
+      .filter(m -> m.isInEffectOnDay(day))
+      .findFirst()
+      .orElse(WorkModel.DEFAULT_WORKMODEL);
 
     final Absence absenceForDay = absences.stream()
-        .filter(a -> a.isInDay(day))
-        .findFirst()
-        .orElse(null);
+      .filter(a -> a.isInDay(day))
+      .findFirst()
+      .orElse(null);
 
     final Correction correctionOfTheDay = getCorrectionOfTheDay(correctionsByDay, day); //there should be only one correction per day
     final LocalTime login = getLogin(dailyScans, correctionOfTheDay);
@@ -122,24 +131,6 @@ public class Journal {
   }
 
   @Nonnull
-  public List<JournalSummaryItem> getJournalSummaryItems() {
-    final LocalDate today = LocalDate.now();
-    final LocalDate firstWorkingDay = workdays.getFirst().getDay();
-    final LocalDate firstOfSelectedMonth = LocalDate.of(selectedYear, selectedMonth == null ? 1 : selectedMonth, 1);
-    final LocalDate endOfSelectedMonth = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth();
-    final String selectedRange = selectedYear
-        + (selectedMonth == null ? "" : "-" + Month.of(selectedMonth).getValue());
-
-    return List.of(new JournalSummaryItem(Messages.get(MessageKeys.WORKDAY_HOURS)+" " + selectedRange, calcHoursTotalSelected(selectedYear, selectedMonth)),
-        new JournalSummaryItem(getRangeDesc(firstOfSelectedMonth, endOfSelectedMonth),
-            calcSaldoTotalRange(firstOfSelectedMonth, endOfSelectedMonth)),
-        new JournalSummaryItem(getRangeDesc(firstWorkingDay, today),
-            calcSaldoTotalRange(firstWorkingDay, today)),
-        new JournalSummaryItem(getRangeDesc(firstWorkingDay, endOfSelectedMonth),
-            calcSaldoTotalRange(firstWorkingDay, endOfSelectedMonth)));
-  }
-
-  @Nonnull
   private static String getRangeDesc(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
     return Messages.get("saldo.between", start, end);
   }
@@ -147,121 +138,141 @@ public class Journal {
   @Nonnull
   public String printJournalTxt() {
     return printJournalHeader() +
-        Workday.HEADER_LINE_TXT + System.lineSeparator() +
-        workdays.stream()
-            .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-            .map(Workday::toTxtLine)
-            .collect(Collectors.joining());
+      Workday.HEADER_LINE_TXT + System.lineSeparator() +
+      workdays.stream()
+        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+        .map(Workday::toTxtLine)
+        .collect(Collectors.joining());
   }
 
   @Nonnull
   public String printJournalCsv() {
     return printJournalHeader() +
-        Workday.HEADER_LINE_CSV + System.lineSeparator() +
-        workdays.stream()
-            .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-            .map(Workday::toCsvLine)
-            .collect(Collectors.joining());
+      Workday.HEADER_LINE_CSV + System.lineSeparator() +
+      workdays.stream()
+        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+        .map(Workday::toCsvLine)
+        .collect(Collectors.joining());
   }
 
   @Nonnull
   private String printJournalHeader() {
     return "# " + Messages.get(MessageKeys.EMPLOYEE_SUMMARY) + System.lineSeparator() +
-        getEmployeeWorkModelSummaryItems().stream()
-            .map(JournalSummaryItem::toTxtLine)
-            .collect(Collectors.joining()) +
-        System.lineSeparator() +
-        "# " + Messages.get(MessageKeys.TIME_JOURNAL_SUMMARY) + System.lineSeparator() +
-        getJournalSummaryItems().stream()
-            .map(JournalSummaryItem::toTxtLine)
-            .collect(Collectors.joining()) +
-        System.lineSeparator() +
-        "# " + Messages.get(MessageKeys.TIME_JOURNAL_DETAILS) + System.lineSeparator();
+      getEmployeeWorkModelSummaryItems().stream()
+        .map(JournalSummaryItem::toTxtLine)
+        .collect(Collectors.joining()) +
+      System.lineSeparator() +
+      "# " + Messages.get(MessageKeys.TIME_JOURNAL_SUMMARY) + System.lineSeparator() +
+      getJournalSummaryItems().stream()
+        .map(JournalSummaryItem::toTxtLine)
+        .collect(Collectors.joining()) +
+      System.lineSeparator() +
+      "# " + Messages.get(MessageKeys.TIME_JOURNAL_DETAILS) + System.lineSeparator();
   }
 
   @Nonnull
-  private String calcHoursTotalSelected(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
-    final Duration duration = Duration.of(workdays.stream()
-        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-        .map(workday -> workday.getHoursDayInPlace().toMinutes())
-        .mapToLong(value -> value)
-        .sum(), ChronoUnit.MINUTES);
-    return formatDurationHHHmm(duration);
+  public List<JournalSummaryItem> getJournalSummaryItems() {
+    final LocalDate today = LocalDate.now();
+    final LocalDate firstWorkingDay = workdays.getFirst().getDay();
+    final LocalDate firstOfSelectedMonth = LocalDate.of(selectedYear, selectedMonth == null ? 1 : selectedMonth, 1);
+    final LocalDate endOfSelectedMonth = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth();
+    final String selectedRange = selectedYear + (selectedMonth == null ? "" : "-" + Month.of(selectedMonth).getValue());
+    final BigDecimal initialHours = calcInitialHours();
+
+    return List.of(
+      new JournalSummaryItem(Messages.get(MessageKeys.WORKMODEL_INITIAL_HOURS), formatHoursHHHmm(initialHours)),
+      new JournalSummaryItem(Messages.get(MessageKeys.WORKDAY_HOURS) + " " + selectedRange,
+        calcSelectedHours(selectedYear, selectedMonth)),
+      new JournalSummaryItem(getRangeDesc(firstOfSelectedMonth, endOfSelectedMonth),
+        formatHoursHHHmm(calcSaldoInRange(firstOfSelectedMonth, endOfSelectedMonth))),
+      new JournalSummaryItem(getRangeDesc(firstWorkingDay, today),
+        formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, today).add(initialHours)))),
+      new JournalSummaryItem(getRangeDesc(firstWorkingDay, endOfSelectedMonth),
+        formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, endOfSelectedMonth)))));
   }
 
   @Nonnull
-  private String calcSaldoTotalRange(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
+  private BigDecimal calcInitialHours() {
+    return workModels.stream()
+      .map(w -> BigDecimal.valueOf(w.getInitialHours()))
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
+
+  @Nonnull
+  private String calcSelectedHours(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
+    final long sum = workdays.stream()
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .map(workday -> workday.getHoursDayInPlace().toMinutes())
+      .mapToLong(value -> value)
+      .sum();
+    return formatDurationHHHmm(Duration.of(sum, ChronoUnit.MINUTES));
+  }
+
+  @Nonnull
+  private BigDecimal calcSaldoInRange(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
+    return workdays.stream()
+      .filter(w -> w.isInDateRange(start, end))
+      .map(Workday::getSaldo)
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
+
+  @Nonnull
+  private String calcSelectedSaldo(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
     final BigDecimal totalSaldo = workdays.stream()
-        .filter(w -> w.isInDateRange(start, end))
-        .map(Workday::getSaldo)
-        .reduce(BigDecimal.ZERO, BigDecimal::add);
-    return String.format("%+.2f", totalSaldo);
-  }
-
-  @Nonnull
-  private String calcSaldoTotalSelected(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
-    final BigDecimal totalSaldo = workdays.stream()
-        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-        .map(Workday::getSaldo)
-        .reduce(BigDecimal.ZERO, BigDecimal::add);
-    return String.format("%+.2f", totalSaldo);
-  }
-
-  @Nonnull
-  public static String formatDurationHHHmm(@Nonnull final Duration duration) {
-    final long hours = duration.toHours();
-    final long minutes = duration.minusHours(hours).toMinutes();
-    return String.format("%03d:%02d", hours, minutes);
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .map(Workday::getSaldo)
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
+    return formatHoursHHHmm(totalSaldo);
   }
 
   @Nonnull
   public List<Workday> getSelectedWorkdays() {
     return workdays.stream()
-        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-        .toList();
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .toList();
   }
 
   public long getSelectedTotalDays() {
     return workdays.stream()
-        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-        .count();
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .count();
   }
 
   @Nonnull
   public String getSelectedTotalSaldo() {
-    return calcSaldoTotalSelected(selectedYear, selectedMonth);
+    return calcSelectedSaldo(selectedYear, selectedMonth);
   }
 
   @Nonnull
   public String getSelectedTotalHours() {
-    return calcHoursTotalSelected(selectedYear, selectedMonth);
+    return calcSelectedHours(selectedYear, selectedMonth);
   }
 
   public long getSelectedTotalAbsenceDays() {
     return workdays.stream()
-        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-        .filter(w -> w.getAbsenceType() != null)
-        .count();
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .filter(w -> w.getAbsenceType() != null)
+      .count();
   }
 
   public long getSelectedTotalCorrectedDays() {
     return workdays.stream()
-        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-        .filter(Workday::isCorrected)
-        .count();
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .filter(Workday::isCorrected)
+      .count();
   }
 
   public long getSelectedTotalLogins() {
     return workdays.stream()
-        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-        .filter(w -> w.getLogin() != null)
-        .count();
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .filter(w -> w.getLogin() != null)
+      .count();
   }
 
   public long getSelectedTotalLogouts() {
     return workdays.stream()
-        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-        .filter(w -> w.getLogout() != null)
-        .count();
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .filter(w -> w.getLogout() != null)
+      .count();
   }
 }

@@ -42,7 +42,7 @@ public class WorkModelRepository extends AbstractCsvRepository {
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       return lines
         .filter(line -> !line.isEmpty())
-        .filter(line -> !line.equals(WorkModel.HEADER_LINE))
+        .filter(line -> !line.startsWith(WorkModel.HEADER_LINE.substring(0,10)))
         .map(WorkModel::fromCsvLine)
         .toList();
     }

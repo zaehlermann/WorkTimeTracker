@@ -1,5 +1,11 @@
 package de.zaehlermann.timetracker.model;
 
+import de.zaehlermann.timetracker.globals.TimeFormat;
+import de.zaehlermann.timetracker.i18n.MessageKeys;
+import de.zaehlermann.timetracker.i18n.Messages;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
@@ -9,13 +15,6 @@ import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import de.zaehlermann.timetracker.globals.TimeFormat;
-import de.zaehlermann.timetracker.i18n.MessageKeys;
-import de.zaehlermann.timetracker.i18n.Messages;
 
 public class Workday {
 
@@ -77,7 +76,6 @@ public class Workday {
     return login != null && logout != null ? Duration.between(login, logout) : Duration.ZERO;
   }
 
-
   @Nonnull
   public String toTxtLine() {
     return day + "  " +
@@ -87,7 +85,7 @@ public class Workday {
       String.format("%-6s", logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + "  " +
       String.format("%-1s", corrected ? "X" : "") + "  " +
       getHoursDayInPlaceFormatted() + "  " +
-      String.format("%+.2f", saldo) +
+      getSaldoFormatted() +
       System.lineSeparator();
   }
 
@@ -100,7 +98,7 @@ public class Workday {
       (logout != null ? logout.format(TimeFormat.TIME_FORMAT) : "") + ";" +
       (corrected ? "X" : "") + ";" +
       getHoursDayInPlaceFormatted() + ";" +
-      String.format("%+.2f", saldo) +
+      getSaldoFormatted() +
       System.lineSeparator();
   }
 
@@ -150,6 +148,11 @@ public class Workday {
   @Nonnull
   public BigDecimal getSaldo() {
     return saldo;
+  }
+
+  @Nonnull
+  public String getSaldoFormatted() {
+    return TimeFormat.formatHoursHHmm(getSaldo());
   }
 
   public boolean isInSelectedRange(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {

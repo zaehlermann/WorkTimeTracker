@@ -24,7 +24,10 @@ public enum MessageKeys {
   WORKDAY_SALDO("workday.saldo"),
 
   DAILY_WORKTIME("workmodel.daily_worktime"),
-  DAILY_BREAKTIME("workmodel.daily_breaktime");
+  DAILY_BREAKTIME("workmodel.daily_breaktime"),
+  WORKMODEL_INITIAL_HOURS("workmodel.initialhours"),
+  WORKMODEL_VALID_FROM("workmodel.valid_from"),
+  WORKMODEL_VALID_UNTIL("workmodel.valid_until");
 
   private final String key;
 
