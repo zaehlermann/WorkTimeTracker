@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static de.zaehlermann.timetracker.globals.TimeFormat.formatDurationHHHmm;
+import static de.zaehlermann.timetracker.globals.TimeFormat.formatHoursHHHmm;
+
 public class Journal {
 
   private final Employee employee;
@@ -48,8 +51,10 @@ public class Journal {
 
     // Ensure all days are represented, even if there are no scans
     final LocalDate journalStart = workModels.getFirst().getValidFrom();
-    final LocalDate journalEnd = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth().plusDays(1);
-    journalStart.datesUntil(journalEnd).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
+    final LocalDate selectedEnd = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth().plusDays(1);
+    if (journalStart.isBefore(selectedEnd)) {
+      journalStart.datesUntil(selectedEnd).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
+    }
 
     this.workdays = scanByDay.entrySet().stream()
       .map(dailyScans -> createWorkDay(dailyScans, absences, correctionsByDay, workModels))
@@ -175,15 +180,15 @@ public class Journal {
     final BigDecimal initialHours = calcInitialHours();
 
     return List.of(
-      new JournalSummaryItem(Messages.get(MessageKeys.WORKMODEL_INITIAL_HOURS), formatBigDecimal(initialHours)),
+      new JournalSummaryItem(Messages.get(MessageKeys.WORKMODEL_INITIAL_HOURS), formatHoursHHHmm(initialHours)),
       new JournalSummaryItem(Messages.get(MessageKeys.WORKDAY_HOURS) + " " + selectedRange,
         calcSelectedHours(selectedYear, selectedMonth)),
       new JournalSummaryItem(getRangeDesc(firstOfSelectedMonth, endOfSelectedMonth),
-        formatBigDecimal(calcSaldoInRange(firstOfSelectedMonth, endOfSelectedMonth))),
+        formatHoursHHHmm(calcSaldoInRange(firstOfSelectedMonth, endOfSelectedMonth))),
       new JournalSummaryItem(getRangeDesc(firstWorkingDay, today),
-        formatBigDecimal(initialHours.add(calcSaldoInRange(firstWorkingDay, today).add(initialHours)))),
+        formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, today).add(initialHours)))),
       new JournalSummaryItem(getRangeDesc(firstWorkingDay, endOfSelectedMonth),
-        formatBigDecimal(initialHours.add(calcSaldoInRange(firstWorkingDay, endOfSelectedMonth)))));
+        formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, endOfSelectedMonth)))));
   }
 
   @Nonnull
@@ -204,11 +209,6 @@ public class Journal {
   }
 
   @Nonnull
-  private static String formatBigDecimal(@Nonnull final BigDecimal bigDecimal) {
-    return String.format("%+.2f", bigDecimal);
-  }
-
-  @Nonnull
   private BigDecimal calcSaldoInRange(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
     return workdays.stream()
       .filter(w -> w.isInDateRange(start, end))
@@ -222,14 +222,7 @@ public class Journal {
       .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
       .map(Workday::getSaldo)
       .reduce(BigDecimal.ZERO, BigDecimal::add);
-    return formatBigDecimal(totalSaldo);
-  }
-
-  @Nonnull
-  public static String formatDurationHHHmm(@Nonnull final Duration duration) {
-    final long hours = duration.toHours();
-    final long minutes = duration.minusHours(hours).toMinutes();
-    return String.format("%03d:%02d", hours, minutes);
+    return formatHoursHHHmm(totalSaldo);
   }
 
   @Nonnull
