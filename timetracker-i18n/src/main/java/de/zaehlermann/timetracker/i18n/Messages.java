@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 
 public class Messages {
 
+  private static final String BASE_NAME = "de.zaehlermann.timetracker.i18n.messages";
+
   @Nonnull
   public static String get(@Nonnull final MessageKeys key, @Nonnull final Object... args) {
     return MessageFormat.format(get(key.key()), args);
@@ -19,10 +21,7 @@ public class Messages {
 
   @Nonnull
   public static String get(@Nonnull final String key) {
-    final ResourceBundle messages = ResourceBundle.getBundle(
-        "de.zaehlermann.timetracker.i18n.messages",
-        Locale.GERMAN);
-
-    return messages.getString(key);
+    final ResourceBundle messages = ResourceBundle.getBundle(BASE_NAME, Locale.GERMAN);
+    return messages == null ? "MISSING_TRANSLATION" : messages.getString(key);
   }
 }
