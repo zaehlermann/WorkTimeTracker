@@ -50,6 +50,18 @@
     <dependencies>
 
       <dependency>
+        <groupId>de.zaehlermann.timetracker</groupId>
+        <artifactId>timetracker-i18n</artifactId>
+        <version>${project.parent.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>de.zaehlermann.timetracker</groupId>
+        <artifactId>timetracker-rfid</artifactId>
+        <version>${project.parent.version}</version>
+      </dependency>
+
+      <dependency>
         <groupId>com.google.code.findbugs</groupId>
         <artifactId>jsr305</artifactId>
         <version>${findbugs-jsr305.version}</version>
