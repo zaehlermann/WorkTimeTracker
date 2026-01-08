@@ -1,6 +1,7 @@
 # TODOs for upcoming v.1.x.x versions
 
 * add journal export in pdf format
+* add/remove corrections out of the time journal table
 
 # Ideas for v.2.0.0
 

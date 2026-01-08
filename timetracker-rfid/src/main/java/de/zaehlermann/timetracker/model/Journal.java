@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.Year;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class Journal {
 
     // Ensure all days are represented, even if there are no scans
     final LocalDate journalStart = workModels.getFirst().getValidFrom();
-    final LocalDate selectedEnd = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth().plusDays(1);
+    final LocalDate selectedEnd = YearMonth.of(Year.now().getValue(), 12).atEndOfMonth().plusDays(1);
     if (journalStart.isBefore(selectedEnd)) {
       journalStart.datesUntil(selectedEnd).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
     }
@@ -186,7 +187,7 @@ public class Journal {
       new JournalSummaryItem(getRangeDesc(firstOfSelectedMonth, endOfSelectedMonth),
         formatHoursHHHmm(calcSaldoInRange(firstOfSelectedMonth, endOfSelectedMonth))),
       new JournalSummaryItem(getRangeDesc(firstWorkingDay, today),
-        formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, today).add(initialHours)))),
+        formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, today)))),
       new JournalSummaryItem(getRangeDesc(firstWorkingDay, endOfSelectedMonth),
         formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, endOfSelectedMonth)))));
   }
