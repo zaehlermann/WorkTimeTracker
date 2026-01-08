@@ -177,7 +177,7 @@ public class Journal {
     final LocalDate firstWorkingDay = workdays.getFirst().getDay();
     final LocalDate firstOfSelectedMonth = LocalDate.of(selectedYear, selectedMonth == null ? 1 : selectedMonth, 1);
     final LocalDate endOfSelectedMonth = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth();
-    final String selectedRange = selectedYear + (selectedMonth == null ? "" : "-" + Month.of(selectedMonth).getValue());
+    final String selectedRange = printSelectedRange();
     final BigDecimal initialHours = calcInitialHours();
 
     return List.of(
@@ -276,4 +276,10 @@ public class Journal {
       .filter(w -> w.getLogout() != null)
       .count();
   }
+
+  @Nonnull
+  public String printSelectedRange() {
+    return selectedYear + (selectedMonth == null ? "" : "-" + Month.of(selectedMonth).getValue());
+  }
+
 }

@@ -10,27 +10,31 @@ import de.zaehlermann.timetracker.globals.DefaultDirs;
 public class JournalRepository extends AbstractCsvRepository {
 
   @Nonnull
-  public File saveToTxtFile(@Nonnull final String employeeId, @Nonnull final String content) {
-    final Path filePath = getJournalTxtFilePath(employeeId);
+  public File saveToTxtFile(@Nonnull final String employeeId,
+                            @Nonnull final String selectedRange,
+                            @Nonnull final String content) {
+    final Path filePath = getJournalTxtFilePath(employeeId, selectedRange);
     saveToFile(content, filePath);
     return filePath.toFile();
   }
 
   @Nonnull
-  public File saveToCsvFile(@Nonnull final String employeeId, @Nonnull final String content) {
-    final Path filePath = getJournalXsvFilePath(employeeId);
+  public File saveToCsvFile(@Nonnull final String employeeId,
+                            @Nonnull final String selectedRange,
+                            @Nonnull final String content) {
+    final Path filePath = getJournalCsvFilePath(employeeId, selectedRange);
     saveToFile(content, filePath);
     return filePath.toFile();
   }
 
   @Nonnull
-  private Path getJournalTxtFilePath(@Nonnull final String fileName) {
-    return Path.of(DefaultDirs.JOURNAL_DIR, fileName + ".txt");
+  private Path getJournalTxtFilePath(@Nonnull final String fileName, @Nonnull final String selectedRange) {
+    return Path.of(DefaultDirs.JOURNAL_DIR, fileName + "-" + selectedRange + ".txt");
   }
 
   @Nonnull
-  private Path getJournalXsvFilePath(@Nonnull final String fileName) {
-    return Path.of(DefaultDirs.JOURNAL_DIR, fileName + ".csv");
+  private Path getJournalCsvFilePath(@Nonnull final String fileName, @Nonnull final String selectedRange) {
+    return Path.of(DefaultDirs.JOURNAL_DIR, fileName + "-" + selectedRange + ".csv");
   }
 
 }

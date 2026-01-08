@@ -33,7 +33,8 @@ public class JournalService {
   public String createAndSaveJournalTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalTxt();
-    JOURNAL_REPOSITORY.saveToTxtFile(employeeId, journalTxt);
+    final String selectedRangeDesc = journal.printSelectedRange();
+    JOURNAL_REPOSITORY.saveToTxtFile(employeeId, selectedRangeDesc, journalTxt);
     return journalTxt;
   }
 
@@ -41,14 +42,16 @@ public class JournalService {
   public File downloadCsv(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalCsv();
-    return JOURNAL_REPOSITORY.saveToCsvFile(employeeId, journalTxt);
+    final String selectedRangeDesc = journal.printSelectedRange();
+    return JOURNAL_REPOSITORY.saveToCsvFile(employeeId, selectedRangeDesc, journalTxt);
   }
 
   @Nonnull
   public File downloadTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalTxt();
-    return JOURNAL_REPOSITORY.saveToTxtFile(employeeId, journalTxt);
+    final String selectedRangeDesc = journal.printSelectedRange();
+    return JOURNAL_REPOSITORY.saveToTxtFile(employeeId, selectedRangeDesc, journalTxt);
   }
 
   @Nonnull
