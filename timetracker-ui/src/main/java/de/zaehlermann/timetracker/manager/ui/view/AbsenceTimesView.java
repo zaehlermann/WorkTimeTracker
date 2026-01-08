@@ -21,6 +21,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
+import de.zaehlermann.timetracker.i18n.MessageKeys;
+import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
 import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Absence;
@@ -53,7 +55,7 @@ public class AbsenceTimesView extends Main {
   public AbsenceTimesView() {
 
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
-    selectEmployee.setLabel("Employee");
+    selectEmployee.setLabel(Messages.get(MessageKeys.EMPLOYEE_ID));
     selectEmployee.setItems(allEmployeeNames);
     if(!allEmployeeNames.isEmpty()) {
       selectEmployee.setValue(allEmployeeNames.getFirst());

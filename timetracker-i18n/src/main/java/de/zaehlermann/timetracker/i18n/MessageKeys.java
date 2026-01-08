@@ -11,8 +11,11 @@ public enum MessageKeys {
   RFID("employee.rfid"),
   EMPLOYEE_FIRSTNAME("employee.firstname"),
   EMPLOYEE_LASTNAME("employee.lastname"),
+
   TIME_JOURNAL_SUMMARY("time.journal.summary"),
   TIME_JOURNAL_DETAILS("time.journal.details"),
+  TIME_JOURNAL_YEAR("time.journal.year"),
+  TIME_JOURNAL_MONTH("time.journal.month"),
 
   WORKDAY_DATE("workday.date"),
   WORKDAY_WEEKDAY("workday.weekday"),

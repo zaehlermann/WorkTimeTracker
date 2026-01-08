@@ -36,6 +36,8 @@ import com.vaadin.flow.server.streams.DownloadResponse;
 import com.vaadin.flow.server.streams.InputStreamDownloadCallback;
 
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
+import de.zaehlermann.timetracker.i18n.MessageKeys;
+import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.model.Journal;
 import de.zaehlermann.timetracker.model.JournalSummaryItem;
 import de.zaehlermann.timetracker.model.Workday;
@@ -67,12 +69,12 @@ public class TimeJournalView extends Main {
   public TimeJournalView() {
 
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
-    selectEmployee.setLabel("Employee");
+    selectEmployee.setLabel(Messages.get(MessageKeys.EMPLOYEE_ID));
     selectEmployee.setItems(allEmployeeNames); // select from the employee file
     selectEmployee.setValue(allEmployeeNames.isEmpty() ? null : allEmployeeNames.getFirst());
 
     final Select<Integer> selectYear = new Select<>();
-    selectYear.setLabel("Year");
+    selectYear.setLabel(Messages.get(MessageKeys.TIME_JOURNAL_YEAR));
     selectYear.setItems(asList(2025, 2026, 2027, 2028, 2029, 2030)); // select from the employee file
     selectYear.setValue(LocalDate.now().getYear());
 
