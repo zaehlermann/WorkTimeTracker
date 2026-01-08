@@ -42,7 +42,7 @@ public class WorkModelRepository extends AbstractCsvRepository {
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       return lines
         .filter(line -> !line.isEmpty())
-        .filter(line -> !line.startsWith(WorkModel.HEADER_LINE.substring(0,10)))
+        .filter(WorkModelRepository::isNotHeader)
         .map(WorkModel::fromCsvLine)
         .toList();
     }
@@ -51,13 +51,17 @@ public class WorkModelRepository extends AbstractCsvRepository {
     }
   }
 
+  private static boolean isNotHeader(String line) {
+    return !line.startsWith(WorkModel.HEADER_LINE.substring(0, 10));
+  }
+
   @Nonnull
   public List<WorkModel> findAllWorkModelsByEmployeeId(@Nonnull final String employeeId) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       final List<WorkModel> savedModels = lines
         .filter(line -> !line.isEmpty())
-        .filter(line -> !line.equals(WorkModel.HEADER_LINE))
+        .filter(WorkModelRepository::isNotHeader)
         .map(WorkModel::fromCsvLine)
         .filter(e -> employeeId.equals(e.getEmployeeId()))
         .toList();

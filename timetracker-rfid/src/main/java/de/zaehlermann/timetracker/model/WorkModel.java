@@ -115,7 +115,8 @@ public class WorkModel implements AbstractCsvEntity<WorkModel> {
 
   @Nonnull
   public List<JournalSummaryItem> getSummaryItems() {
-    return List.of(new JournalSummaryItem(Messages.get(MessageKeys.DAILY_WORKTIME), LocalTime.ofSecondOfDay(getWorktimeADayInMin() * 60L).toString() + "h "),
+    return List.of(
+      new JournalSummaryItem(Messages.get(MessageKeys.DAILY_WORKTIME), LocalTime.ofSecondOfDay(getWorktimeADayInMin() * 60L).toString() + "h "),
       new JournalSummaryItem(Messages.get(MessageKeys.DAILY_BREAKTIME), LocalTime.ofSecondOfDay(getBreaktimeADayInMin() * 60L).toString() + "h"));
   }
 

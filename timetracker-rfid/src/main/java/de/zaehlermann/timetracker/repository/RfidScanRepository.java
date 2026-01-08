@@ -54,7 +54,7 @@ public class RfidScanRepository extends AbstractCsvRepository {
       return emptyList();
     }
 
-    try(Stream<String> stream = Files.lines(trackingFilePath, UTF_8)) {
+    try(final Stream<String> stream = Files.lines(trackingFilePath, UTF_8)) {
       return stream
         .filter(s -> !s.startsWith("RFID"))// skip header line
         .map(RfidScan::fromCsvLine)
