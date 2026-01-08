@@ -1,12 +1,12 @@
 How-to release
 =================
 
-Feature Release, e.g. for v.1.2.0
+Feature Release, e.g. for v.1.3.0
 
 # Create a branch
 
-    mvn release:branch -DbranchName="bugfix/timetracker-1.2"
-    git checkout bugfix/timetracker-1.2
+    mvn release:branch -DbranchName="bugfix/timetracker-1.3"
+    git checkout bugfix/timetracker-1.3
 
 # Perform QA etc etc
 
