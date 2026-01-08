@@ -2,6 +2,7 @@
 
 * add journal export in pdf format
 * add/remove corrections out of the time journal table
+* finish translation to german
 
 # Ideas for v.2.0.0
 

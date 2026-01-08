@@ -1,9 +1,5 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
-import java.io.Serial;
-import java.util.List;
-import java.util.Set;
-
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -19,8 +15,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
+import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
 import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Employee;
@@ -29,6 +25,10 @@ import de.zaehlermann.timetracker.service.RfidScanService;
 import de.zaehlermann.timetracker.validate.ValidateUtils;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+
+import java.io.Serial;
+import java.util.List;
+import java.util.Set;
 
 @Route("employees")
 @PageTitle("Employees")
@@ -41,10 +41,10 @@ public class EmployeeView extends Main {
   private static final EmployeeService EMPLOYEE_SERVICE = new EmployeeService();
   private static final RfidScanService RFID_SCAN_SERVICE = new RfidScanService();
 
-  private final TextField employeeId = new TextField("Employee ID");
-  private final ComboBox<String> rfid = new ComboBox<>("RFID");
-  private final TextField firstName = new TextField("First Name");
-  private final TextField lastName = new TextField("Last Name");
+  private final TextField employeeId = new TextField(MessageKeys.EMPLOYEE_ID.getTranslation());
+  private final ComboBox<String> rfid = new ComboBox<>(MessageKeys.RFID.getTranslation());
+  private final TextField firstName = new TextField(MessageKeys.EMPLOYEE_FIRSTNAME.getTranslation());
+  private final TextField lastName = new TextField(MessageKeys.EMPLOYEE_LASTNAME.getTranslation());
   private final Grid<Employee> employeeGrid;
 
   public EmployeeView() {
@@ -64,10 +64,10 @@ public class EmployeeView extends Main {
     employeeGrid.setItems(EMPLOYEE_SERVICE.findAll());
 
     // columns
-    employeeGrid.addColumn(Employee::getEmployeeId).setHeader("Employee ID");
-    employeeGrid.addColumn(Employee::getRfid).setHeader("RFID");
-    employeeGrid.addColumn(Employee::getFirstName).setHeader("First Name");
-    employeeGrid.addColumn(Employee::getLastName).setHeader("Last Name");
+    employeeGrid.addColumn(Employee::getEmployeeId).setHeader(MessageKeys.EMPLOYEE_ID.getTranslation());
+    employeeGrid.addColumn(Employee::getRfid).setHeader(MessageKeys.RFID.getTranslation());
+    employeeGrid.addColumn(Employee::getFirstName).setHeader(MessageKeys.EMPLOYEE_FIRSTNAME.getTranslation());
+    employeeGrid.addColumn(Employee::getLastName).setHeader(MessageKeys.EMPLOYEE_LASTNAME.getTranslation());
     employeeGrid.setSizeFull();
     employeeGrid.setColumnReorderingAllowed(true);
     employeeGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);

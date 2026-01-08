@@ -30,7 +30,7 @@ public class Employee implements AbstractCsvEntity<Employee> {
   @Nonnull
   public List<JournalSummaryItem> getSummaryItems() {
     return List.of(
-      new JournalSummaryItem(Messages.get(MessageKeys.EMPLOYEE_ID), employeeId),
+      new JournalSummaryItem(MessageKeys.EMPLOYEE_ID.getTranslation(), employeeId),
       new JournalSummaryItem(Messages.get(MessageKeys.EMPLOYEE_NAME), firstName + " " + lastName),
       new JournalSummaryItem(Messages.get(MessageKeys.RFID), rfid));
   }

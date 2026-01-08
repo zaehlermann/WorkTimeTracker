@@ -1,10 +1,5 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
-import java.io.Serial;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -19,10 +14,8 @@ import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
-import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
 import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Correction;
@@ -30,6 +23,11 @@ import de.zaehlermann.timetracker.service.CorrectionService;
 import de.zaehlermann.timetracker.service.JournalService;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+
+import java.io.Serial;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @Route("correction-times")
 @PageTitle("Correction times")
@@ -53,7 +51,7 @@ public class CorrectionTimesView extends Main {
   public CorrectionTimesView() {
 
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
-    selectEmployee.setLabel(Messages.get(MessageKeys.EMPLOYEE_ID));
+    selectEmployee.setLabel(MessageKeys.EMPLOYEE_ID.getTranslation());
     selectEmployee.setItems(allEmployeeNames);
     if(!allEmployeeNames.isEmpty()) {
       selectEmployee.setValue(allEmployeeNames.getFirst());
@@ -78,7 +76,7 @@ public class CorrectionTimesView extends Main {
   }
 
   private void configureGrid() {
-    grid.addColumn(Correction::getEmployeeId).setHeader("Employee ID");
+    grid.addColumn(Correction::getEmployeeId).setHeader(MessageKeys.EMPLOYEE_ID.getTranslation());
     grid.addColumn(Correction::getWorkday).setHeader("Date");
     grid.addColumn(Correction::getLogin).setHeader("Login correction");
     grid.addColumn(Correction::getLogout).setHeader("Logout correction");

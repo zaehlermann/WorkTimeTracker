@@ -3,6 +3,7 @@ package de.zaehlermann.timetracker.model;
 import de.zaehlermann.timetracker.globals.TimeFormat;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
+import de.zaehlermann.timetracker.i18n.SupportedLocales;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -14,7 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.List;
-import java.util.Locale;
 
 public class Workday {
 
@@ -113,12 +113,17 @@ public class Workday {
 
   @Nonnull
   public String getWeekDayName() {
-    return day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+    return day.getDayOfWeek().getDisplayName(TextStyle.SHORT, SupportedLocales.getDefault());
   }
 
   @Nullable
   public AbsenceType getAbsenceType() {
     return absenceType;
+  }
+
+  @Nullable
+  public String getAbsenceTypePrintValueLong() {
+    return absenceType == null ? null : absenceType.getPrintValueLong();
   }
 
   @Nullable
@@ -163,4 +168,5 @@ public class Workday {
   public boolean isInDateRange(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
     return (day.isEqual(start) || day.isAfter(start)) && (day.isEqual(end) || day.isBefore(end));
   }
+
 }

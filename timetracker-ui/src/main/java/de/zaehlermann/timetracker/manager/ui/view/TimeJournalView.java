@@ -1,19 +1,5 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
-import static java.util.Arrays.asList;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.Serial;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.format.TextStyle;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-
-import javax.annotation.Nonnull;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.details.Details;
@@ -34,16 +20,28 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
 import com.vaadin.flow.server.streams.InputStreamDownloadCallback;
-
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
+import de.zaehlermann.timetracker.i18n.SupportedLocales;
 import de.zaehlermann.timetracker.model.Journal;
 import de.zaehlermann.timetracker.model.JournalSummaryItem;
 import de.zaehlermann.timetracker.model.Workday;
 import de.zaehlermann.timetracker.service.JournalService;
 import de.zaehlermann.timetracker.validate.ValidateUtils;
 import jakarta.annotation.security.PermitAll;
+
+import javax.annotation.Nonnull;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.Serial;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.TextStyle;
+import java.util.Comparator;
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 @Route("time-journal")
 @PageTitle("Time journal")
@@ -69,7 +67,7 @@ public class TimeJournalView extends Main {
   public TimeJournalView() {
 
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
-    selectEmployee.setLabel(Messages.get(MessageKeys.EMPLOYEE_ID));
+    selectEmployee.setLabel(MessageKeys.EMPLOYEE_ID.getTranslation());
     selectEmployee.setItems(allEmployeeNames); // select from the employee file
     selectEmployee.setValue(allEmployeeNames.isEmpty() ? null : allEmployeeNames.getFirst());
 
@@ -79,10 +77,10 @@ public class TimeJournalView extends Main {
     selectYear.setValue(LocalDate.now().getYear());
 
     final Select<Integer> selectMonth = new Select<>();
-    selectMonth.setLabel("Month");
+    selectMonth.setLabel(MessageKeys.TIME_JOURNAL_MONTH.getTranslation());
     selectMonth.setEmptySelectionAllowed(true);
     selectMonth.setEmptySelectionCaption("All");
-    selectMonth.setItemLabelGenerator(item -> item == null ? "All" : Month.of(item).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+    selectMonth.setItemLabelGenerator(item -> item == null ? "All" : Month.of(item).getDisplayName(TextStyle.FULL, SupportedLocales.getDefault()));
     selectMonth.setItems(asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
     selectMonth.setValue(LocalDate.now().getMonth().getValue());
 
@@ -112,7 +110,7 @@ public class TimeJournalView extends Main {
     workdayGrid.addColumn(Workday::getDay).setKey(COLUMN_DATE).setHeader(COLUMN_DATE).setFooter("Total Days:");
     workdayGrid.addColumn(Workday::getWeekDayName).setKey(COLUMN_WEEKDAY).setHeader(COLUMN_WEEKDAY)
       .setComparator(Comparator.comparing(Workday::getWeekDayValue));
-    workdayGrid.addColumn(Workday::getAbsenceType).setKey(COLUMN_ABSENCE).setHeader(COLUMN_ABSENCE);
+    workdayGrid.addColumn(Workday::getAbsenceTypePrintValueLong).setKey(COLUMN_ABSENCE).setHeader(COLUMN_ABSENCE);
     workdayGrid.addColumn(Workday::getLogin).setKey(COLUMN_LOGIN).setHeader(COLUMN_LOGIN);
     workdayGrid.addColumn(Workday::getLogout).setKey(COLUMN_LOGOUT).setHeader(COLUMN_LOGOUT);
     workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "").setKey(COLUMN_CORRECTED).setHeader(COLUMN_CORRECTED);

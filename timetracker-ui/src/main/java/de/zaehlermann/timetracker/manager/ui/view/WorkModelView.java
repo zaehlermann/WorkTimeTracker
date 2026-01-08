@@ -53,7 +53,7 @@ public class WorkModelView extends Main {
 
   public WorkModelView() {
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
-    employeeSelect.setLabel(Messages.get(MessageKeys.EMPLOYEE_ID));
+    employeeSelect.setLabel(MessageKeys.EMPLOYEE_ID.getTranslation());
     employeeSelect.setItems(allEmployeeNames);
     if (!allEmployeeNames.isEmpty()) {
       employeeSelect.setValue(allEmployeeNames.getFirst());
@@ -79,7 +79,7 @@ public class WorkModelView extends Main {
     workModelGrid.setItems(WORK_MODEL_SERVICE.findAll());
 
     // columns
-    workModelGrid.addColumn(WorkModel::getEmployeeId).setHeader(Messages.get(MessageKeys.EMPLOYEE_ID));
+    workModelGrid.addColumn(WorkModel::getEmployeeId).setHeader(MessageKeys.EMPLOYEE_ID.getTranslation());
     workModelGrid.addColumn(WorkModel::getValidFrom).setHeader(Messages.get(MessageKeys.WORKMODEL_VALID_FROM));
     workModelGrid.addColumn(WorkModel::getValidUntil).setHeader(Messages.get(MessageKeys.WORKMODEL_VALID_UNTIL));
     workModelGrid.addColumn(WorkModel::getWorktimeADayInMin).setHeader("Daily working time in minutes");

@@ -42,4 +42,9 @@ public enum MessageKeys {
   public String key() {
     return key;
   }
+
+  @Nonnull
+  public String getTranslation() {
+    return Messages.get(this);
+  }
 }
