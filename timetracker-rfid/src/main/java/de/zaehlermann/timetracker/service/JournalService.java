@@ -55,6 +55,15 @@ public class JournalService {
   }
 
   @Nonnull
+  public File downloadPdf(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
+    final Journal journal = createJournal(employeeId, year, month);
+    final String selectedRangeDesc = journal.printSelectedRange();
+    final File pdfFile = JournalRepository.getJournalPdfFilePath(employeeId, selectedRangeDesc).toFile();
+    journal.createJournalPdf(pdfFile);
+    return pdfFile;
+  }
+
+  @Nonnull
   public Journal createJournal(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Employee employee = EMPLOYEE_REPOSITORY.findEmployeeByEmployeeId(employeeId);
     final List<WorkModel> workModels = WORK_MODEL_REPOSITORY.findAllWorkModelsByEmployeeId(employeeId);

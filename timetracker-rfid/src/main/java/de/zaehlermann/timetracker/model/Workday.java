@@ -19,15 +19,18 @@ import java.util.List;
 public class Workday {
 
   public static final String HEADER_LINE_TXT = "DATE        D  OFF  LOGIN  LOGOUT  C  HOURS  SALDO";
-  public static final String HEADER_LINE_CSV =
-    Messages.get(MessageKeys.WORKDAY_DATE) + ";" +
-      Messages.get(MessageKeys.WORKDAY_WEEKDAY) + ";" +
-      Messages.get(MessageKeys.WORKDAY_ABSENCE) + ";" +
-      Messages.get(MessageKeys.WORKDAY_LOGIN) + ";" +
-      Messages.get(MessageKeys.WORKDAY_LOGOUT) + ";" +
-      Messages.get(MessageKeys.WORKDAY_CORRECTION) + ";" +
-      Messages.get(MessageKeys.WORKDAY_HOURS) + ";" +
-      Messages.get(MessageKeys.WORKDAY_SALDO);
+  public static final List<String> HEADER_LINE_PDF =
+    List.of(
+      Messages.get(MessageKeys.WORKDAY_DATE),
+      Messages.get(MessageKeys.WORKDAY_WEEKDAY),
+      Messages.get(MessageKeys.WORKDAY_ABSENCE),
+      Messages.get(MessageKeys.WORKDAY_LOGIN),
+      Messages.get(MessageKeys.WORKDAY_LOGOUT),
+      Messages.get(MessageKeys.WORKDAY_CORRECTION),
+      Messages.get(MessageKeys.WORKDAY_HOURS),
+      Messages.get(MessageKeys.WORKDAY_SALDO)
+    );
+  public static final String HEADER_LINE_CSV = String.join(";", HEADER_LINE_PDF);
 
   private final LocalDate day;
   private final LocalTime login;
@@ -74,6 +77,18 @@ public class Workday {
   @Nonnull
   private static Duration calcHoursInPlace(final LocalTime login, final LocalTime logout) {
     return login != null && logout != null ? Duration.between(login, logout) : Duration.ZERO;
+  }
+
+  @Nonnull
+  public List<String> toPdfRow() {
+    return List.of(day.toString(),
+      getWeekDayName(),
+      (absenceType != null ? absenceType.getPrintValueLong() : ""),
+      (login != null ? login.format(TimeFormat.TIME_FORMAT) : ""),
+      (logout != null ? logout.format(TimeFormat.TIME_FORMAT) : ""),
+      (corrected ? "X" : ""),
+      getHoursDayInPlaceFormatted(),
+      getSaldoFormatted());
   }
 
   @Nonnull
