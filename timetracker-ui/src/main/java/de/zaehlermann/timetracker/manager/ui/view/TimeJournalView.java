@@ -138,6 +138,7 @@ public class TimeJournalView extends Main {
     showJournalButton.addClickListener(
       clickEvent -> displayJournal(selectEmployee, selectYear, selectMonth, employeeSummaryGrid, journalSummaryGrid, workdayGrid));
 
+    final Anchor downloadJournalPdf = new Anchor(downloadPdf(selectEmployee, selectYear, selectMonth), "Download Journal as PDF");
     final Anchor downloadJournalTxt = new Anchor(downloadTxt(selectEmployee, selectYear, selectMonth), "Download Journal as TXT");
     final Anchor downloadJournalCsv = new Anchor(downloadCsv(selectEmployee, selectYear, selectMonth), "Download Journal as CSV");
     final Anchor downloadJournalBackup = new Anchor(downloadFullBackup(), "Download FullBackup");
@@ -146,7 +147,7 @@ public class TimeJournalView extends Main {
     final Details formDetails = new Details("Select Journal", formLayout);
     formDetails.setOpened(true);
 
-    final FormLayout downloadLayout = new FormLayout(downloadJournalTxt, downloadJournalCsv, downloadJournalBackup);
+    final FormLayout downloadLayout = new FormLayout(downloadJournalPdf, downloadJournalTxt, downloadJournalCsv, downloadJournalBackup);
     downloadLayout.setAutoResponsive(true);
     downloadLayout.setAutoRows(true);
     downloadLayout.setWidthFull();
@@ -161,6 +162,18 @@ public class TimeJournalView extends Main {
     setSizeFull();
     add(new ViewToolbar("Time journal"));
     add(verticalLayout);
+  }
+
+  @Nonnull
+  private static DownloadHandler downloadPdf(@Nonnull final Select<String> selectEmployee,
+                                             @Nonnull final Select<Integer> selectYear,
+                                             @Nonnull final Select<Integer> selectMonth) {
+
+    return DownloadHandler.fromInputStream((InputStreamDownloadCallback) downloadEvent -> {
+      final File file = JOURNAL_SERVICE.downloadPdf(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
+      final FileInputStream fileInputStream = new FileInputStream(file);
+      return new DownloadResponse(fileInputStream, file.getName(), "application/pdf", file.length());
+    });
   }
 
   @Nonnull

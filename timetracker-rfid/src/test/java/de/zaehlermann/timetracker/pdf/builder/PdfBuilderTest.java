@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import static de.zaehlermann.timetracker.pdf.builder.PdfBuilder.BODY_FONT;
-import static de.zaehlermann.timetracker.pdf.builder.PdfBuilder.TITLE_FONT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PdfBuilderTest {
@@ -35,9 +33,9 @@ class PdfBuilderTest {
       .withTitle("My PDF Document")
       .withAuthor("John Doe")
       .open()
-      .addParagraph("Test equal space 0815!!", TITLE_FONT)
-      .addParagraph("Test equal space 0815!!", BODY_FONT)
-      .addParagraph(LocalDateTime.now().toString(), BODY_FONT)
+      .addParagraph("Test equal space 0815!!")
+      .addParagraph("Test equal space 0815!!")
+      .addParagraph(LocalDateTime.now().toString())
       .addTable(table)
       .build();
 

@@ -8,20 +8,26 @@ import org.openpdf.text.Paragraph;
 import org.openpdf.text.pdf.PdfWriter;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 public class PdfBuilder {
 
-  static final Font TITLE_FONT = FontFactory.getFont(FontFactory.COURIER_BOLD, 20);
-  static final Font BODY_FONT = FontFactory.getFont(FontFactory.COURIER, 12);
+  static final Font FONT_TITLE = FontFactory.getFont(FontFactory.COURIER_BOLD, 20);
+  public static final Font FONT_BODY = FontFactory.getFont(FontFactory.COURIER, 8);
 
   private final Document document;
   private final PdfWriter writer;
 
-  public PdfBuilder(final String filePath) throws FileNotFoundException {
+  public PdfBuilder(@Nonnull final String filePath) throws FileNotFoundException {
     this.document = new Document();
     this.writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+  }
+
+  public PdfBuilder(@Nonnull final File file) throws FileNotFoundException {
+    this.document = new Document();
+    this.writer = PdfWriter.getInstance(document, new FileOutputStream(file));
   }
 
   @Nonnull
@@ -43,8 +49,8 @@ public class PdfBuilder {
   }
 
   @Nonnull
-  public PdfBuilder addParagraph(@Nonnull final String text, Font font) throws DocumentException {
-    document.add(new Paragraph(text, font));
+  public PdfBuilder addParagraph(@Nonnull final String text) throws DocumentException {
+    document.add(new Paragraph(text, FONT_BODY));
     return this;
   }
 

@@ -28,12 +28,17 @@ public class JournalRepository extends AbstractCsvRepository {
   }
 
   @Nonnull
-  private Path getJournalTxtFilePath(@Nonnull final String fileName, @Nonnull final String selectedRange) {
+  public static Path getJournalPdfFilePath(@Nonnull final String fileName, @Nonnull final String selectedRange) {
+    return Path.of(DefaultDirs.JOURNAL_DIR, fileName + "-" + selectedRange + ".pdf");
+  }
+
+  @Nonnull
+  private static Path getJournalTxtFilePath(@Nonnull final String fileName, @Nonnull final String selectedRange) {
     return Path.of(DefaultDirs.JOURNAL_DIR, fileName + "-" + selectedRange + ".txt");
   }
 
   @Nonnull
-  private Path getJournalCsvFilePath(@Nonnull final String fileName, @Nonnull final String selectedRange) {
+  private static Path getJournalCsvFilePath(@Nonnull final String fileName, @Nonnull final String selectedRange) {
     return Path.of(DefaultDirs.JOURNAL_DIR, fileName + "-" + selectedRange + ".csv");
   }
 

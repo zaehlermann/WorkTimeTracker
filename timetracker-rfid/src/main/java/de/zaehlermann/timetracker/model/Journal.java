@@ -2,9 +2,13 @@ package de.zaehlermann.timetracker.model;
 
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
+import de.zaehlermann.timetracker.pdf.builder.PdfBuilder;
+import de.zaehlermann.timetracker.pdf.builder.PdfTable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -134,6 +138,26 @@ public class Journal {
   @Nonnull
   private static String getRangeDesc(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
     return Messages.get("saldo.between", start, end);
+  }
+
+  public void createJournalPdf(@Nonnull final File file) {
+    final List<List<String>> pdfTableRows = workdays.stream()
+      .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+      .map(Workday::toPdfRow)
+      .collect(Collectors.toList());
+
+    try {
+      new PdfBuilder(file)
+        .open()
+        .addParagraph(printJournalHeader())
+        .addTable(new PdfTable(pdfTableRows.getFirst().size())
+          .addHeader(Workday.HEADER_LINE_PDF)
+          .addRows(pdfTableRows))
+        .build();
+    } catch (final FileNotFoundException e) {
+      throw new IllegalStateException(e);
+    }
+
   }
 
   @Nonnull

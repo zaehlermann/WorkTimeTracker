@@ -8,6 +8,9 @@ import org.openpdf.text.pdf.PdfPTable;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+import static de.zaehlermann.timetracker.pdf.builder.PdfBuilder.FONT_BODY;
+import static java.util.Arrays.asList;
+
 public class PdfTable {
 
   private final PdfPTable table;
@@ -28,8 +31,13 @@ public class PdfTable {
 
   @Nonnull
   public PdfTable addHeader(@Nonnull final String... headers) {
+    return addHeader(asList(headers));
+  }
+
+  @Nonnull
+  public PdfTable addHeader(@Nonnull final List<String> headers) {
     for (final String header : headers) {
-      final PdfPCell cell = new PdfPCell(new Phrase(header));
+      final PdfPCell cell = new PdfPCell(new Phrase(header, FONT_BODY));
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       cell.setPadding(5);
       table.addCell(cell);
@@ -40,8 +48,13 @@ public class PdfTable {
 
   @Nonnull
   public PdfTable addRow(@Nonnull final String... cells) {
+    return addRow(asList(cells));
+  }
+
+  @Nonnull
+  public PdfTable addRow(@Nonnull final List<String> cells) {
     for (final String cellText : cells) {
-      final PdfPCell cell = new PdfPCell(new Phrase(cellText));
+      final PdfPCell cell = new PdfPCell(new Phrase(cellText, FONT_BODY));
       cell.setPadding(5);
       table.addCell(cell);
     }
@@ -50,13 +63,12 @@ public class PdfTable {
 
   @Nonnull
   public PdfTable addRows(@Nonnull final List<List<String>> rows) {
-    for (final List<String> row : rows) {
-      addRow(row.toArray(new String[0]));
-    }
+    rows.forEach(this::addRow);
     return this;
   }
 
   public PdfPTable build() {
     return table;
   }
+
 }
