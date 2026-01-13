@@ -23,11 +23,13 @@ public class PdfBuilder {
   public PdfBuilder(@Nonnull final String filePath) throws FileNotFoundException {
     this.document = new Document();
     this.writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+    this.writer.setPageEvent(new FooterEvent());
   }
 
   public PdfBuilder(@Nonnull final File file) throws FileNotFoundException {
     this.document = new Document();
     this.writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+    this.writer.setPageEvent(new FooterEvent());
   }
 
   @Nonnull
