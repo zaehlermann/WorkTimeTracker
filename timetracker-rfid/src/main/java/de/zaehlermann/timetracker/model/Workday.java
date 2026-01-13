@@ -82,7 +82,7 @@ public class Workday {
   @Nonnull
   public List<String> toPdfRow() {
     return List.of(day.toString(),
-      String.valueOf(getWeekDayValue()),
+      getWeekDayName(),
       (absenceType != null ? absenceType.getPrintValueLong() : ""),
       (login != null ? login.format(TimeFormat.TIME_FORMAT) : ""),
       (logout != null ? logout.format(TimeFormat.TIME_FORMAT) : ""),
