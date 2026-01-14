@@ -1,6 +1,6 @@
 package de.zaehlermann.timetracker.model;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface AbstractCsvEntity<T> {
 

@@ -5,8 +5,8 @@ import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.pdf.builder.PdfBuilder;
 import de.zaehlermann.timetracker.pdf.builder.PdfTable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;

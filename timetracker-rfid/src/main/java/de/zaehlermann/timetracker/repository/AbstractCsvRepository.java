@@ -1,6 +1,6 @@
 package de.zaehlermann.timetracker.repository;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

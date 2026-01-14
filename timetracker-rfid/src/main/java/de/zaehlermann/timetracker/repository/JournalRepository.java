@@ -3,7 +3,7 @@ package de.zaehlermann.timetracker.repository;
 import java.io.File;
 import java.nio.file.Path;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import de.zaehlermann.timetracker.globals.DefaultDirs;
 

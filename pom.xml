@@ -1,5 +1,6 @@
 <!-- pom.xml -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <description>Work time tracking by RFID</description>
@@ -13,7 +14,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>3.5.9</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <modules>
@@ -39,6 +40,7 @@
     <commons-lang3.version>3.18.0</commons-lang3.version>
     <openpdf.version>3.0.0</openpdf.version>
     <commons-io.version>2.20.0</commons-io.version>
+    <jakarta-annotation-api.version>2.1.1</jakarta-annotation-api.version>
   </properties>
 
   <distributionManagement>
@@ -86,6 +88,12 @@
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>jakarta.annotation</groupId>
+        <artifactId>jakarta.annotation-api</artifactId>
+        <version>${jakarta-annotation-api.version}</version> <!-- in syn with spring boot loader-->
       </dependency>
 
       <dependency>

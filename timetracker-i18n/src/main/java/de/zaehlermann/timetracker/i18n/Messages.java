@@ -1,6 +1,6 @@
 package de.zaehlermann.timetracker.i18n;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 

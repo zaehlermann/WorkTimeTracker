@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class InfoService {
 

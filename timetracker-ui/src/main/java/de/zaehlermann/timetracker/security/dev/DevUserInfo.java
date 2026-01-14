@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.time.ZoneId;
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.jspecify.annotations.Nullable;
 

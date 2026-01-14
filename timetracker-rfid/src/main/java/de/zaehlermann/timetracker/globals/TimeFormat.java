@@ -1,6 +1,6 @@
 package de.zaehlermann.timetracker.globals;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;

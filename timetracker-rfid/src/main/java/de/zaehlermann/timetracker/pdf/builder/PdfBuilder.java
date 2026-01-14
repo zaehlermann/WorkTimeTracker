@@ -7,7 +7,7 @@ import org.openpdf.text.FontFactory;
 import org.openpdf.text.Paragraph;
 import org.openpdf.text.pdf.PdfWriter;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
