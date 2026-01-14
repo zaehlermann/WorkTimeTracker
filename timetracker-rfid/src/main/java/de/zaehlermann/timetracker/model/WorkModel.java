@@ -10,10 +10,10 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-public class WorkModel implements AbstractCsvEntity<WorkModel> {
+public class WorkModel implements AbstractCsvEntity {
 
   public static final String HEADER_LINE = "EMPLOYEE_ID;VALID_FROM;VALID_UNTIL;WORKTIME_A_DAY_IN_MIN;BREAKTIME_A_DAY_IN_MIN;INITIAL_HOURS";
   public static final WorkModel DEFAULT_WORKMODEL = new WorkModel(

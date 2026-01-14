@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import de.zaehlermann.timetracker.globals.DefaultDirs;
 import de.zaehlermann.timetracker.model.WorkModel;
@@ -51,7 +51,7 @@ public class WorkModelRepository extends AbstractCsvRepository {
     }
   }
 
-  private static boolean isNotHeader(String line) {
+  private static boolean isNotHeader(final String line) {
     return !line.startsWith(WorkModel.HEADER_LINE.substring(0, 10));
   }
 

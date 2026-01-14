@@ -3,8 +3,8 @@ package de.zaehlermann.timetracker.service;
 import java.io.File;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import de.zaehlermann.timetracker.model.Absence;
 import de.zaehlermann.timetracker.model.Correction;

@@ -2,7 +2,7 @@ package de.zaehlermann.timetracker.service;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import de.zaehlermann.timetracker.repository.RfidScanRepository;
 

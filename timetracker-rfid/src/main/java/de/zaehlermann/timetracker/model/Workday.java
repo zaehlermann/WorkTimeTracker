@@ -5,8 +5,8 @@ import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.i18n.SupportedLocales;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;

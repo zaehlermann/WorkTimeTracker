@@ -31,7 +31,7 @@ import de.zaehlermann.timetracker.service.JournalService;
 import de.zaehlermann.timetracker.validate.ValidateUtils;
 import jakarta.annotation.security.PermitAll;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serial;

@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import de.zaehlermann.timetracker.globals.DefaultDirs;
 

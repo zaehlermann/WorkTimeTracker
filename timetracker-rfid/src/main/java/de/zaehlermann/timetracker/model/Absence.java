@@ -4,15 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * One closed period of absence.
  * a.k.a. Abwesenheit
  */
 public record Absence(String employeeId, AbsenceType type, LocalDate startDay, LocalDate endDay, LocalTime startTime, LocalTime endTime)
-  implements AbstractCsvEntity<Absence> {
+  implements AbstractCsvEntity {
   public static final String HEADER_LINE = "EMPLOYEE;TYPE;STARTDAY;ENDDAY;STARTTIME;ENDTIME";
 
   /**

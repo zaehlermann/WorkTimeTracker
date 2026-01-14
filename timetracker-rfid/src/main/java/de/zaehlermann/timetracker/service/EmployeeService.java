@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import de.zaehlermann.timetracker.model.Employee;
 import de.zaehlermann.timetracker.repository.EmployeeRepository;
