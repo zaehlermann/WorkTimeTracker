@@ -51,7 +51,7 @@ public class WorkModelRepository extends AbstractCsvRepository {
     }
   }
 
-  private static boolean isNotHeader(String line) {
+  private static boolean isNotHeader(final String line) {
     return !line.startsWith(WorkModel.HEADER_LINE.substring(0, 10));
   }
 

@@ -22,7 +22,7 @@ public class InfoService {
 
   @Nonnull
   private String readAppVersion() {
-    try(InputStream resourceAsStream = getClass().getResourceAsStream("version.txt")) {
+    try(final InputStream resourceAsStream = getClass().getResourceAsStream("version.txt")) {
       requireNonNull(resourceAsStream, "version file not found");
       return new String(resourceAsStream.readAllBytes(), StandardCharsets.UTF_8);
     }
