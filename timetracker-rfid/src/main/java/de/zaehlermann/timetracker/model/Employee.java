@@ -8,7 +8,7 @@ import java.util.Objects;
 
 import jakarta.annotation.Nonnull;
 
-public class Employee implements AbstractCsvEntity<Employee> {
+public class Employee implements AbstractCsvEntity {
 
   public static final String HEADER_LINE = "EMPLOYEE_ID;RFID;FIRSTNAME;LASTNAME";
 

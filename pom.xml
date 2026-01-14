@@ -36,7 +36,6 @@
     <maven.compiler.target>21</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit-jupiter.version>5.13.4</junit-jupiter.version>
-    <findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
     <commons-lang3.version>3.18.0</commons-lang3.version>
     <openpdf.version>3.0.0</openpdf.version>
     <commons-io.version>2.20.0</commons-io.version>
@@ -63,13 +62,6 @@
         <groupId>de.zaehlermann.timetracker</groupId>
         <artifactId>timetracker-rfid</artifactId>
         <version>${project.parent.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.google.code.findbugs</groupId>
-        <artifactId>jsr305</artifactId>
-        <version>${findbugs-jsr305.version}</version>
-        <scope>compile</scope>
       </dependency>
 
       <dependency>

@@ -9,7 +9,7 @@ import jakarta.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class Correction implements AbstractCsvEntity<Correction> {
+public class Correction implements AbstractCsvEntity {
 
   public static final String HEADER_LINE = "EMPLOYEE;WORKDAY;LOGIN;LOGOUT";
   private final String employeeId;

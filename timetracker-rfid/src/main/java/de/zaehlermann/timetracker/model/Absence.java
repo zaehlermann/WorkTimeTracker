@@ -12,7 +12,7 @@ import jakarta.annotation.Nullable;
  * a.k.a. Abwesenheit
  */
 public record Absence(String employeeId, AbsenceType type, LocalDate startDay, LocalDate endDay, LocalTime startTime, LocalTime endTime)
-  implements AbstractCsvEntity<Absence> {
+  implements AbstractCsvEntity {
   public static final String HEADER_LINE = "EMPLOYEE;TYPE;STARTDAY;ENDDAY;STARTTIME;ENDTIME";
 
   /**
