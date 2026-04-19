@@ -4,7 +4,14 @@ import javax.annotation.Nonnull;
 
 public enum MessageKeys {
 
+  EMPLOYEES("employees"),
+  WORK_MODES("work_models"),
+  ABSENCE_TIMES("absence_times"),
+  CORRECTION_TIMES("correction_times"),
+  TIME_JOURNALS("time_journals"),
+
   SALDO_BETWEEN("saldo.between"),
+
   EMPLOYEE_SUMMARY("employee.summary"),
   EMPLOYEE_ID("employee.id"),
   EMPLOYEE_NAME("employee.name"),

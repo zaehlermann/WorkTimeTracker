@@ -103,7 +103,7 @@ public class WorkModelView extends Main {
     verticalLayout.setSizeFull();
 
     setSizeFull();
-    add(new ViewToolbar("Work models"));
+    add(new ViewToolbar(Messages.get(MessageKeys.WORK_MODES)));
     add(verticalLayout);
   }
 

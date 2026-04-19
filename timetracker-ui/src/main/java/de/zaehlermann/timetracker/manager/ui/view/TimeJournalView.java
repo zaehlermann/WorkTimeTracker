@@ -100,10 +100,10 @@ public class TimeJournalView extends Main {
     journalSummaryGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
     journalSummaryGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
-    final Details employeeDetails = new Details("Employee Summary", employeeSummaryGrid);
+    final Details employeeDetails = new Details(Messages.get(MessageKeys.EMPLOYEE_SUMMARY), employeeSummaryGrid);
     employeeDetails.setOpened(true);
 
-    final Details summaryDetails = new Details("Time Journal Summary", journalSummaryGrid);
+    final Details summaryDetails = new Details(Messages.get(MessageKeys.TIME_JOURNAL_SUMMARY), journalSummaryGrid);
     summaryDetails.setOpened(true);
 
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
@@ -128,7 +128,7 @@ public class TimeJournalView extends Main {
     workdayGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
     workdayGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
-    final Details workdayGridDetails = new Details("Time Journal Details", workdayGrid);
+    final Details workdayGridDetails = new Details(Messages.get(MessageKeys.TIME_JOURNAL_DETAILS), workdayGrid);
     workdayGridDetails.setOpened(true);
     workdayGridDetails.setWidthFull();
 
@@ -160,7 +160,7 @@ public class TimeJournalView extends Main {
     verticalLayout.setSizeFull();
 
     setSizeFull();
-    add(new ViewToolbar("Time journal"));
+    add(new ViewToolbar(Messages.get(MessageKeys.TIME_JOURNALS)));
     add(verticalLayout);
   }
 

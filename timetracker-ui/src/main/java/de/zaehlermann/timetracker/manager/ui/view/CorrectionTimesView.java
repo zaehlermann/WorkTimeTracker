@@ -16,6 +16,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
+import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
 import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Correction;
@@ -69,7 +70,7 @@ public class CorrectionTimesView extends Main {
     verticalLayout.add(grid);
 
     setSizeFull();
-    add(new ViewToolbar("Correction times"));
+    add(new ViewToolbar(Messages.get(MessageKeys.CORRECTION_TIMES)));
     add(verticalLayout);
 
     updateGrid();
