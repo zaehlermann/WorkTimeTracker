@@ -16,7 +16,9 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
+import de.zaehlermann.timetracker.base.ui.view.MainLayout;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
+import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
 import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Employee;
@@ -85,7 +87,7 @@ public class EmployeeView extends Main {
     verticalLayout.setSizeFull();
 
     setSizeFull();
-    add(new ViewToolbar("Employees"));
+    add(new ViewToolbar(Messages.get(MessageKeys.EMPLOYEES)));
     add(verticalLayout);
   }
 

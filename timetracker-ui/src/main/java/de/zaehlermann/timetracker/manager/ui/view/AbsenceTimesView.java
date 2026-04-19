@@ -16,6 +16,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
+import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
 import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Absence;
@@ -76,7 +77,7 @@ public class AbsenceTimesView extends Main {
     verticalLayout.add(grid);
 
     setSizeFull();
-    add(new ViewToolbar("Absence times"));
+    add(new ViewToolbar(Messages.get(MessageKeys.ABSENCE_TIMES)));
     add(verticalLayout);
 
     grid.setItems(ABSENCE_SERVICE.findAll());
