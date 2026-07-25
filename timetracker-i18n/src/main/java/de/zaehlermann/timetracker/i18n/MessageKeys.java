@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 public enum MessageKeys {
 
   EMPLOYEES("employees"),
-  WORK_MODES("work_models"),
+  WORK_MODELS("work_models"),
   ABSENCE_TIMES("absence_times"),
   CORRECTION_TIMES("correction_times"),
   TIME_JOURNALS("time_journals"),
@@ -39,8 +39,12 @@ public enum MessageKeys {
   WORKMODEL_VALID_FROM("workmodel.valid_from"),
   WORKMODEL_VALID_UNTIL("workmodel.valid_until"),
 
+  WORKMODEL_DAILY_WORKTIME_IN_MIN("workmodel.daily_worktime_in_min"),
+  WORKMODEL_DAILY_BREAKTIME_IN_MIN("workmodel.daily_breaktime_in_min"),
+
   SAVE("save"),
   DELETE("delete");
+
 
   private final String key;
 

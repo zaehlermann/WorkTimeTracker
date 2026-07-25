@@ -46,14 +46,14 @@ public class WorkModelView extends Main {
   private final Select<String> employeeSelect = new Select<>();
   private final DatePicker validFromPicker = new DatePicker(Messages.get(MessageKeys.WORKMODEL_VALID_FROM));
   private final DatePicker validUntilPicker = new DatePicker(Messages.get(MessageKeys.WORKMODEL_VALID_UNTIL));
-  private final TimePicker workTimePicker = new TimePicker("Daily working time (HH:mm)");
-  private final TimePicker breakTimePicker = new TimePicker("Daily break time (HH:mm)");
+  private final TimePicker workTimePicker = new TimePicker(Messages.get(MessageKeys.WORKMODEL_DAILY_WORKTIME_IN_MIN));
+  private final TimePicker breakTimePicker = new TimePicker(Messages.get(MessageKeys.WORKMODEL_DAILY_BREAKTIME_IN_MIN));
   private final IntegerField initialHourField = new IntegerField(Messages.get(MessageKeys.WORKMODEL_INITIAL_HOURS));
   private final Grid<WorkModel> workModelGrid;
 
   public WorkModelView() {
     final List<String> allEmployeeNames = JOURNAL_SERVICE.getAllEmployeeNames();
-    employeeSelect.setLabel(MessageKeys.EMPLOYEE_ID.getTranslation());
+    employeeSelect.setLabel(Messages.get(MessageKeys.EMPLOYEE_ID));
     employeeSelect.setItems(allEmployeeNames);
     if (!allEmployeeNames.isEmpty()) {
       employeeSelect.setValue(allEmployeeNames.getFirst());
@@ -82,8 +82,8 @@ public class WorkModelView extends Main {
     workModelGrid.addColumn(WorkModel::getEmployeeId).setHeader(MessageKeys.EMPLOYEE_ID.getTranslation());
     workModelGrid.addColumn(WorkModel::getValidFrom).setHeader(Messages.get(MessageKeys.WORKMODEL_VALID_FROM));
     workModelGrid.addColumn(WorkModel::getValidUntil).setHeader(Messages.get(MessageKeys.WORKMODEL_VALID_UNTIL));
-    workModelGrid.addColumn(WorkModel::getWorktimeADayInMin).setHeader("Daily working time in minutes");
-    workModelGrid.addColumn(WorkModel::getBreaktimeADayInMin).setHeader("Daily break time in minutes");
+    workModelGrid.addColumn(WorkModel::getWorktimeADayInMin).setHeader(Messages.get(MessageKeys.WORKMODEL_DAILY_WORKTIME_IN_MIN));
+    workModelGrid.addColumn(WorkModel::getBreaktimeADayInMin).setHeader(Messages.get(MessageKeys.WORKMODEL_DAILY_BREAKTIME_IN_MIN));
     workModelGrid.addColumn(WorkModel::getInitialHours).setHeader(Messages.get(MessageKeys.WORKMODEL_INITIAL_HOURS));
     workModelGrid.setSizeFull();
     workModelGrid.setColumnReorderingAllowed(true);
@@ -103,7 +103,7 @@ public class WorkModelView extends Main {
     verticalLayout.setSizeFull();
 
     setSizeFull();
-    add(new ViewToolbar(Messages.get(MessageKeys.WORK_MODES)));
+    add(new ViewToolbar(Messages.get(MessageKeys.WORK_MODELS)));
     add(verticalLayout);
   }
 
