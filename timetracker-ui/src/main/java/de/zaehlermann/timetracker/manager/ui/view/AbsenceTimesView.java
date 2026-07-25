@@ -1,5 +1,10 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
+import java.io.Serial;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -14,6 +19,7 @@ import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
@@ -24,11 +30,6 @@ import de.zaehlermann.timetracker.model.AbsenceType;
 import de.zaehlermann.timetracker.service.AbsenceService;
 import de.zaehlermann.timetracker.service.JournalService;
 import jakarta.annotation.security.PermitAll;
-
-import java.io.Serial;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 
 @Route("absence-times")
 @PageTitle("Absence times")
@@ -67,6 +68,7 @@ public class AbsenceTimesView extends Main {
     selectAbsenceType.setLabel(Messages.get(MessageKeys.ABSENCE_TYPE));
     selectAbsenceType.setItems(absenceTypes);
     selectAbsenceType.setValue(absenceTypes.getFirst());
+    selectAbsenceType.setItemLabelGenerator(AbsenceType::getPrintValueLong);
 
     startDateField.setValue(LocalDate.now());
 
@@ -89,7 +91,7 @@ public class AbsenceTimesView extends Main {
     grid.addColumn(Absence::startTime).setHeader(Messages.get(MessageKeys.ABSENCE_START_TIME));
     grid.addColumn(Absence::endDay).setHeader(Messages.get(MessageKeys.ABSENCE_END_DATE));
     grid.addColumn(Absence::endTime).setHeader(Messages.get(MessageKeys.ABSENCE_END_TIME));
-    grid.addColumn(Absence::type).setHeader(Messages.get(MessageKeys.ABSENCE_TYPE));
+    grid.addColumn(absence -> absence.type().getPrintValueLong()).setHeader(Messages.get(MessageKeys.ABSENCE_TYPE));
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
     grid.setColumnReorderingAllowed(true);
     grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
