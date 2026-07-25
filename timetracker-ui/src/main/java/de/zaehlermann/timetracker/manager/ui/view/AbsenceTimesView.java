@@ -44,10 +44,10 @@ public class AbsenceTimesView extends Main {
   // Form fields
   private final Select<String> selectEmployee = new Select<>();
   private final Select<AbsenceType> selectAbsenceType = new Select<>();
-  private final DatePicker startDateField = new DatePicker("Start Date");
-  private final TimePicker startTimeField = new TimePicker("Start Time");
-  private final DatePicker endDateField = new DatePicker("End Date");
-  private final TimePicker endTimeField = new TimePicker("End Time");
+  private final DatePicker startDateField = new DatePicker(Messages.get(MessageKeys.ABSENCE_START_DATE));
+  private final TimePicker startTimeField = new TimePicker(Messages.get(MessageKeys.ABSENCE_START_TIME));
+  private final DatePicker endDateField = new DatePicker(Messages.get(MessageKeys.ABSENCE_END_DATE));
+  private final TimePicker endTimeField = new TimePicker(Messages.get(MessageKeys.ABSENCE_END_TIME));
 
   private final Grid<Absence> grid = new Grid<>(Absence.class, false);
 
@@ -64,7 +64,7 @@ public class AbsenceTimesView extends Main {
     }
 
     final List<AbsenceType> absenceTypes = AbsenceType.getSelectableValues();
-    selectAbsenceType.setLabel("Type");
+    selectAbsenceType.setLabel(Messages.get(MessageKeys.ABSENCE_TYPE));
     selectAbsenceType.setItems(absenceTypes);
     selectAbsenceType.setValue(absenceTypes.getFirst());
 
@@ -85,11 +85,11 @@ public class AbsenceTimesView extends Main {
 
   private void configureGrid() {
     grid.addColumn(Absence::employeeId).setHeader(MessageKeys.EMPLOYEE_ID.getTranslation());
-    grid.addColumn(Absence::startDay).setHeader("Start Date");
-    grid.addColumn(Absence::startTime).setHeader("Start Time");
-    grid.addColumn(Absence::endDay).setHeader("End Day");
-    grid.addColumn(Absence::endTime).setHeader("End Time");
-    grid.addColumn(Absence::type).setHeader("Type");
+    grid.addColumn(Absence::startDay).setHeader(Messages.get(MessageKeys.ABSENCE_START_DATE));
+    grid.addColumn(Absence::startTime).setHeader(Messages.get(MessageKeys.ABSENCE_START_TIME));
+    grid.addColumn(Absence::endDay).setHeader(Messages.get(MessageKeys.ABSENCE_END_DATE));
+    grid.addColumn(Absence::endTime).setHeader(Messages.get(MessageKeys.ABSENCE_END_TIME));
+    grid.addColumn(Absence::type).setHeader(Messages.get(MessageKeys.ABSENCE_TYPE));
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
     grid.setColumnReorderingAllowed(true);
     grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);

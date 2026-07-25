@@ -43,8 +43,13 @@ public enum MessageKeys {
   WORKMODEL_DAILY_BREAKTIME_IN_MIN("workmodel.daily_breaktime_in_min"),
 
   SAVE("save"),
-  DELETE("delete");
+  DELETE("delete"),
 
+  ABSENCE_START_DATE("absence.start_date"),
+  ABSENCE_END_DATE("absence.end_date"),
+  ABSENCE_START_TIME("absence.start_time"),
+  ABSENCE_END_TIME("absence.end_time"),
+  ABSENCE_TYPE("absence.type");
 
   private final String key;
 
