@@ -49,7 +49,11 @@ public enum MessageKeys {
   ABSENCE_END_DATE("absence.end_date"),
   ABSENCE_START_TIME("absence.start_time"),
   ABSENCE_END_TIME("absence.end_time"),
-  ABSENCE_TYPE("absence.type");
+  ABSENCE_TYPE("absence.type"),
+
+  CORRECTION_TIMES_DATE("correction_times.date"),
+  CORRECTION_TIMES_LOGIN_CORRECTION("correction_times.login_correction"),
+  CORRECTION_TIMES_LOGOUT_CORRECTION("correction_times.logout_correction");
 
   private final String key;
 

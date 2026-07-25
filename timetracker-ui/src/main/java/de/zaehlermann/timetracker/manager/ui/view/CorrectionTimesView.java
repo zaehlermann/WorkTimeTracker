@@ -43,9 +43,9 @@ public class CorrectionTimesView extends Main {
 
   // Form fields
   private final Select<String> selectEmployee = new Select<>();
-  private final DatePicker workdayField = new DatePicker("Date");
-  private final TimePicker loginTimeField = new TimePicker("Login Time Correction");
-  private final TimePicker logoutTimeField = new TimePicker("Logout Time Correction");
+  private final DatePicker workdayField = new DatePicker(Messages.get(MessageKeys.CORRECTION_TIMES_DATE));
+  private final TimePicker loginTimeField = new TimePicker(Messages.get(MessageKeys.CORRECTION_TIMES_LOGIN_CORRECTION));
+  private final TimePicker logoutTimeField = new TimePicker(Messages.get(MessageKeys.CORRECTION_TIMES_LOGOUT_CORRECTION));
 
   private final Grid<Correction> grid = new Grid<>(Correction.class, false);
 
@@ -78,9 +78,9 @@ public class CorrectionTimesView extends Main {
 
   private void configureGrid() {
     grid.addColumn(Correction::getEmployeeId).setHeader(MessageKeys.EMPLOYEE_ID.getTranslation());
-    grid.addColumn(Correction::getWorkday).setHeader("Date");
-    grid.addColumn(Correction::getLogin).setHeader("Login correction");
-    grid.addColumn(Correction::getLogout).setHeader("Logout correction");
+    grid.addColumn(Correction::getWorkday).setHeader(Messages.get(MessageKeys.CORRECTION_TIMES_DATE));
+    grid.addColumn(Correction::getLogin).setHeader(Messages.get(MessageKeys.CORRECTION_TIMES_LOGIN_CORRECTION));
+    grid.addColumn(Correction::getLogout).setHeader(Messages.get(MessageKeys.CORRECTION_TIMES_LOGOUT_CORRECTION));
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
     grid.setColumnReorderingAllowed(true);
     grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
