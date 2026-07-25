@@ -37,7 +37,10 @@ public enum MessageKeys {
   DAILY_BREAKTIME("workmodel.daily_breaktime"),
   WORKMODEL_INITIAL_HOURS("workmodel.initialhours"),
   WORKMODEL_VALID_FROM("workmodel.valid_from"),
-  WORKMODEL_VALID_UNTIL("workmodel.valid_until");
+  WORKMODEL_VALID_UNTIL("workmodel.valid_until"),
+
+  SAVE("save"),
+  DELETE("delete");
 
   private final String key;
 
