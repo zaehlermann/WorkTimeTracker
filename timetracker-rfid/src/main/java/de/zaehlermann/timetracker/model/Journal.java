@@ -1,12 +1,8 @@
 package de.zaehlermann.timetracker.model;
 
-import de.zaehlermann.timetracker.i18n.MessageKeys;
-import de.zaehlermann.timetracker.i18n.Messages;
-import de.zaehlermann.timetracker.pdf.builder.PdfBuilder;
-import de.zaehlermann.timetracker.pdf.builder.PdfTable;
+import static de.zaehlermann.timetracker.globals.TimeFormat.formatDurationHHHmm;
+import static de.zaehlermann.timetracker.globals.TimeFormat.formatHoursHHHmm;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
@@ -19,19 +15,27 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static de.zaehlermann.timetracker.globals.TimeFormat.formatDurationHHHmm;
-import static de.zaehlermann.timetracker.globals.TimeFormat.formatHoursHHHmm;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import de.zaehlermann.timetracker.i18n.MessageKeys;
+import de.zaehlermann.timetracker.i18n.Messages;
+import de.zaehlermann.timetracker.pdf.builder.PdfBuilder;
+import de.zaehlermann.timetracker.pdf.builder.PdfTable;
 
 public class Journal {
 
   private final Employee employee;
   private final List<Workday> workdays;
   private final List<WorkModel> workModels;
+  private final List<Vacation> vacations;
+  private final List<Absence> absences;
   @Nonnull
   private final Integer selectedYear;
   @Nullable
@@ -39,6 +43,7 @@ public class Journal {
 
   public Journal(@Nonnull final Employee employee,
                  @Nonnull final List<WorkModel> workModels,
+                 @Nonnull final List<Vacation> vacations,
                  @Nonnull final List<Absence> absences,
                  @Nonnull final List<Correction> corrections,
                  @Nonnull final List<RfidScan> allScans,
@@ -46,6 +51,8 @@ public class Journal {
                  @Nullable final Integer selectedMonth) {
     this.employee = employee;
     this.workModels = workModels;
+    this.vacations = vacations;
+    this.absences = absences;
     this.selectedYear = selectedYear;
     this.selectedMonth = selectedMonth;
 
@@ -57,8 +64,8 @@ public class Journal {
 
     // Ensure all days are represented, even if there are no scans
     final LocalDate journalStart = workModels.getFirst().getValidFrom();
-    final LocalDate selectedEnd = YearMonth.of(Year.now().getValue(), 12).atEndOfMonth().plusDays(1);
-    if (journalStart.isBefore(selectedEnd)) {
+    final LocalDate selectedEnd = YearMonth.of(Year.now(ZoneId.systemDefault()).getValue(), Month.DECEMBER).atEndOfMonth().plusDays(1);
+    if(journalStart.isBefore(selectedEnd)) {
       journalStart.datesUntil(selectedEnd).forEach(d -> scanByDay.putIfAbsent(d, List.of()));
     }
 
@@ -103,7 +110,7 @@ public class Journal {
   private static LocalTime getLogin(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
                                     @Nullable final Correction correctionOfTheDay) {
 
-    if (correctionOfTheDay != null && correctionOfTheDay.getLogin() != null) {
+    if(correctionOfTheDay != null && correctionOfTheDay.getLogin() != null) {
       return correctionOfTheDay.getLogin();
     }
     return dailyScans.getValue().isEmpty() ? null : dailyScans.getValue().getFirst().getScanTime();
@@ -113,7 +120,7 @@ public class Journal {
   private static LocalTime getLogout(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
                                      @Nullable final Correction correctionOfTheDay) {
 
-    if (correctionOfTheDay != null && correctionOfTheDay.getLogout() != null) {
+    if(correctionOfTheDay != null && correctionOfTheDay.getLogout() != null) {
       return correctionOfTheDay.getLogout();
     }
     return dailyScans.getValue().isEmpty() ? null : dailyScans.getValue().getLast().getScanTime();
@@ -123,6 +130,7 @@ public class Journal {
   public List<JournalSummaryItem> getEmployeeWorkModelSummaryItems() {
     final List<JournalSummaryItem> items = new ArrayList<>(getEmployeeSummaryItems());
     items.addAll(getLastWorkModelSummaryItems());
+    items.addAll(getVacationSummaryItems());
     return items;
   }
 
@@ -136,9 +144,16 @@ public class Journal {
     return workModels.getLast().getSummaryItems();
   }
 
+  private List<JournalSummaryItem> getVacationSummaryItems() {
+    return vacations.stream()
+      .map(Vacation::getSummaryItems)
+      .flatMap(Collection::stream)
+      .collect(Collectors.toList());
+  }
+
   @Nonnull
   private static String getRangeDesc(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
-    return Messages.get("saldo.between", start, end);
+    return MessageKeys.TIME_JOURNALS_SALDO_BETWEEN.getTranslation(start, end);
   }
 
   public void createJournalPdf(@Nonnull final File file) {
@@ -152,10 +167,11 @@ public class Journal {
         .open()
         .addParagraph(printJournalHeader())
         .addTable(new PdfTable(pdfTableRows.getFirst().size())
-          .addHeader(Workday.HEADER_LINE_PDF)
-          .addRows(pdfTableRows))
+                    .addHeader(Workday.HEADER_LINE_PDF)
+                    .addRows(pdfTableRows))
         .build();
-    } catch (final FileNotFoundException e) {
+    }
+    catch(final FileNotFoundException e) {
       throw new IllegalStateException(e);
     }
 
@@ -164,36 +180,36 @@ public class Journal {
   @Nonnull
   public String printJournalTxt() {
     return printJournalHeader() +
-      Workday.HEADER_LINE_TXT + System.lineSeparator() +
-      workdays.stream()
-        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-        .map(Workday::toTxtLine)
-        .collect(Collectors.joining());
+           Workday.HEADER_LINE_TXT + System.lineSeparator() +
+           workdays.stream()
+             .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+             .map(Workday::toTxtLine)
+             .collect(Collectors.joining());
   }
 
   @Nonnull
   public String printJournalCsv() {
     return printJournalHeader() +
-      Workday.HEADER_LINE_CSV + System.lineSeparator() +
-      workdays.stream()
-        .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
-        .map(Workday::toCsvLine)
-        .collect(Collectors.joining());
+           Workday.HEADER_LINE_CSV + System.lineSeparator() +
+           workdays.stream()
+             .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
+             .map(Workday::toCsvLine)
+             .collect(Collectors.joining());
   }
 
   @Nonnull
   private String printJournalHeader() {
     return "# " + Messages.get(MessageKeys.EMPLOYEE_SUMMARY) + System.lineSeparator() +
-      getEmployeeWorkModelSummaryItems().stream()
-        .map(JournalSummaryItem::toTxtLine)
-        .collect(Collectors.joining()) +
-      System.lineSeparator() +
-      "# " + Messages.get(MessageKeys.TIME_JOURNAL_SUMMARY) + System.lineSeparator() +
-      getJournalSummaryItems().stream()
-        .map(JournalSummaryItem::toTxtLine)
-        .collect(Collectors.joining()) +
-      System.lineSeparator() +
-      "# " + Messages.get(MessageKeys.TIME_JOURNAL_DETAILS) + System.lineSeparator();
+           getEmployeeWorkModelSummaryItems().stream()
+             .map(JournalSummaryItem::toTxtLine)
+             .collect(Collectors.joining()) +
+           System.lineSeparator() +
+           "# " + Messages.get(MessageKeys.TIME_JOURNAL_SUMMARY) + System.lineSeparator() +
+           getJournalSummaryItems().stream()
+             .map(JournalSummaryItem::toTxtLine)
+             .collect(Collectors.joining()) +
+           System.lineSeparator() +
+           "# " + Messages.get(MessageKeys.TIME_JOURNAL_DETAILS) + System.lineSeparator();
   }
 
   @Nonnull
@@ -208,13 +224,30 @@ public class Journal {
     return List.of(
       new JournalSummaryItem(Messages.get(MessageKeys.WORKMODEL_INITIAL_HOURS), formatHoursHHHmm(initialHours)),
       new JournalSummaryItem(Messages.get(MessageKeys.WORKDAY_HOURS) + " " + selectedRange,
-        calcSelectedHours(selectedYear, selectedMonth)),
+                             calcSelectedHours(selectedYear, selectedMonth)),
       new JournalSummaryItem(getRangeDesc(firstOfSelectedMonth, endOfSelectedMonth),
-        formatHoursHHHmm(calcSaldoInRange(firstOfSelectedMonth, endOfSelectedMonth))),
+                             formatHoursHHHmm(calcSaldoInRange(firstOfSelectedMonth, endOfSelectedMonth))),
       new JournalSummaryItem(getRangeDesc(firstWorkingDay, today),
-        formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, today)))),
+                             formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, today)))),
       new JournalSummaryItem(getRangeDesc(firstWorkingDay, endOfSelectedMonth),
-        formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, endOfSelectedMonth)))));
+                             formatHoursHHHmm(initialHours.add(calcSaldoInRange(firstWorkingDay, endOfSelectedMonth)))),
+      new JournalSummaryItem(MessageKeys.TIME_JOURNAL_VACATION_REST.getTranslation(), calcVacationRest() + "d")
+    );
+  }
+
+  private String calcVacationRest() {
+
+    final int sumVacationsGiven = vacations.stream()
+      .mapToInt(Vacation::getVacationInDays)
+      .sum();
+
+    final double sumVacationUsed = absences.stream()
+      .filter(a -> a.getType() == AbsenceType.VACATION)
+      .mapToDouble(Absence::getTimeRangeInDays)
+      .sum();
+
+    final double vacationRest = sumVacationsGiven - sumVacationUsed;
+    return String.valueOf(vacationRest);
   }
 
   @Nonnull

@@ -1,6 +1,8 @@
 package de.zaehlermann.timetracker.model;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -92,5 +94,20 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
     if(date == null || start == null || end == null) return false;
     return (date.isEqual(start) || date.isAfter(start)) &&
            (date.isEqual(end) || date.isBefore(end));
+  }
+
+  public AbsenceType getType() {
+    return type;
+  }
+
+  public double getTimeRangeInDays() {
+    final LocalDateTime startDateTime = LocalDateTime.of(startDay, startTime == null ? LocalTime.MIN : startTime);
+
+    LocalDate date = endDay == null ? startDay : endDay;
+    if(endTime == null) {
+      date = date.plusDays(1);
+    }
+    final LocalDateTime endDateTime = LocalDateTime.of(date, endTime == null ? LocalTime.MIN : endTime);
+    return (double) Duration.between(startDateTime, endDateTime).toHours() / 24;
   }
 }

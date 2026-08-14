@@ -2,9 +2,12 @@ package de.zaehlermann.timetracker.model;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
+
+import de.zaehlermann.timetracker.i18n.MessageKeys;
 
 public class Vacation implements AbstractCsvEntity<Vacation> {
 
@@ -64,5 +67,12 @@ public class Vacation implements AbstractCsvEntity<Vacation> {
   @Override
   public int hashCode() {
     return Objects.hash(employeeId, year);
+  }
+
+  @Nonnull
+  public List<JournalSummaryItem> getSummaryItems() {
+    return List.of(
+      new JournalSummaryItem(MessageKeys.VACATIONS_CURRENT_YEAR.getTranslation(String.valueOf(year)), String.valueOf(vacationInDays) + "d")
+    );
   }
 }

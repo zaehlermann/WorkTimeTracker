@@ -10,8 +10,6 @@ public enum MessageKeys {
   CORRECTION_TIMES("correction_times"),
   TIME_JOURNALS("time_journals"),
 
-  SALDO_BETWEEN("saldo.between"),
-
   EMPLOYEE_SUMMARY("employee.summary"),
   EMPLOYEE_ID("employee.id"),
   EMPLOYEE_NAME("employee.name"),
@@ -33,6 +31,8 @@ public enum MessageKeys {
   TIME_JOURNAL_DOWNLOAD_CSV("time.journal.download.csv"),
   TIME_JOURNAL_DOWNLOAD_FULL_BACKUP("time.journal.download.full_backup"),
   TIME_JOURNAL_SHOW_JOURNAL("time.journal.show_journal"),
+  TIME_JOURNALS_SALDO_BETWEEN("time.journal.saldo.between"),
+  TIME_JOURNAL_VACATION_REST("time.journal.vacation_rest"),
 
   WORKDAY_DATE("workday.date"),
   WORKDAY_WEEKDAY("workday.weekday"),
@@ -69,6 +69,7 @@ public enum MessageKeys {
   VACATION_YEAR("vacation.year"),
   VACATION_IN_DAYS("vacation.in_days"),
   VACATION_SAVED("vacation.saved"),
+  VACATIONS_CURRENT_YEAR("vacations.current_year"),
 
   MAIN("main"),
   MAIN_WELCOME_0("main.welcome_0"),
@@ -109,5 +110,9 @@ public enum MessageKeys {
   @Nonnull
   public String getTranslation() {
     return Messages.get(this);
+  }
+
+  public String getTranslation(@Nonnull final Object... arg) {
+   return Messages.get(this, arg);
   }
 }
