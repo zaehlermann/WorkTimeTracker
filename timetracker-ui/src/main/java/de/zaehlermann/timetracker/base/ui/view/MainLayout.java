@@ -34,6 +34,7 @@ import com.vaadin.flow.server.menu.MenuConfiguration;
 import com.vaadin.flow.server.menu.MenuEntry;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 
+import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.security.AppUserInfo;
 import de.zaehlermann.timetracker.security.CurrentUser;
 import de.zaehlermann.timetracker.service.InfoService;
@@ -78,7 +79,7 @@ public final class MainLayout extends AppLayout {
 
   private SideNavItem createSideNavItem(final MenuEntry menuEntry) {
     if(menuEntry.icon() != null) {
-      return new SideNavItem(menuEntry.title(), menuEntry.path(), new Icon(menuEntry.icon()));
+      return new SideNavItem(MessageKeys.getMainMenueTitle(menuEntry.title()), menuEntry.path(), new Icon(menuEntry.icon()));
     }
     else {
       return new SideNavItem(menuEntry.title(), menuEntry.path());

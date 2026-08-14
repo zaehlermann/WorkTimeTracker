@@ -1,10 +1,17 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
+import java.io.Serial;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Set;
+
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -14,10 +21,12 @@ import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
+import de.zaehlermann.timetracker.manager.ui.components.MyDatePicker;
 import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Absence;
 import de.zaehlermann.timetracker.model.AbsenceType;
@@ -25,14 +34,9 @@ import de.zaehlermann.timetracker.service.AbsenceService;
 import de.zaehlermann.timetracker.service.JournalService;
 import jakarta.annotation.security.PermitAll;
 
-import java.io.Serial;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
-
 @Route("absence-times")
 @PageTitle("Absence times")
-@Menu(order = 2, icon = "vaadin:user-clock", title = "Absence times")
+@Menu(order = 3, icon = "vaadin:user-clock", title = "Absence times")
 @PermitAll // When security is enabled, allow all authenticated users
 public class AbsenceTimesView extends Main {
   @Serial
@@ -44,10 +48,10 @@ public class AbsenceTimesView extends Main {
   // Form fields
   private final Select<String> selectEmployee = new Select<>();
   private final Select<AbsenceType> selectAbsenceType = new Select<>();
-  private final DatePicker startDateField = new DatePicker("Start Date");
-  private final TimePicker startTimeField = new TimePicker("Start Time");
-  private final DatePicker endDateField = new DatePicker("End Date");
-  private final TimePicker endTimeField = new TimePicker("End Time");
+  private final MyDatePicker startDateField = new MyDatePicker(Messages.get(MessageKeys.ABSENCE_START_DATE));
+  private final TimePicker startTimeField = new TimePicker(Messages.get(MessageKeys.ABSENCE_START_TIME));
+  private final MyDatePicker endDateField = new MyDatePicker(Messages.get(MessageKeys.ABSENCE_END_DATE));
+  private final TimePicker endTimeField = new TimePicker(Messages.get(MessageKeys.ABSENCE_END_TIME));
 
   private final Grid<Absence> grid = new Grid<>(Absence.class, false);
 
@@ -64,14 +68,23 @@ public class AbsenceTimesView extends Main {
     }
 
     final List<AbsenceType> absenceTypes = AbsenceType.getSelectableValues();
-    selectAbsenceType.setLabel("Type");
+    selectAbsenceType.setLabel(Messages.get(MessageKeys.ABSENCE_TYPE));
     selectAbsenceType.setItems(absenceTypes);
     selectAbsenceType.setValue(absenceTypes.getFirst());
+    selectAbsenceType.setItemLabelGenerator(AbsenceType::getPrintValueLong);
 
-    startDateField.setValue(LocalDate.now());
+    startDateField.setValue(LocalDate.now(ZoneId.systemDefault()));
+
+    final Details hintsDetails = new Details(MessageKeys.HINTS.getTranslation(),
+                                             new Div(Messages.get(MessageKeys.ABSENCE_TIMES_DESCRIPTION_0)),
+                                             new Div(Messages.get(MessageKeys.ABSENCE_TIMES_DESCRIPTION_1)),
+                                             new Div(Messages.get(MessageKeys.ABSENCE_TIMES_DESCRIPTION_2)),
+                                             new Div(Messages.get(MessageKeys.ABSENCE_TIMES_DESCRIPTION_3)));
+    hintsDetails.setOpened(false);
 
     final VerticalLayout verticalLayout = new VerticalLayout();
     verticalLayout.setSizeFull();
+    verticalLayout.add(hintsDetails);
     verticalLayout.add(createForm());
     configureGrid();
     verticalLayout.add(grid);
@@ -85,11 +98,11 @@ public class AbsenceTimesView extends Main {
 
   private void configureGrid() {
     grid.addColumn(Absence::employeeId).setHeader(MessageKeys.EMPLOYEE_ID.getTranslation());
-    grid.addColumn(Absence::startDay).setHeader("Start Date");
-    grid.addColumn(Absence::startTime).setHeader("Start Time");
-    grid.addColumn(Absence::endDay).setHeader("End Day");
-    grid.addColumn(Absence::endTime).setHeader("End Time");
-    grid.addColumn(Absence::type).setHeader("Type");
+    grid.addColumn(Absence::startDay).setHeader(Messages.get(MessageKeys.ABSENCE_START_DATE));
+    grid.addColumn(Absence::startTime).setHeader(Messages.get(MessageKeys.ABSENCE_START_TIME));
+    grid.addColumn(Absence::endDay).setHeader(Messages.get(MessageKeys.ABSENCE_END_DATE));
+    grid.addColumn(Absence::endTime).setHeader(Messages.get(MessageKeys.ABSENCE_END_TIME));
+    grid.addColumn(absence -> absence.type().getPrintValueLong()).setHeader(Messages.get(MessageKeys.ABSENCE_TYPE));
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
     grid.setColumnReorderingAllowed(true);
     grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);

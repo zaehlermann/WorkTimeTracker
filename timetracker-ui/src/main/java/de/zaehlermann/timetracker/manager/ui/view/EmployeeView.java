@@ -1,5 +1,9 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
+import java.io.Serial;
+import java.util.List;
+import java.util.Set;
+
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -15,8 +19,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
-import de.zaehlermann.timetracker.base.ui.view.MainLayout;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
@@ -27,10 +31,6 @@ import de.zaehlermann.timetracker.service.RfidScanService;
 import de.zaehlermann.timetracker.validate.ValidateUtils;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
-
-import java.io.Serial;
-import java.util.List;
-import java.util.Set;
 
 @Route("employees")
 @PageTitle("Employees")

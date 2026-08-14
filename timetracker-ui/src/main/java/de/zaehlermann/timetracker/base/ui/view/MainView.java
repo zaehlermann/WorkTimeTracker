@@ -9,6 +9,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
+import de.zaehlermann.timetracker.i18n.MessageKeys;
 import jakarta.annotation.security.PermitAll;
 
 /**
@@ -23,13 +24,12 @@ public final class MainView extends Main {
 
   MainView() {
     addClassName(LumoUtility.Padding.MEDIUM);
-    add(new ViewToolbar("Main"));
-    add(new Div("Welcome to the Time Tracker Management application!"));
-    add(new Div("1. Setup  your employee configuration."));
-    add(new Div("2. Manage your employees absence times."));
-    add(new Div("3. Scan your rfid tag to login/logout."));
-    add(new Div("4. Create time journal for an employee."));
-    add(new Div("5. Have fun!"));
+    add(new ViewToolbar(MessageKeys.MAIN.getTranslation()));
+    add(new Div(MessageKeys.MAIN_WELCOME_0.getTranslation()));
+    add(new Div(MessageKeys.MAIN_WELCOME_1.getTranslation()));
+    add(new Div(MessageKeys.MAIN_WELCOME_2.getTranslation()));
+    add(new Div(MessageKeys.MAIN_WELCOME_3.getTranslation()));
+    add(new Div(MessageKeys.MAIN_WELCOME_4.getTranslation()));
   }
 
   /**

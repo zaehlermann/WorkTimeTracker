@@ -1,8 +1,6 @@
 # TODOs for upcoming v.1.x.x versions
 
-* add journal export in pdf format
 * add/remove corrections out of the time journal table
-* finish translation to german
 * create a language picker / detect browser language
 
 # Ideas for v.2.0.0

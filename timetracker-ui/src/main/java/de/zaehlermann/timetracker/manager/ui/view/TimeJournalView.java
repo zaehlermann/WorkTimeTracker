@@ -1,5 +1,19 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
+import static java.util.Arrays.asList;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.Serial;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.format.TextStyle;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.details.Details;
@@ -20,6 +34,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
 import com.vaadin.flow.server.streams.InputStreamDownloadCallback;
+
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
@@ -31,21 +46,9 @@ import de.zaehlermann.timetracker.service.JournalService;
 import de.zaehlermann.timetracker.validate.ValidateUtils;
 import jakarta.annotation.security.PermitAll;
 
-import javax.annotation.Nonnull;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.Serial;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.format.TextStyle;
-import java.util.Comparator;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-
-@Route("time-journal")
-@PageTitle("Time journal")
-@Menu(order = 4, icon = "vaadin:chart", title = "Time journal")
+@Route("time-journals")
+@PageTitle("Time journals")
+@Menu(order = 5, icon = "vaadin:chart", title = "Time journals")
 @PermitAll // When security is enabled, allow all authenticated users
 public class TimeJournalView extends Main {
 
@@ -74,27 +77,42 @@ public class TimeJournalView extends Main {
     final Select<Integer> selectYear = new Select<>();
     selectYear.setLabel(Messages.get(MessageKeys.TIME_JOURNAL_YEAR));
     selectYear.setItems(asList(2025, 2026, 2027, 2028, 2029, 2030)); // select from the employee file
-    selectYear.setValue(LocalDate.now().getYear());
+    selectYear.setValue(LocalDate.now(ZoneId.systemDefault()).getYear());
 
     final Select<Integer> selectMonth = new Select<>();
     selectMonth.setLabel(MessageKeys.TIME_JOURNAL_MONTH.getTranslation());
     selectMonth.setEmptySelectionAllowed(true);
-    selectMonth.setEmptySelectionCaption("All");
-    selectMonth.setItemLabelGenerator(item -> item == null ? "All" : Month.of(item).getDisplayName(TextStyle.FULL, SupportedLocales.getDefault()));
+    selectMonth.setEmptySelectionCaption(MessageKeys.TIME_JOURNAL_ALL.getTranslation());
+    selectMonth.setItemLabelGenerator(item -> item == null ?
+                                              MessageKeys.TIME_JOURNAL_ALL.getTranslation() :
+                                              Month.of(item).getDisplayName(TextStyle.FULL, SupportedLocales.getDefault()));
     selectMonth.setItems(asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
-    selectMonth.setValue(LocalDate.now().getMonth().getValue());
+    selectMonth.setValue(LocalDate.now(ZoneId.systemDefault()).getMonth().getValue());
 
     final Grid<JournalSummaryItem> employeeSummaryGrid = new Grid<>(JournalSummaryItem.class, false);
-    employeeSummaryGrid.addColumn(JournalSummaryItem::getKey).setHeader("Description").setResizable(true).setAutoWidth(true);
-    employeeSummaryGrid.addColumn(JournalSummaryItem::getValue).setHeader("Value").setResizable(true).setAutoWidth(true);
+    employeeSummaryGrid.addColumn(JournalSummaryItem::getKey)
+      .setHeader(MessageKeys.TIME_JOURNAL_DESCRIPTION.getTranslation())
+      .setResizable(true)
+      .setAutoWidth(true);
+    employeeSummaryGrid.addColumn(JournalSummaryItem::getValue)
+      .setHeader(MessageKeys.TIME_JOURNAL_VALUE.getTranslation())
+      .setResizable(true)
+      .setAutoWidth(true);
     employeeSummaryGrid.setAllRowsVisible(true);
     employeeSummaryGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
     employeeSummaryGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
     employeeSummaryGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
 
     final Grid<JournalSummaryItem> journalSummaryGrid = new Grid<>(JournalSummaryItem.class, false);
-    journalSummaryGrid.addColumn(JournalSummaryItem::getKey).setHeader("Description").setResizable(true).setAutoWidth(true);
-    journalSummaryGrid.addColumn(JournalSummaryItem::getValue).setHeader("Value").setResizable(true).setAutoWidth(true).setTextAlign(ColumnTextAlign.END);
+    journalSummaryGrid.addColumn(JournalSummaryItem::getKey)
+      .setHeader(MessageKeys.TIME_JOURNAL_DESCRIPTION.getTranslation())
+      .setResizable(true)
+      .setAutoWidth(true);
+    journalSummaryGrid.addColumn(JournalSummaryItem::getValue)
+      .setHeader(MessageKeys.TIME_JOURNAL_VALUE.getTranslation())
+      .setResizable(true)
+      .setAutoWidth(true)
+      .setTextAlign(ColumnTextAlign.END);
     journalSummaryGrid.setAllRowsVisible(true);
     journalSummaryGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
     journalSummaryGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
@@ -107,15 +125,34 @@ public class TimeJournalView extends Main {
     summaryDetails.setOpened(true);
 
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
-    workdayGrid.addColumn(Workday::getDay).setKey(COLUMN_DATE).setHeader(COLUMN_DATE).setFooter("Total Days:");
-    workdayGrid.addColumn(Workday::getWeekDayName).setKey(COLUMN_WEEKDAY).setHeader(COLUMN_WEEKDAY)
+    workdayGrid.addColumn(Workday::getDay)
+      .setKey(COLUMN_DATE)
+      .setHeader(MessageKeys.TIME_JOURNAL_DATE.getTranslation())
+      .setFooter("Total Days:");
+    workdayGrid.addColumn(Workday::getWeekDayName)
+      .setKey(COLUMN_WEEKDAY)
+      .setHeader(MessageKeys.TIME_JOURNAL_WEEKDAY.getTranslation())
       .setComparator(Comparator.comparing(Workday::getWeekDayValue));
-    workdayGrid.addColumn(Workday::getAbsenceTypePrintValueLong).setKey(COLUMN_ABSENCE).setHeader(COLUMN_ABSENCE);
-    workdayGrid.addColumn(Workday::getLogin).setKey(COLUMN_LOGIN).setHeader(COLUMN_LOGIN);
-    workdayGrid.addColumn(Workday::getLogout).setKey(COLUMN_LOGOUT).setHeader(COLUMN_LOGOUT);
-    workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "").setKey(COLUMN_CORRECTED).setHeader(COLUMN_CORRECTED);
-    workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted).setKey(COLUMN_HOURS).setHeader(COLUMN_HOURS).setTextAlign(ColumnTextAlign.END);
-    workdayGrid.addColumn(Workday::getSaldoFormatted).setKey(COLUMN_SALDO).setHeader(COLUMN_SALDO).setTextAlign(ColumnTextAlign.END);
+    workdayGrid.addColumn(Workday::getAbsenceTypePrintValueLong)
+      .setKey(COLUMN_ABSENCE)
+      .setHeader(MessageKeys.TIME_JOURNAL_ABSENCE.getTranslation());
+    workdayGrid.addColumn(Workday::getLogin)
+      .setKey(COLUMN_LOGIN)
+      .setHeader(MessageKeys.TIME_JOURNAL_LOGIN.getTranslation());
+    workdayGrid.addColumn(Workday::getLogout)
+      .setKey(COLUMN_LOGOUT)
+      .setHeader(MessageKeys.TIME_JOURNAL_LOGOUT.getTranslation());
+    workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "")
+      .setKey(COLUMN_CORRECTED)
+      .setHeader(MessageKeys.TIME_JOURNAL_CORRECTION.getTranslation());
+    workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted)
+      .setKey(COLUMN_HOURS)
+      .setHeader(MessageKeys.TIME_JOURNAL_HOURS.getTranslation())
+      .setTextAlign(ColumnTextAlign.END);
+    workdayGrid.addColumn(Workday::getSaldoFormatted)
+      .setKey(COLUMN_SALDO)
+      .setHeader(MessageKeys.TIME_JOURNAL_SALDO.getTranslation())
+      .setTextAlign(ColumnTextAlign.END);
 
     workdayGrid.setColumnReorderingAllowed(true);
     workdayGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
@@ -132,19 +169,23 @@ public class TimeJournalView extends Main {
     workdayGridDetails.setOpened(true);
     workdayGridDetails.setWidthFull();
 
-    final Button showJournalButton = new Button("Show Journal");
+    final Button showJournalButton = new Button(MessageKeys.TIME_JOURNAL_SHOW_JOURNAL.getTranslation());
     showJournalButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     showJournalButton.setIcon(VaadinIcon.CHART.create());
     showJournalButton.addClickListener(
       clickEvent -> displayJournal(selectEmployee, selectYear, selectMonth, employeeSummaryGrid, journalSummaryGrid, workdayGrid));
 
-    final Anchor downloadJournalPdf = new Anchor(downloadPdf(selectEmployee, selectYear, selectMonth), "Download Journal as PDF");
-    final Anchor downloadJournalTxt = new Anchor(downloadTxt(selectEmployee, selectYear, selectMonth), "Download Journal as TXT");
-    final Anchor downloadJournalCsv = new Anchor(downloadCsv(selectEmployee, selectYear, selectMonth), "Download Journal as CSV");
-    final Anchor downloadJournalBackup = new Anchor(downloadFullBackup(), "Download FullBackup");
+    final Anchor downloadJournalPdf = new Anchor(downloadPdf(selectEmployee, selectYear, selectMonth),
+                                                 MessageKeys.TIME_JOURNAL_DOWNLOAD_PDF.getTranslation());
+    final Anchor downloadJournalTxt = new Anchor(downloadTxt(selectEmployee, selectYear, selectMonth),
+                                                 MessageKeys.TIME_JOURNAL_DOWNLOAD_TXT.getTranslation());
+    final Anchor downloadJournalCsv = new Anchor(downloadCsv(selectEmployee, selectYear, selectMonth),
+                                                 MessageKeys.TIME_JOURNAL_DOWNLOAD_CSV.getTranslation());
+    final Anchor downloadJournalBackup = new Anchor(downloadFullBackup(),
+                                                    MessageKeys.TIME_JOURNAL_DOWNLOAD_FULL_BACKUP.getTranslation());
 
     final FormLayout formLayout = new FormLayout(selectEmployee, selectYear, selectMonth, showJournalButton);
-    final Details formDetails = new Details("Select Journal", formLayout);
+    final Details formDetails = new Details(MessageKeys.TIME_JOURNAL_SELECT.getTranslation(), formLayout);
     formDetails.setOpened(true);
 
     final FormLayout downloadLayout = new FormLayout(downloadJournalPdf, downloadJournalTxt, downloadJournalCsv, downloadJournalBackup);
@@ -152,7 +193,7 @@ public class TimeJournalView extends Main {
     downloadLayout.setAutoRows(true);
     downloadLayout.setWidthFull();
 
-    final Details downloadDetails = new Details("Download Journal", downloadLayout);
+    final Details downloadDetails = new Details(MessageKeys.TIME_JOURNAL_DOWNLOAD.getTranslation(), downloadLayout);
     downloadDetails.setOpened(true);
     downloadDetails.setWidthFull();
 
@@ -216,7 +257,7 @@ public class TimeJournalView extends Main {
                                      @Nonnull final Grid<Workday> workdayGrid) {
 
     final boolean isValid = ValidateUtils.validateSelects(List.of(selectEmployee, selectYear));
-    if (!isValid) {
+    if(!isValid) {
       Notification.show("Please fill all required fields").addThemeVariants(NotificationVariant.LUMO_ERROR);
       return;
     }
