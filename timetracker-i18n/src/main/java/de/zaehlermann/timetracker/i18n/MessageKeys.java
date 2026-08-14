@@ -58,8 +58,15 @@ public enum MessageKeys {
   VACATIONS("vacations"),
   VACATION_YEAR("vacation.year"),
   VACATION_IN_DAYS("vacation.in_days"),
-  VACATION_SAVED("vacation.saved");
+  VACATION_SAVED("vacation.saved"),
 
+  MAIN("main"),
+  MAIN_WELCOME_0("main.welcome_0"),
+  MAIN_WELCOME_1("main.welcome_1"),
+  MAIN_WELCOME_2("main.welcome_2"),
+  MAIN_WELCOME_3("main.welcome_3"),
+  MAIN_WELCOME_4("main.welcome_4"),
+  MAIN_WELCOME_5("main.welcome_5");
   private final String key;
 
   MessageKeys(@Nonnull final String key) {
