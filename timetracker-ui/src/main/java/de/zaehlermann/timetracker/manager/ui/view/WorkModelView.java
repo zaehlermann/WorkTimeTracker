@@ -28,6 +28,7 @@ import jakarta.annotation.security.PermitAll;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Set;
@@ -67,7 +68,7 @@ public class WorkModelView extends Main {
     breakTimePicker.setRequired(false);
     initialHourField.setRequired(true);
 
-    validFromPicker.setValue(LocalDate.now());
+    validFromPicker.setValue(LocalDate.now(ZoneId.systemDefault()));
     workTimePicker.setValue(LocalTime.of(8, 0));
     breakTimePicker.setValue(LocalTime.of(0, 30));
     initialHourField.setValue(0);

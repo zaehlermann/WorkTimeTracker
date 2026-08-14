@@ -3,6 +3,7 @@ package de.zaehlermann.timetracker.model;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -16,8 +17,8 @@ public class RfidScan {
 
   public RfidScan(final String rfid) {
     this.rfid = rfid;
-    this.workday = LocalDate.now();
-    this.scanTime = LocalTime.now();
+    this.workday = LocalDate.now(ZoneId.systemDefault());
+    this.scanTime = LocalTime.now(ZoneId.systemDefault());
   }
 
   public RfidScan(final Clock clock, final String rfid) {

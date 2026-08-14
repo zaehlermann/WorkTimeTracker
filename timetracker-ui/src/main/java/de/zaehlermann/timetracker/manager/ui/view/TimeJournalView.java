@@ -37,6 +37,7 @@ import java.io.FileInputStream;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.ZoneId;
 import java.time.format.TextStyle;
 import java.util.Comparator;
 import java.util.List;
@@ -74,7 +75,7 @@ public class TimeJournalView extends Main {
     final Select<Integer> selectYear = new Select<>();
     selectYear.setLabel(Messages.get(MessageKeys.TIME_JOURNAL_YEAR));
     selectYear.setItems(asList(2025, 2026, 2027, 2028, 2029, 2030)); // select from the employee file
-    selectYear.setValue(LocalDate.now().getYear());
+    selectYear.setValue(LocalDate.now(ZoneId.systemDefault()).getYear());
 
     final Select<Integer> selectMonth = new Select<>();
     selectMonth.setLabel(MessageKeys.TIME_JOURNAL_MONTH.getTranslation());
@@ -82,7 +83,7 @@ public class TimeJournalView extends Main {
     selectMonth.setEmptySelectionCaption("All");
     selectMonth.setItemLabelGenerator(item -> item == null ? "All" : Month.of(item).getDisplayName(TextStyle.FULL, SupportedLocales.getDefault()));
     selectMonth.setItems(asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
-    selectMonth.setValue(LocalDate.now().getMonth().getValue());
+    selectMonth.setValue(LocalDate.now(ZoneId.systemDefault()).getMonth().getValue());
 
     final Grid<JournalSummaryItem> employeeSummaryGrid = new Grid<>(JournalSummaryItem.class, false);
     employeeSummaryGrid.addColumn(JournalSummaryItem::getKey).setHeader("Description").setResizable(true).setAutoWidth(true);

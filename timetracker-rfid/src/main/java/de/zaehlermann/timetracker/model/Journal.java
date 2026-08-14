@@ -16,6 +16,7 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.time.Year;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -197,7 +198,7 @@ public class Journal {
 
   @Nonnull
   public List<JournalSummaryItem> getJournalSummaryItems() {
-    final LocalDate today = LocalDate.now();
+    final LocalDate today = LocalDate.now(ZoneId.systemDefault());
     final LocalDate firstWorkingDay = workdays.getFirst().getDay();
     final LocalDate firstOfSelectedMonth = LocalDate.of(selectedYear, selectedMonth == null ? 1 : selectedMonth, 1);
     final LocalDate endOfSelectedMonth = YearMonth.of(selectedYear, selectedMonth == null ? 12 : selectedMonth).atEndOfMonth();

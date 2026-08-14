@@ -2,6 +2,7 @@ package de.zaehlermann.timetracker.manager.ui.view;
 
 import java.io.Serial;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
 
@@ -70,7 +71,7 @@ public class AbsenceTimesView extends Main {
     selectAbsenceType.setValue(absenceTypes.getFirst());
     selectAbsenceType.setItemLabelGenerator(AbsenceType::getPrintValueLong);
 
-    startDateField.setValue(LocalDate.now());
+    startDateField.setValue(LocalDate.now(ZoneId.systemDefault()));
 
     final VerticalLayout verticalLayout = new VerticalLayout();
     verticalLayout.setSizeFull();
