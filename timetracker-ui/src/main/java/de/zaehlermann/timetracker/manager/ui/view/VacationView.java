@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -71,8 +73,13 @@ public class VacationView extends Main {
     selectVacationInDays.setMax(365);
     selectVacationInDays.setValue(30);
 
+    final Details descriptionDetails = new Details(MessageKeys.HINTS.getTranslation(),
+                                                   new Div(MessageKeys.VACATION_DESCRIPTION.getTranslation()));
+    descriptionDetails.setOpened(false);
+
     final VerticalLayout verticalLayout = new VerticalLayout();
     verticalLayout.setSizeFull();
+    verticalLayout.add(descriptionDetails);
     verticalLayout.add(createForm());
     configureGrid();
     verticalLayout.add(grid);

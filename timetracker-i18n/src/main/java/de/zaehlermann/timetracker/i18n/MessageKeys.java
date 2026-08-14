@@ -9,6 +9,7 @@ public enum MessageKeys {
   ABSENCE_TIMES("absence_times"),
   CORRECTION_TIMES("correction_times"),
   TIME_JOURNALS("time_journals"),
+  HINTS("hints"),
 
   EMPLOYEE_SUMMARY("employee.summary"),
   EMPLOYEE_ID("employee.id"),
@@ -60,6 +61,10 @@ public enum MessageKeys {
   ABSENCE_START_TIME("absence.start_time"),
   ABSENCE_END_TIME("absence.end_time"),
   ABSENCE_TYPE("absence.type"),
+  ABSENCE_TIMES_DESCRIPTION_0("absence.description_0"),
+  ABSENCE_TIMES_DESCRIPTION_1("absence.description_1"),
+  ABSENCE_TIMES_DESCRIPTION_2("absence.description_2"),
+  ABSENCE_TIMES_DESCRIPTION_3("absence.description_3"),
 
   CORRECTION_TIMES_DATE("correction_times.date"),
   CORRECTION_TIMES_LOGIN_CORRECTION("correction_times.login_correction"),
@@ -70,6 +75,7 @@ public enum MessageKeys {
   VACATION_IN_DAYS("vacation.in_days"),
   VACATION_SAVED("vacation.saved"),
   VACATIONS_CURRENT_YEAR("vacations.current_year"),
+  VACATION_DESCRIPTION("vacation.description"),
 
   MAIN("main"),
   MAIN_WELCOME_0("main.welcome_0"),

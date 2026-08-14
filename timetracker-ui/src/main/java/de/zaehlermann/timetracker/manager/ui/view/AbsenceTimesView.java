@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -73,8 +75,16 @@ public class AbsenceTimesView extends Main {
 
     startDateField.setValue(LocalDate.now(ZoneId.systemDefault()));
 
+    final Details hintsDetails = new Details(MessageKeys.HINTS.getTranslation(),
+                                             new Div(Messages.get(MessageKeys.ABSENCE_TIMES_DESCRIPTION_0)),
+                                             new Div(Messages.get(MessageKeys.ABSENCE_TIMES_DESCRIPTION_1)),
+                                             new Div(Messages.get(MessageKeys.ABSENCE_TIMES_DESCRIPTION_2)),
+                                             new Div(Messages.get(MessageKeys.ABSENCE_TIMES_DESCRIPTION_3)));
+    hintsDetails.setOpened(false);
+
     final VerticalLayout verticalLayout = new VerticalLayout();
     verticalLayout.setSizeFull();
+    verticalLayout.add(hintsDetails);
     verticalLayout.add(createForm());
     configureGrid();
     verticalLayout.add(grid);
