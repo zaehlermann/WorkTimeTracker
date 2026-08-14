@@ -27,8 +27,10 @@ public class Correction implements AbstractCsvEntity<Correction> {
     this.logout = logout;
   }
 
-  public Correction(@Nonnull final String employeeId, @Nonnull final String workday,
-                    @Nullable final String login, @Nullable final String logout) {
+  public Correction(@Nonnull final String employeeId,
+                    @Nonnull final String workday,
+                    @Nullable final String login,
+                    @Nullable final String logout) {
     this.employeeId = employeeId;
     this.workday = LocalDate.parse(workday);
     this.login = StringUtils.isBlank(login) ? null : LocalTime.parse(login);
