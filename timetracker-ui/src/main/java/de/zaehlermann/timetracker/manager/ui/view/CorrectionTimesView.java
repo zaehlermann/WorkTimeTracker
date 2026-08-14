@@ -33,7 +33,7 @@ import java.util.Set;
 
 @Route("correction-times")
 @PageTitle("Correction times")
-@Menu(order = 3, icon = "vaadin:user-check", title = "Correction times")
+@Menu(order = 4, icon = "vaadin:user-check", title = "Correction times")
 @PermitAll // When security is enabled, allow all authenticated users
 public class CorrectionTimesView extends Main {
   @Serial

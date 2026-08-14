@@ -34,7 +34,7 @@ import jakarta.annotation.security.PermitAll;
 
 @Route("vacations")
 @PageTitle("Vacations")
-@Menu(order = 3, icon = "vaadin:user-check", title = "Vacations")
+@Menu(order = 2, icon = "vaadin:user-check", title = "Vacations")
 @PermitAll // When security is enabled, allow all authenticated users
 public class VacationView extends Main {
   @Serial
