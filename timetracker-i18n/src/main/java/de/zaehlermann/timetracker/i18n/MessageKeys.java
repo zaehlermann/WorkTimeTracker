@@ -53,7 +53,12 @@ public enum MessageKeys {
 
   CORRECTION_TIMES_DATE("correction_times.date"),
   CORRECTION_TIMES_LOGIN_CORRECTION("correction_times.login_correction"),
-  CORRECTION_TIMES_LOGOUT_CORRECTION("correction_times.logout_correction");
+  CORRECTION_TIMES_LOGOUT_CORRECTION("correction_times.logout_correction"),
+
+  VACATIONS("vacations"),
+  VACATION_YEAR("vacation.year"),
+  VACATION_IN_DAYS("vacation.in_days"),
+  VACATION_SAVED("vacation.saved");
 
   private final String key;
 
