@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -25,6 +24,7 @@ import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.manager.ui.components.DeleteButton;
+import de.zaehlermann.timetracker.manager.ui.components.MyDatePicker;
 import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Absence;
 import de.zaehlermann.timetracker.model.AbsenceType;
@@ -46,9 +46,9 @@ public class AbsenceTimesView extends Main {
   // Form fields
   private final Select<String> selectEmployee = new Select<>();
   private final Select<AbsenceType> selectAbsenceType = new Select<>();
-  private final DatePicker startDateField = new DatePicker(Messages.get(MessageKeys.ABSENCE_START_DATE));
+  private final MyDatePicker startDateField = new MyDatePicker(Messages.get(MessageKeys.ABSENCE_START_DATE));
   private final TimePicker startTimeField = new TimePicker(Messages.get(MessageKeys.ABSENCE_START_TIME));
-  private final DatePicker endDateField = new DatePicker(Messages.get(MessageKeys.ABSENCE_END_DATE));
+  private final MyDatePicker endDateField = new MyDatePicker(Messages.get(MessageKeys.ABSENCE_END_DATE));
   private final TimePicker endTimeField = new TimePicker(Messages.get(MessageKeys.ABSENCE_END_TIME));
 
   private final Grid<Absence> grid = new Grid<>(Absence.class, false);

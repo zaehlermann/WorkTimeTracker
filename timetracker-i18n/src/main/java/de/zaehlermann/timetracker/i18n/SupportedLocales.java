@@ -1,10 +1,14 @@
 package de.zaehlermann.timetracker.i18n;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
+
 public class SupportedLocales {
+  private SupportedLocales() {
+    /* This utility class should not be instantiated */
+  }
 
   public static final Locale GERMAN = Locale.GERMAN;
   public static final Locale ENGLISH = Locale.ENGLISH;
