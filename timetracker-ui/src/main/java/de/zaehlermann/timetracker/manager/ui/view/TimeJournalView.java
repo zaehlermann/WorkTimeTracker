@@ -125,15 +125,34 @@ public class TimeJournalView extends Main {
     summaryDetails.setOpened(true);
 
     final Grid<Workday> workdayGrid = new Grid<>(Workday.class, false);
-    workdayGrid.addColumn(Workday::getDay).setKey(COLUMN_DATE).setHeader(COLUMN_DATE).setFooter("Total Days:");
-    workdayGrid.addColumn(Workday::getWeekDayName).setKey(COLUMN_WEEKDAY).setHeader(COLUMN_WEEKDAY)
+    workdayGrid.addColumn(Workday::getDay)
+      .setKey(COLUMN_DATE)
+      .setHeader(MessageKeys.TIME_JOURNAL_DATE.getTranslation())
+      .setFooter("Total Days:");
+    workdayGrid.addColumn(Workday::getWeekDayName)
+      .setKey(COLUMN_WEEKDAY)
+      .setHeader(MessageKeys.TIME_JOURNAL_WEEKDAY.getTranslation())
       .setComparator(Comparator.comparing(Workday::getWeekDayValue));
-    workdayGrid.addColumn(Workday::getAbsenceTypePrintValueLong).setKey(COLUMN_ABSENCE).setHeader(COLUMN_ABSENCE);
-    workdayGrid.addColumn(Workday::getLogin).setKey(COLUMN_LOGIN).setHeader(COLUMN_LOGIN);
-    workdayGrid.addColumn(Workday::getLogout).setKey(COLUMN_LOGOUT).setHeader(COLUMN_LOGOUT);
-    workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "").setKey(COLUMN_CORRECTED).setHeader(COLUMN_CORRECTED);
-    workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted).setKey(COLUMN_HOURS).setHeader(COLUMN_HOURS).setTextAlign(ColumnTextAlign.END);
-    workdayGrid.addColumn(Workday::getSaldoFormatted).setKey(COLUMN_SALDO).setHeader(COLUMN_SALDO).setTextAlign(ColumnTextAlign.END);
+    workdayGrid.addColumn(Workday::getAbsenceTypePrintValueLong)
+      .setKey(COLUMN_ABSENCE)
+      .setHeader(MessageKeys.TIME_JOURNAL_ABSENCE.getTranslation());
+    workdayGrid.addColumn(Workday::getLogin)
+      .setKey(COLUMN_LOGIN)
+      .setHeader(MessageKeys.TIME_JOURNAL_LOGIN.getTranslation());
+    workdayGrid.addColumn(Workday::getLogout)
+      .setKey(COLUMN_LOGOUT)
+      .setHeader(MessageKeys.TIME_JOURNAL_LOGOUT.getTranslation());
+    workdayGrid.addColumn(workday -> workday.isCorrected() ? "X" : "")
+      .setKey(COLUMN_CORRECTED)
+      .setHeader(MessageKeys.TIME_JOURNAL_CORRECTION.getTranslation());
+    workdayGrid.addColumn(Workday::getHoursDayInPlaceFormatted)
+      .setKey(COLUMN_HOURS)
+      .setHeader(MessageKeys.TIME_JOURNAL_HOURS.getTranslation())
+      .setTextAlign(ColumnTextAlign.END);
+    workdayGrid.addColumn(Workday::getSaldoFormatted)
+      .setKey(COLUMN_SALDO)
+      .setHeader(MessageKeys.TIME_JOURNAL_SALDO.getTranslation())
+      .setTextAlign(ColumnTextAlign.END);
 
     workdayGrid.setColumnReorderingAllowed(true);
     workdayGrid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
