@@ -57,9 +57,10 @@ public enum MessageKeys {
   WORKMODEL_INITIAL_HOURS("workmodel.initialhours"),
   WORKMODEL_VALID_FROM("workmodel.valid_from"),
   WORKMODEL_VALID_UNTIL("workmodel.valid_until"),
-
   WORKMODEL_DAILY_WORKTIME_IN_MIN("workmodel.daily_worktime_in_min"),
   WORKMODEL_DAILY_BREAKTIME_IN_MIN("workmodel.daily_breaktime_in_min"),
+  WORKMODEL_DAILY_WORKTIME_IN_HHMM("workmodel.daily_worktime_in_hhmm"),
+  WORKMODEL_DAILY_BREAKTIME_IN_HHMM("workmodel.daily_breaktime_in_hhmm"),
 
   SAVE("save"),
   DELETE("delete"),

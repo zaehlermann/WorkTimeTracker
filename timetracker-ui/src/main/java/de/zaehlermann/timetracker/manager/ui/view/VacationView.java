@@ -111,7 +111,8 @@ public class VacationView extends Main {
   private FormLayout createForm() {
     final Button saveButton = new SaveButton(event -> saveVacation());
     final Button deleteButton = new DeleteButton(event -> deleteVacation());
-    return new FormLayout(selectEmployee, selectYear, selectVacationInDays, saveButton, deleteButton);
+    return new FormLayout(selectEmployee, selectYear, selectVacationInDays, new Div() /* placeholder */,
+                          saveButton, deleteButton);
   }
 
   private void saveVacation() {

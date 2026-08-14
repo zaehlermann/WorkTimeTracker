@@ -48,8 +48,8 @@ public class WorkModelView extends Main {
   private final Select<String> employeeSelect = new Select<>();
   private final MyDatePicker validFromPicker = new MyDatePicker(Messages.get(MessageKeys.WORKMODEL_VALID_FROM));
   private final MyDatePicker validUntilPicker = new MyDatePicker(Messages.get(MessageKeys.WORKMODEL_VALID_UNTIL));
-  private final TimePicker workTimePicker = new TimePicker(Messages.get(MessageKeys.WORKMODEL_DAILY_WORKTIME_IN_MIN));
-  private final TimePicker breakTimePicker = new TimePicker(Messages.get(MessageKeys.WORKMODEL_DAILY_BREAKTIME_IN_MIN));
+  private final TimePicker workTimePicker = new TimePicker(Messages.get(MessageKeys.WORKMODEL_DAILY_WORKTIME_IN_HHMM));
+  private final TimePicker breakTimePicker = new TimePicker(Messages.get(MessageKeys.WORKMODEL_DAILY_BREAKTIME_IN_HHMM));
   private final IntegerField initialHourField = new IntegerField(Messages.get(MessageKeys.WORKMODEL_INITIAL_HOURS));
   private final Grid<WorkModel> workModelGrid;
 
