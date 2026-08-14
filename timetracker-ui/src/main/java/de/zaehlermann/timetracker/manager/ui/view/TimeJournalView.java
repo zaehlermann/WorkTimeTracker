@@ -44,9 +44,9 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-@Route("time-journal")
-@PageTitle("Time journal")
-@Menu(order = 5, icon = "vaadin:chart", title = "Time journal")
+@Route("time-journals")
+@PageTitle("Time journals")
+@Menu(order = 5, icon = "vaadin:chart", title = "Time journals")
 @PermitAll // When security is enabled, allow all authenticated users
 public class TimeJournalView extends Main {
 

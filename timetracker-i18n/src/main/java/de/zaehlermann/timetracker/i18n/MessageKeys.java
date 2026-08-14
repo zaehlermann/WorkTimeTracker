@@ -73,6 +73,24 @@ public enum MessageKeys {
     this.key = key;
   }
 
+  /**
+   * Because Menu annotations need a static translation during compile time, the translation is exchanged this way.
+   * It is not very elegant but works without a mambo jumbo.
+   * @param title the title of the menu item annotation
+   * @return the translated title
+   */
+  public static String getMainMenueTitle(final String title) {
+    return switch(title) {
+      case "Employees" -> MessageKeys.EMPLOYEES.getTranslation();
+      case "Work models" -> MessageKeys.WORK_MODELS.getTranslation();
+      case "Vacations" -> MessageKeys.VACATIONS.getTranslation();
+      case "Absence times" -> MessageKeys.ABSENCE_TIMES.getTranslation();
+      case "Correction times" -> MessageKeys.CORRECTION_TIMES.getTranslation();
+      case "Time journals" -> MessageKeys.TIME_JOURNALS.getTranslation();
+      default -> title;
+    };
+  }
+
   @Nonnull
   public String key() {
     return key;
