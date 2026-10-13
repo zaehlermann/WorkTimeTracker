@@ -3,6 +3,8 @@ package de.zaehlermann.timetracker;
 import java.io.Serial;
 import java.time.Clock;
 
+import com.vaadin.flow.component.dependency.StyleSheet;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +14,7 @@ import com.vaadin.flow.theme.Theme;
 
 @SpringBootApplication
 @Theme("default")
+@StyleSheet(Lumo.UTILITY_STYLESHEET)
 public class Application implements AppShellConfigurator {
 
   @Serial

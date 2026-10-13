@@ -61,6 +61,12 @@
       <version>${vaadin.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-dev</artifactId>
+      <optional>true</optional>
+    </dependency>
+
     <!-- Additional Spring Dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
