@@ -1,7 +1,5 @@
 package de.zaehlermann.timetracker.base.ui.component;
 
-import java.io.Serial;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -17,6 +15,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
+
+import java.io.Serial;
 
 public final class ViewToolbar extends Composite<Header> {
 

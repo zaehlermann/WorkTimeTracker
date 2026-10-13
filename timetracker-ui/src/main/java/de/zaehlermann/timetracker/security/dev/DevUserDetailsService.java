@@ -1,13 +1,14 @@
 package de.zaehlermann.timetracker.security.dev;
 
+import jakarta.annotation.Nonnull;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * Implementation of {@link UserDetailsService} for development environments.
@@ -64,7 +65,7 @@ final class DevUserDetailsService implements UserDetailsService {
   }
 
   @Override
-  public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(@Nonnull final String username) throws UsernameNotFoundException {
     return Optional.ofNullable(userByUsername.get(username))
       .orElseThrow(() -> new UsernameNotFoundException(username));
   }

@@ -1,7 +1,17 @@
 package de.zaehlermann.timetracker.security.dev;
 
-import static java.util.Objects.requireNonNull;
+import de.zaehlermann.timetracker.security.AppUserInfo;
+import de.zaehlermann.timetracker.security.AppUserPrincipal;
+import de.zaehlermann.timetracker.security.domain.UserId;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.Nonnull;
 import java.io.Serial;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -12,19 +22,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
-
-import org.jspecify.annotations.Nullable;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import de.zaehlermann.timetracker.security.AppUserInfo;
-import de.zaehlermann.timetracker.security.AppUserPrincipal;
-import de.zaehlermann.timetracker.security.domain.UserId;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Implementation of {@link AppUserPrincipal} and {@link UserDetails} for development environments.
@@ -89,6 +87,7 @@ final class DevUser implements AppUserPrincipal, UserDetails {
   }
 
   @Override
+  @Nonnull
   public String getUsername() {
     return appUser.getPreferredUsername();
   }

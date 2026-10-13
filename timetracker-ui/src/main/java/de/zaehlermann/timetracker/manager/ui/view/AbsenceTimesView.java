@@ -1,11 +1,5 @@
 package de.zaehlermann.timetracker.manager.ui.view;
 
-import java.io.Serial;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.Set;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -21,7 +15,6 @@ import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
@@ -33,6 +26,12 @@ import de.zaehlermann.timetracker.model.AbsenceType;
 import de.zaehlermann.timetracker.service.AbsenceService;
 import de.zaehlermann.timetracker.service.JournalService;
 import jakarta.annotation.security.PermitAll;
+
+import java.io.Serial;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Set;
 
 @Route("absence-times")
 @PageTitle("Absence times")
