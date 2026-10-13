@@ -1,5 +1,5 @@
-Time Tracker RFI
-================
+Work Time Tracker RFI
+=====================
 This application records the rfid scans.
 
 # Deploy to Raspberry Pi

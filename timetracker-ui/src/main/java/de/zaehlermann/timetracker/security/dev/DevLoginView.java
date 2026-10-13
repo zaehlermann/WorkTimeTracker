@@ -9,6 +9,7 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+import de.zaehlermann.timetracker.Application;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 
 import java.io.Serial;
@@ -50,7 +51,7 @@ class DevLoginView extends Main implements BeforeEnterObserver {
     i18n.setErrorMessage(i18nErrorMessage);
 
     login = new LoginOverlay();
-    login.setTitle("Work Time Tracker");
+    login.setTitle(Application.APP_TITLE);
     login.setDescription("© by zaehlermann");
     login.setAction(LOGIN_PATH);
     login.setForgotPasswordButtonVisible(false);

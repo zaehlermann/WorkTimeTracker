@@ -20,6 +20,7 @@ public class Application implements AppShellConfigurator {
 
   @Serial
   private static final long serialVersionUID = -2379599047979107326L;
+  public static final String APP_TITLE = "Work Time Tracker";
 
   @Bean
   public Clock clock() {

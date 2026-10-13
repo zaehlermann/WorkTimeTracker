@@ -35,6 +35,7 @@ import com.vaadin.flow.server.menu.MenuConfiguration;
 import com.vaadin.flow.server.menu.MenuEntry;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 
+import de.zaehlermann.timetracker.Application;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.security.AppUserInfo;
 import de.zaehlermann.timetracker.security.CurrentUser;
@@ -63,7 +64,7 @@ public final class MainLayout extends AppLayout {
     final Icon appLogo = VaadinIcon.TIME_FORWARD.create();
     appLogo.addClassNames(TextColor.PRIMARY, IconSize.LARGE);
 
-    final Span appName = new Span("Time Tracker");
+    final Span appName = new Span(Application.APP_TITLE);
     appName.addClassNames(FontWeight.SEMIBOLD, FontSize.LARGE);
 
     final Div header = new Div(appLogo, appName);
