@@ -23,8 +23,8 @@ import com.vaadin.flow.spring.security.AuthenticationContext;
  */
 @PageTitle("Login")
 @AnonymousAllowed
-  // No @Route annotation - the route is registered dynamically by DevSecurityConfig.
-class DevLoginView extends Main implements BeforeEnterObserver {
+public// No @Route annotation - the route is registered dynamically by DevSecurityConfig.
+  class DevLoginView extends Main implements BeforeEnterObserver {
 
   static final String LOGIN_PATH = "login";
   private static final String CALLOUT_HIDDEN_KEY = "walking-skeleton-dev-login-callout-hidden";
