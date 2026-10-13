@@ -18,6 +18,7 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -37,10 +38,12 @@ import com.vaadin.flow.spring.security.AuthenticationContext;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.security.AppUserInfo;
 import de.zaehlermann.timetracker.security.CurrentUser;
+import de.zaehlermann.timetracker.security.dev.DevLoginView;
 import de.zaehlermann.timetracker.service.InfoService;
 
 @Layout
 @AnonymousAllowed // Allow all users, including anonymous ones. If you want only authenticated users, change to @PermitAll.
+@Uses(DevLoginView.class)
 public final class MainLayout extends AppLayout {
 
   private static final InfoService INFO_SERVICE = new InfoService();
