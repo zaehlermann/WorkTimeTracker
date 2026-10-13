@@ -1,15 +1,14 @@
 package de.zaehlermann.timetracker.manager.ui.components;
 
-import java.io.Serial;
-
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.VaadinIcon;
-
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
+
+import java.io.Serial;
 
 public class DeleteButton extends Button {
 

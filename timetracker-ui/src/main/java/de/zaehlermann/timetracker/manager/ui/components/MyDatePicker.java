@@ -1,8 +1,8 @@
 package de.zaehlermann.timetracker.manager.ui.components;
 
-import java.io.Serial;
-
 import com.vaadin.flow.component.datepicker.DatePicker;
+
+import java.io.Serial;
 
 public class MyDatePicker extends DatePicker {
 

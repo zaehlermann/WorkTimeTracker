@@ -4,6 +4,16 @@ import javax.annotation.Nonnull;
 
 public enum MessageKeys {
 
+  LOGIN_TITLE("login.title"),
+  LOGIN_USERNAME("login.username"),
+  LOGIN_PASSWORD("login.password"),
+  LOGIN_SUBMIT("login.submit"),
+  LOGIN_FORGOT("login.forgot"),
+  LOGIN_ERROR_TITLE("login.error.title"),
+  LOGIN_ERROR_MESSAGE("login.error.message"),
+  LOGIN_ERROR_USERNAME("login.error.username"),
+  LOGIN_ERROR_PASSWORD("login.error.password"),
+
   EMPLOYEES("employees"),
   WORK_MODELS("work_models"),
   ABSENCE_TIMES("absence_times"),

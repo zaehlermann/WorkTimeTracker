@@ -1,16 +1,15 @@
 package de.zaehlermann.timetracker.base.ui.view;
 
-import java.io.Serial;
-
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-
 import de.zaehlermann.timetracker.base.ui.component.ViewToolbar;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import jakarta.annotation.security.PermitAll;
+
+import java.io.Serial;
 
 /**
  * This view shows up when a user navigates to the root ('/') of the application.

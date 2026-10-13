@@ -1,16 +1,14 @@
 package de.zaehlermann.timetracker.security.dev;
 
-import static java.util.Objects.requireNonNull;
+import de.zaehlermann.timetracker.security.AppUserInfo;
+import de.zaehlermann.timetracker.security.domain.UserId;
+import org.jspecify.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.time.ZoneId;
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
-
-import org.jspecify.annotations.Nullable;
-
-import de.zaehlermann.timetracker.security.AppUserInfo;
-import de.zaehlermann.timetracker.security.domain.UserId;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Implementation of {@link AppUserInfo} used by {@link DevUser} for development environments.

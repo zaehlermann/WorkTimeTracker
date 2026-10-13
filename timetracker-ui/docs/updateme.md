@@ -1,5 +1,5 @@
-Time Tracker UI - update me on Raspberry
-=======================================
+Work Time Tracker UI - update me on Raspberry
+=============================================
 
 # Building
 

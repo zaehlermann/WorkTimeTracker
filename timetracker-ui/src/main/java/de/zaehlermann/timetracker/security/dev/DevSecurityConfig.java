@@ -1,5 +1,9 @@
 package de.zaehlermann.timetracker.security.dev;
 
+import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.flow.server.VaadinServiceInitListener;
+import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
+import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.cloud.CloudPlatform;
@@ -12,11 +16,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
-
-import com.vaadin.flow.router.RouteConfiguration;
-import com.vaadin.flow.server.VaadinServiceInitListener;
-import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
-import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 
 /**
  * Security configuration for the development environment.
@@ -64,7 +63,7 @@ class DevSecurityConfig {
   }
 
   @Bean
-  SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
+  SecurityFilterChain securityFilterChain(final HttpSecurity http) {
     return http.with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(DevLoginView.LOGIN_PATH))
       .build();
   }

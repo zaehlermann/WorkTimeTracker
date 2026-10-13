@@ -1,10 +1,10 @@
 package de.zaehlermann.timetracker.security.dev;
 
-import java.util.List;
-import java.util.UUID;
-
 import de.zaehlermann.timetracker.security.AppRoles;
 import de.zaehlermann.timetracker.security.domain.UserId;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Provides predefined sample users for development and testing environments.

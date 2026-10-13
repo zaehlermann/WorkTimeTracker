@@ -1,17 +1,5 @@
 package de.zaehlermann.timetracker.base.ui.view;
 
-import static com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import static com.vaadin.flow.theme.lumo.LumoUtility.Display;
-import static com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import static com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
-import static com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import static com.vaadin.flow.theme.lumo.LumoUtility.IconSize;
-import static com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import static com.vaadin.flow.theme.lumo.LumoUtility.Padding;
-import static com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
-
-import java.io.Serial;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -34,12 +22,24 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.server.menu.MenuConfiguration;
 import com.vaadin.flow.server.menu.MenuEntry;
 import com.vaadin.flow.spring.security.AuthenticationContext;
-
+import de.zaehlermann.timetracker.Application;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.security.AppUserInfo;
 import de.zaehlermann.timetracker.security.CurrentUser;
 import de.zaehlermann.timetracker.security.dev.DevLoginView;
 import de.zaehlermann.timetracker.service.InfoService;
+
+import java.io.Serial;
+
+import static com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
+import static com.vaadin.flow.theme.lumo.LumoUtility.Display;
+import static com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
+import static com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
+import static com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import static com.vaadin.flow.theme.lumo.LumoUtility.IconSize;
+import static com.vaadin.flow.theme.lumo.LumoUtility.Margin;
+import static com.vaadin.flow.theme.lumo.LumoUtility.Padding;
+import static com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
 
 @Layout
 @AnonymousAllowed // Allow all users, including anonymous ones. If you want only authenticated users, change to @PermitAll.
@@ -63,7 +63,7 @@ public final class MainLayout extends AppLayout {
     final Icon appLogo = VaadinIcon.TIME_FORWARD.create();
     appLogo.addClassNames(TextColor.PRIMARY, IconSize.LARGE);
 
-    final Span appName = new Span("Time Tracker");
+    final Span appName = new Span(Application.APP_TITLE);
     appName.addClassNames(FontWeight.SEMIBOLD, FontSize.LARGE);
 
     final Div header = new Div(appLogo, appName);
