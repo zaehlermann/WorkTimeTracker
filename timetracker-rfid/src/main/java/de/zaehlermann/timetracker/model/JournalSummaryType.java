@@ -10,6 +10,6 @@ public enum JournalSummaryType {
   /**
    * Only the monthly hours, no rest vocation, no initial hours, etc.
    */
-  MONTHLY_HOURS_ONLY;
+  MONTHLY_HOURS_ONLY
 
 }
