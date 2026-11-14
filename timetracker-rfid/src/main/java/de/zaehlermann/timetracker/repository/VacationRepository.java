@@ -1,16 +1,15 @@
 package de.zaehlermann.timetracker.repository;
 
+import de.zaehlermann.timetracker.globals.DefaultDirs;
+import de.zaehlermann.timetracker.model.Vacation;
+import org.eclipse.jdt.annotation.NonNull;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-
-import de.zaehlermann.timetracker.globals.DefaultDirs;
-import de.zaehlermann.timetracker.model.Vacation;
 
 public class VacationRepository extends AbstractCsvRepository {
 
@@ -21,23 +20,23 @@ public class VacationRepository extends AbstractCsvRepository {
     }
   }
 
-  public void appendToFile(@Nonnull final Vacation vacation) {
+  public void appendToFile(@NonNull final Vacation vacation) {
     appendToFile(vacation.toCsvLine(), getFilePath());
   }
 
-  public void saveToFile(@Nonnull final List<Vacation> vacations) {
+  public void saveToFile(@NonNull final List<Vacation> vacations) {
     final Path filePath = getFilePath();
     saveToFile(Vacation.HEADER_LINE + System.lineSeparator(), filePath);
     vacations.forEach(this::appendToFile);
   }
 
-  @Nonnull
+  @NonNull
   private Path getFilePath() {
     return Path.of(DefaultDirs.EMPLOYEE_DIR, "vacations.csv");
   }
 
-  @Nonnull
-  public List<Vacation> findVacationsByEmployeeId(@Nonnull final String employeeId) {
+  @NonNull
+  public List<Vacation> findVacationsByEmployeeId(@NonNull final String employeeId) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       return lines
@@ -52,7 +51,7 @@ public class VacationRepository extends AbstractCsvRepository {
     }
   }
 
-  @Nonnull
+  @NonNull
   public List<Vacation> findAll() {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {

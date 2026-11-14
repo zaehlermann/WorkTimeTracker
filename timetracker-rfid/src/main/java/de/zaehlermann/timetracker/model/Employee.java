@@ -2,11 +2,10 @@ package de.zaehlermann.timetracker.model;
 
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
+import org.eclipse.jdt.annotation.NonNull;
 
 import java.util.List;
 import java.util.Objects;
-
-import javax.annotation.Nonnull;
 
 public class Employee implements AbstractCsvEntity<Employee> {
 
@@ -17,17 +16,17 @@ public class Employee implements AbstractCsvEntity<Employee> {
   private final String firstName;
   private final String lastName;
 
-  public Employee(@Nonnull final String employeeId,
-                  @Nonnull final String rfid,
-                  @Nonnull final String firstName,
-                  @Nonnull final String lastName) {
+  public Employee(@NonNull final String employeeId,
+                  @NonNull final String rfid,
+                  @NonNull final String firstName,
+                  @NonNull final String lastName) {
     this.employeeId = employeeId;
     this.rfid = rfid;
     this.firstName = firstName;
     this.lastName = lastName;
   }
 
-  @Nonnull
+  @NonNull
   public List<JournalSummaryItem> getSummaryItems() {
     return List.of(
       new JournalSummaryItem(MessageKeys.EMPLOYEE_ID.getTranslation(), employeeId),
@@ -35,34 +34,34 @@ public class Employee implements AbstractCsvEntity<Employee> {
       new JournalSummaryItem(Messages.get(MessageKeys.RFID), rfid));
   }
 
-  @Nonnull
-  public static Employee fromCsvLine(@Nonnull final String csvLine) {
+  @NonNull
+  public static Employee fromCsvLine(@NonNull final String csvLine) {
     final String[] split = csvLine.split(";", -1);
     return new Employee(split[0], split[1], split[2], split[3]);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String toCsvLine() {
     return employeeId + ";" + rfid + ";" + firstName + ";" + lastName + System.lineSeparator();
   }
 
-  @Nonnull
+  @NonNull
   public String getFirstName() {
     return firstName;
   }
 
-  @Nonnull
+  @NonNull
   public String getLastName() {
     return lastName;
   }
 
-  @Nonnull
+  @NonNull
   public String getRfid() {
     return rfid;
   }
 
-  @Nonnull
+  @NonNull
   public String getEmployeeId() {
     return employeeId;
   }

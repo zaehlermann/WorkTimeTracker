@@ -1,13 +1,12 @@
 package de.zaehlermann.timetracker.model;
 
+import de.zaehlermann.timetracker.i18n.MessageKeys;
+import org.eclipse.jdt.annotation.NonNull;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
-
-import javax.annotation.Nonnull;
-
-import de.zaehlermann.timetracker.i18n.MessageKeys;
 
 public class Vacation implements AbstractCsvEntity<Vacation> {
 
@@ -18,7 +17,7 @@ public class Vacation implements AbstractCsvEntity<Vacation> {
   private final int year;
   private final int vacationInDays;
 
-  public Vacation(@Nonnull final String employeeId,
+  public Vacation(@NonNull final String employeeId,
                   final int year,
                   final int vacationInDays) {
     this.employeeId = employeeId;
@@ -32,7 +31,7 @@ public class Vacation implements AbstractCsvEntity<Vacation> {
     this.vacationInDays = Integer.parseInt(vacationInDays);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String toCsvLine() {
     return employeeId + ";" +
@@ -40,8 +39,8 @@ public class Vacation implements AbstractCsvEntity<Vacation> {
            vacationInDays + System.lineSeparator();
   }
 
-  @Nonnull
-  public static Vacation fromCsvLine(@Nonnull final String csvLine) {
+  @NonNull
+  public static Vacation fromCsvLine(@NonNull final String csvLine) {
     final String[] split = csvLine.split(";", -1);
     return new Vacation(split[0], split[1], split[2]);
   }
@@ -69,10 +68,10 @@ public class Vacation implements AbstractCsvEntity<Vacation> {
     return Objects.hash(employeeId, year);
   }
 
-  @Nonnull
+  @NonNull
   public List<JournalSummaryItem> getSummaryItems() {
     return List.of(
-      new JournalSummaryItem(MessageKeys.VACATIONS_CURRENT_YEAR.getTranslation(String.valueOf(year)), String.valueOf(vacationInDays) + "d")
+      new JournalSummaryItem(MessageKeys.VACATIONS_CURRENT_YEAR.getTranslation(String.valueOf(year)), vacationInDays + "d")
     );
   }
 }

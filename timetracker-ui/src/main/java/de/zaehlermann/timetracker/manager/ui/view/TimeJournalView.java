@@ -25,14 +25,14 @@ import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.i18n.SupportedLocales;
 import de.zaehlermann.timetracker.model.Journal;
-import de.zaehlermann.timetracker.model.JournalSummaryType;
 import de.zaehlermann.timetracker.model.JournalSummaryItem;
+import de.zaehlermann.timetracker.model.JournalSummaryType;
 import de.zaehlermann.timetracker.model.Workday;
 import de.zaehlermann.timetracker.service.JournalService;
 import de.zaehlermann.timetracker.validate.ValidateUtils;
 import jakarta.annotation.security.PermitAll;
+import org.eclipse.jdt.annotation.NonNull;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serial;
@@ -215,11 +215,11 @@ public class TimeJournalView extends Main {
     add(verticalLayout);
   }
 
-  @Nonnull
+  @NonNull
   private static DownloadHandler downloadPdf(final JournalSummaryType journalSummaryType,
-                                             @Nonnull final Select<String> selectEmployee,
-                                             @Nonnull final Select<Integer> selectYear,
-                                             @Nonnull final Select<Integer> selectMonth) {
+                                             @NonNull final Select<String> selectEmployee,
+                                             @NonNull final Select<Integer> selectYear,
+                                             @NonNull final Select<Integer> selectMonth) {
 
     return DownloadHandler.fromInputStream((InputStreamDownloadCallback) downloadEvent -> {
       final File file = JOURNAL_SERVICE.downloadPdf(journalSummaryType, selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
@@ -228,10 +228,10 @@ public class TimeJournalView extends Main {
     });
   }
 
-  @Nonnull
-  private static DownloadHandler downloadTxt(@Nonnull final Select<String> selectEmployee,
-                                             @Nonnull final Select<Integer> selectYear,
-                                             @Nonnull final Select<Integer> selectMonth) {
+  @NonNull
+  private static DownloadHandler downloadTxt(@NonNull final Select<String> selectEmployee,
+                                             @NonNull final Select<Integer> selectYear,
+                                             @NonNull final Select<Integer> selectMonth) {
 
     return DownloadHandler.fromInputStream((InputStreamDownloadCallback) downloadEvent -> {
       final File file = JOURNAL_SERVICE.downloadTxt(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
@@ -240,10 +240,10 @@ public class TimeJournalView extends Main {
     });
   }
 
-  @Nonnull
-  private static DownloadHandler downloadCsv(@Nonnull final Select<String> selectEmployee,
-                                             @Nonnull final Select<Integer> selectYear,
-                                             @Nonnull final Select<Integer> selectMonth) {
+  @NonNull
+  private static DownloadHandler downloadCsv(@NonNull final Select<String> selectEmployee,
+                                             @NonNull final Select<Integer> selectYear,
+                                             @NonNull final Select<Integer> selectMonth) {
     return DownloadHandler.fromInputStream((InputStreamDownloadCallback) downloadEvent -> {
       final File file = JOURNAL_SERVICE.downloadCsv(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
       final FileInputStream fileInputStream = new FileInputStream(file);
@@ -251,7 +251,7 @@ public class TimeJournalView extends Main {
     });
   }
 
-  @Nonnull
+  @NonNull
   private DownloadHandler downloadFullBackup() {
     return DownloadHandler.fromInputStream((InputStreamDownloadCallback) downloadEvent -> {
       final File file = JOURNAL_SERVICE.downloadBackup();
@@ -260,12 +260,12 @@ public class TimeJournalView extends Main {
     });
   }
 
-  private static void displayJournal(@Nonnull final Select<String> selectEmployee,
-                                     @Nonnull final Select<Integer> selectYear,
-                                     @Nonnull final Select<Integer> selectMonth,
-                                     @Nonnull final Grid<JournalSummaryItem> employeeSummaryGrid,
-                                     @Nonnull final Grid<JournalSummaryItem> journalSummaryGrid,
-                                     @Nonnull final Grid<Workday> workdayGrid) {
+  private static void displayJournal(@NonNull final Select<String> selectEmployee,
+                                     @NonNull final Select<Integer> selectYear,
+                                     @NonNull final Select<Integer> selectMonth,
+                                     @NonNull final Grid<JournalSummaryItem> employeeSummaryGrid,
+                                     @NonNull final Grid<JournalSummaryItem> journalSummaryGrid,
+                                     @NonNull final Grid<Workday> workdayGrid) {
 
     final boolean isValid = ValidateUtils.validateSelects(List.of(selectEmployee, selectYear));
     if (!isValid) {

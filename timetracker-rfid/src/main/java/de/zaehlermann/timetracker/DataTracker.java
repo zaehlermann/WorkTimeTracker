@@ -1,9 +1,9 @@
 package de.zaehlermann.timetracker;
 
-import java.util.Scanner;
-
 import de.zaehlermann.timetracker.log.Logger;
 import de.zaehlermann.timetracker.repository.RfidScanRepository;
+
+import java.util.Scanner;
 
 public class DataTracker {
 

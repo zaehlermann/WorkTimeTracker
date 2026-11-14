@@ -1,18 +1,18 @@
 package de.zaehlermann.timetracker.service;
 
-import static java.util.Objects.requireNonNull;
+import org.eclipse.jdt.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 public class InfoService {
 
   private String appVersion;
 
-  @Nonnull
+  @NonNull
   public String getAppVersion() {
     if(appVersion == null) {
       appVersion = readAppVersion();
@@ -20,7 +20,7 @@ public class InfoService {
     return appVersion;
   }
 
-  @Nonnull
+  @NonNull
   private String readAppVersion() {
     try(final InputStream resourceAsStream = getClass().getResourceAsStream("version.txt")) {
       requireNonNull(resourceAsStream, "version file not found");

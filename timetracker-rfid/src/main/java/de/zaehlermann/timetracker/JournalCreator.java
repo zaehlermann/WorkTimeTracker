@@ -1,11 +1,11 @@
 package de.zaehlermann.timetracker;
 
+import de.zaehlermann.timetracker.log.Logger;
+import de.zaehlermann.timetracker.service.JournalService;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Scanner;
-
-import de.zaehlermann.timetracker.log.Logger;
-import de.zaehlermann.timetracker.service.JournalService;
 
 public class JournalCreator {
 

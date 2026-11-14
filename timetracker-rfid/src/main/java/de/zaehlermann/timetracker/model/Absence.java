@@ -1,13 +1,13 @@
 package de.zaehlermann.timetracker.model;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * One closed period of absence.
@@ -22,9 +22,9 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
    * @param startTime Start/End null means the full day;
    * @param endTime Start/End null means the full day;
    */
-  public Absence(@Nonnull final String employeeId,
-                 @Nonnull final AbsenceType type,
-                 @Nonnull final LocalDate startDay,
+  public Absence(@NonNull final String employeeId,
+                 @NonNull final AbsenceType type,
+                 @NonNull final LocalDate startDay,
                  @Nullable final LocalDate endDay,
                  @Nullable final LocalTime startTime,
                  @Nullable final LocalTime endTime) {
@@ -48,7 +48,7 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
     return Objects.hash(employeeId, startDay, endDay, startTime);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String toCsvLine() {
     return employeeId + ";" +
@@ -60,8 +60,8 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
            System.lineSeparator();
   }
 
-  @Nonnull
-  public static Absence fromCsvLine(@Nonnull final String csvLine) {
+  @NonNull
+  public static Absence fromCsvLine(@NonNull final String csvLine) {
     final String[] parts = csvLine.split(";", -1);
     final String employeeId = parts[0];
     final AbsenceType type = AbsenceType.valueOf(parts[1]);
@@ -73,7 +73,7 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String toString() {
     return "Absence[" +
            "employeeId=" + employeeId + ", " +
@@ -84,7 +84,7 @@ public record Absence(String employeeId, AbsenceType type, LocalDate startDay, L
            "endTime=" + endTime + ']';
   }
 
-  public boolean isInDay(@Nonnull final LocalDate day) {
+  public boolean isInDay(@NonNull final LocalDate day) {
     return isDateInSpan(day, startDay, endDay == null ? startDay : endDay);
   }
 

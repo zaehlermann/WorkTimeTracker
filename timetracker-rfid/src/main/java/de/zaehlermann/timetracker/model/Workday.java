@@ -4,9 +4,9 @@ import de.zaehlermann.timetracker.globals.TimeFormat;
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.i18n.SupportedLocales;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
@@ -40,12 +40,12 @@ public class Workday {
   private final AbsenceType absenceType;
   private final BigDecimal saldo;
 
-  public Workday(@Nonnull final LocalDate day,
+  public Workday(@NonNull final LocalDate day,
                  @Nullable final Absence absences,
                  @Nullable final LocalTime login,
                  @Nullable final LocalTime logout,
                  final boolean corrected,
-                 @Nonnull final WorkModel currentContract) {
+                 @NonNull final WorkModel currentContract) {
     this.day = day;
     this.absenceType = calcAbsenceType(day, absences);
     this.login = login;
@@ -68,18 +68,18 @@ public class Workday {
     return List.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(day.getDayOfWeek());
   }
 
-  private long calcSaldoInMinutes(@Nullable final Duration hoursDayInPlace, @Nonnull final WorkModel currentContract) {
+  private long calcSaldoInMinutes(@Nullable final Duration hoursDayInPlace, @NonNull final WorkModel currentContract) {
     if (hoursDayInPlace == null) return 0;
     return absenceType != null ? this.hoursDayInPlace.toMinutes()
       : (this.hoursDayInPlace.toMinutes() - currentContract.getExpectedPresenceTimeInMins());
   }
 
-  @Nonnull
+  @NonNull
   private static Duration calcHoursInPlace(final LocalTime login, final LocalTime logout) {
     return login != null && logout != null ? Duration.between(login, logout) : Duration.ZERO;
   }
 
-  @Nonnull
+  @NonNull
   public List<String> toPdfRow() {
     return List.of(day.toString(),
       getWeekDayName(),
@@ -91,7 +91,7 @@ public class Workday {
       getSaldoFormatted());
   }
 
-  @Nonnull
+  @NonNull
   public String toTxtLine() {
     return day + "  " +
       getWeekDayValue() + "  " +
@@ -104,7 +104,7 @@ public class Workday {
       System.lineSeparator();
   }
 
-  @Nonnull
+  @NonNull
   public String toCsvLine() {
     return day + ";" +
       getWeekDayValue() + ";" +
@@ -117,7 +117,7 @@ public class Workday {
       System.lineSeparator();
   }
 
-  @Nonnull
+  @NonNull
   public LocalDate getDay() {
     return day;
   }
@@ -126,7 +126,7 @@ public class Workday {
     return day.getDayOfWeek().getValue();
   }
 
-  @Nonnull
+  @NonNull
   public String getWeekDayName() {
     return day.getDayOfWeek().getDisplayName(TextStyle.SHORT, SupportedLocales.getDefault());
   }
@@ -155,32 +155,32 @@ public class Workday {
     return corrected;
   }
 
-  @Nonnull
+  @NonNull
   public Duration getHoursDayInPlace() {
     return hoursDayInPlace;
   }
 
-  @Nonnull
+  @NonNull
   public String getHoursDayInPlaceFormatted() {
     return String.format("%02d", hoursDayInPlace.toHoursPart()) + ":" + String.format("%02d", hoursDayInPlace.toMinutesPart());
   }
 
-  @Nonnull
+  @NonNull
   public BigDecimal getSaldo() {
     return saldo;
   }
 
-  @Nonnull
+  @NonNull
   public String getSaldoFormatted() {
     return TimeFormat.formatHoursHHmm(getSaldo());
   }
 
-  public boolean isInSelectedRange(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
+  public boolean isInSelectedRange(@NonNull final Integer selectedYear, @Nullable final Integer selectedMonth) {
     return selectedMonth == null ? day.getYear() == selectedYear
       : day.getYear() == selectedYear && day.getMonthValue() == selectedMonth;
   }
 
-  public boolean isInDateRange(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
+  public boolean isInDateRange(@NonNull final LocalDate start, @NonNull final LocalDate end) {
     return (day.isEqual(start) || day.isAfter(start)) && (day.isEqual(end) || day.isBefore(end));
   }
 

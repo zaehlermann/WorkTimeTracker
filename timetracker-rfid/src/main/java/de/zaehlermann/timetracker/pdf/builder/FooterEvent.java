@@ -1,5 +1,6 @@
 package de.zaehlermann.timetracker.pdf.builder;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.openpdf.text.Document;
 import org.openpdf.text.Element;
 import org.openpdf.text.Font;
@@ -10,7 +11,6 @@ import org.openpdf.text.pdf.PdfContentByte;
 import org.openpdf.text.pdf.PdfPageEventHelper;
 import org.openpdf.text.pdf.PdfWriter;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +25,7 @@ public class FooterEvent extends PdfPageEventHelper {
   }
 
   @Override
-  public void onEndPage(@Nonnull final PdfWriter writer, @Nonnull final Document document) {
+  public void onEndPage(@NonNull final PdfWriter writer, @NonNull final Document document) {
     final PdfContentByte cb = writer.getDirectContent();
     final float left = document.left();
     final float right = document.right();

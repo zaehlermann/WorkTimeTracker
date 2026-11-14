@@ -1,5 +1,8 @@
 package de.zaehlermann.timetracker.repository;
 
+import de.zaehlermann.timetracker.globals.DefaultDirs;
+import org.eclipse.jdt.annotation.NonNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -11,10 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import javax.annotation.Nonnull;
-
-import de.zaehlermann.timetracker.globals.DefaultDirs;
 
 public class BackupRepository {
 
@@ -28,7 +27,7 @@ public class BackupRepository {
     return backupPath.toFile();
   }
 
-  private static void backupRecordsDirectory(@Nonnull final Path sourceDir, @Nonnull final Path zipFile) {
+  private static void backupRecordsDirectory(@NonNull final Path sourceDir, @NonNull final Path zipFile) {
     try(final ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(zipFile));
         final Stream<Path> walk = Files.walk(sourceDir)) {
       walk.filter(path -> !Files.isDirectory(path))

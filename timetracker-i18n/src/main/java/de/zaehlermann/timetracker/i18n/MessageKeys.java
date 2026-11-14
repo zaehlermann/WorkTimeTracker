@@ -1,7 +1,8 @@
 package de.zaehlermann.timetracker.i18n;
 
-import javax.annotation.Nonnull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
+@NonNullByDefault
 public enum MessageKeys {
 
   LOGIN_TITLE("login.title"),
@@ -107,18 +108,19 @@ public enum MessageKeys {
   MAIN_WELCOME_5("main.welcome_5");
   private final String key;
 
-  MessageKeys(@Nonnull final String key) {
+  MessageKeys(final String key) {
     this.key = key;
   }
 
   /**
    * Because Menu annotations need a static translation during compile time, the translation is exchanged this way.
    * It is not very elegant but works without a mambo jumbo.
+   *
    * @param title the title of the menu item annotation
    * @return the translated title
    */
   public static String getMainMenueTitle(final String title) {
-    return switch(title) {
+    return switch (title) {
       case "Employees" -> MessageKeys.EMPLOYEES.getTranslation();
       case "Work models" -> MessageKeys.WORK_MODELS.getTranslation();
       case "Vacations" -> MessageKeys.VACATIONS.getTranslation();
@@ -129,17 +131,15 @@ public enum MessageKeys {
     };
   }
 
-  @Nonnull
   public String key() {
     return key;
   }
 
-  @Nonnull
   public String getTranslation() {
     return Messages.get(this);
   }
 
-  public String getTranslation(@Nonnull final Object... arg) {
-   return Messages.get(this, arg);
+  public String getTranslation(final Object... arg) {
+    return Messages.get(this, arg);
   }
 }

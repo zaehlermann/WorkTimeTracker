@@ -22,8 +22,8 @@ import de.zaehlermann.timetracker.manager.ui.components.SaveButton;
 import de.zaehlermann.timetracker.model.Correction;
 import de.zaehlermann.timetracker.service.CorrectionService;
 import de.zaehlermann.timetracker.service.JournalService;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+import org.eclipse.jdt.annotation.NonNull;
 
 import java.io.Serial;
 import java.time.LocalDate;
@@ -94,7 +94,7 @@ public class CorrectionTimesView extends Main {
     grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
   }
 
-  @Nonnull
+  @NonNull
   private FormLayout createForm() {
     final Button saveButton = new SaveButton(event -> saveAbsence());
     final Button deleteButton = new DeleteButton(event -> deleteAbsence());

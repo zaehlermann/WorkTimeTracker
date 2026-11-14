@@ -2,16 +2,15 @@ package de.zaehlermann.timetracker.model;
 
 import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
-
-import static java.util.Objects.requireNonNull;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import static java.util.Objects.requireNonNull;
 
 public class WorkModel implements AbstractCsvEntity<WorkModel> {
 
@@ -31,8 +30,8 @@ public class WorkModel implements AbstractCsvEntity<WorkModel> {
   public final int breaktimeADayInMin;
   public final int initialHours;
 
-  public WorkModel(@Nonnull final String employeeId,
-                   @Nonnull final LocalDate validFrom,
+  public WorkModel(@NonNull final String employeeId,
+                   @NonNull final LocalDate validFrom,
                    @Nullable final LocalDate validUntil,
                    final int worktimeADayInMin,
                    final int breaktimeADayInMin,
@@ -50,12 +49,12 @@ public class WorkModel implements AbstractCsvEntity<WorkModel> {
     return worktimeADayInMin + breaktimeADayInMin;
   }
 
-  @Nonnull
+  @NonNull
   public String getEmployeeId() {
     return employeeId;
   }
 
-  @Nonnull
+  @NonNull
   public LocalDate getValidFrom() {
     return validFrom;
   }
@@ -73,7 +72,7 @@ public class WorkModel implements AbstractCsvEntity<WorkModel> {
     return breaktimeADayInMin;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String toCsvLine() {
     return employeeId + ";" +
@@ -85,13 +84,13 @@ public class WorkModel implements AbstractCsvEntity<WorkModel> {
       System.lineSeparator();
   }
 
-  public boolean isInEffectOnDay(@Nonnull final LocalDate day) {
+  public boolean isInEffectOnDay(@NonNull final LocalDate day) {
     return validFrom.isEqual(day) || validFrom.isBefore(day) &&
       (validUntil == null || validUntil.isEqual(day) || validUntil.isAfter(day));
   }
 
-  @Nonnull
-  public static WorkModel fromCsvLine(@Nonnull final String csvLine) {
+  @NonNull
+  public static WorkModel fromCsvLine(@NonNull final String csvLine) {
     final String[] split = csvLine.split(";", -1);
     final String employeeId = split[0];
     final LocalDate validFrom = LocalDate.parse(split[1]);
@@ -113,7 +112,7 @@ public class WorkModel implements AbstractCsvEntity<WorkModel> {
     return Objects.hash(employeeId, validFrom);
   }
 
-  @Nonnull
+  @NonNull
   public List<JournalSummaryItem> getSummaryItems() {
     return List.of(
       new JournalSummaryItem(Messages.get(MessageKeys.DAILY_WORKTIME), LocalTime.ofSecondOfDay(getWorktimeADayInMin() * 60L).toString() + "h"),

@@ -1,16 +1,15 @@
 package de.zaehlermann.timetracker.repository;
 
+import de.zaehlermann.timetracker.globals.DefaultDirs;
+import de.zaehlermann.timetracker.model.Absence;
+import org.eclipse.jdt.annotation.NonNull;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-
-import de.zaehlermann.timetracker.globals.DefaultDirs;
-import de.zaehlermann.timetracker.model.Absence;
 
 public class AbsenceRepository extends AbstractCsvRepository {
 
@@ -21,23 +20,23 @@ public class AbsenceRepository extends AbstractCsvRepository {
     }
   }
 
-  public void appendToFile(@Nonnull final Absence absence) {
+  public void appendToFile(@NonNull final Absence absence) {
     appendToFile(absence.toCsvLine(), getFilePath());
   }
 
-  public void saveToFile(@Nonnull final List<Absence> absences) {
+  public void saveToFile(@NonNull final List<Absence> absences) {
     final Path filePath = getFilePath();
     saveToFile(Absence.HEADER_LINE + System.lineSeparator(), filePath);
     absences.forEach(this::appendToFile);
   }
 
-  @Nonnull
+  @NonNull
   private Path getFilePath() {
     return Path.of(DefaultDirs.EMPLOYEE_DIR, "absence.csv");
   }
 
-  @Nonnull
-  public List<Absence> findAbsencesByEmployeeId(@Nonnull final String employeeId) {
+  @NonNull
+  public List<Absence> findAbsencesByEmployeeId(@NonNull final String employeeId) {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
       return lines
@@ -52,7 +51,7 @@ public class AbsenceRepository extends AbstractCsvRepository {
     }
   }
 
-  @Nonnull
+  @NonNull
   public List<Absence> findAll() {
     final Path filePath = getFilePath();
     try(final Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {

@@ -1,10 +1,10 @@
 package de.zaehlermann.timetracker.model;
 
-import javax.annotation.Nonnull;
+import org.eclipse.jdt.annotation.NonNull;
 
 public interface AbstractCsvEntity<T> {
 
-  @Nonnull
+  @NonNull
   String toCsvLine();
 
 }
