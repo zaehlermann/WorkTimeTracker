@@ -38,6 +38,7 @@ public enum MessageKeys {
   TIME_JOURNAL_VALUE("time.journal.value"),
   TIME_JOURNAL_DOWNLOAD("time.journal.download"),
   TIME_JOURNAL_DOWNLOAD_PDF("time.journal.download.pdf"),
+  TIME_JOURNAL_DOWNLOAD_PDF2("time.journal.download.pdf2"),
   TIME_JOURNAL_DOWNLOAD_TXT("time.journal.download.txt"),
   TIME_JOURNAL_DOWNLOAD_CSV("time.journal.download.csv"),
   TIME_JOURNAL_DOWNLOAD_FULL_BACKUP("time.journal.download.full_backup"),
@@ -52,6 +53,7 @@ public enum MessageKeys {
   TIME_JOURNAL_CORRECTION("time.journal.correction"),
   TIME_JOURNAL_HOURS("time.journal.hours"),
   TIME_JOURNAL_SALDO("time.journal.saldo"),
+  TIME_JOURNAL_TOTAL_DAYS("time.journal.total"),
 
   WORKDAY_DATE("workday.date"),
   WORKDAY_WEEKDAY("workday.weekday"),

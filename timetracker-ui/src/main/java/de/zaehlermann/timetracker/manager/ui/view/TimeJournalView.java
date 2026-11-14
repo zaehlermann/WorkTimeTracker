@@ -129,7 +129,7 @@ public class TimeJournalView extends Main {
     workdayGrid.addColumn(Workday::getDay)
       .setKey(COLUMN_DATE)
       .setHeader(MessageKeys.TIME_JOURNAL_DATE.getTranslation())
-      .setFooter("Total Days:");
+      .setFooter(MessageKeys.TIME_JOURNAL_TOTAL_DAYS.getTranslation());
     workdayGrid.addColumn(Workday::getWeekDayName)
       .setKey(COLUMN_WEEKDAY)
       .setHeader(MessageKeys.TIME_JOURNAL_WEEKDAY.getTranslation())
@@ -179,7 +179,7 @@ public class TimeJournalView extends Main {
     final Anchor downloadJournalPdf1 = new Anchor(downloadPdf(ALL_DETAILS, selectEmployee, selectYear, selectMonth),
       MessageKeys.TIME_JOURNAL_DOWNLOAD_PDF.getTranslation());
     final Anchor downloadJournalPdf2 = new Anchor(downloadPdf(MONTHLY_HOURS_ONLY, selectEmployee, selectYear, selectMonth),
-      MessageKeys.TIME_JOURNAL_DOWNLOAD_PDF.getTranslation());
+      MessageKeys.TIME_JOURNAL_DOWNLOAD_PDF2.getTranslation());
     final Anchor downloadJournalTxt = new Anchor(downloadTxt(selectEmployee, selectYear, selectMonth),
       MessageKeys.TIME_JOURNAL_DOWNLOAD_TXT.getTranslation());
     final Anchor downloadJournalCsv = new Anchor(downloadCsv(selectEmployee, selectYear, selectMonth),
