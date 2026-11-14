@@ -1,25 +1,24 @@
 package de.zaehlermann.timetracker.service;
 
+import de.zaehlermann.timetracker.model.Absence;
+import de.zaehlermann.timetracker.repository.AbsenceRepository;
+import org.eclipse.jdt.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import de.zaehlermann.timetracker.model.Absence;
-import de.zaehlermann.timetracker.repository.AbsenceRepository;
 
 public class AbsenceService {
 
   private static final AbsenceRepository ABSENCE_REPOSITORY = new AbsenceRepository();
 
-  @Nonnull
+  @NonNull
   public List<Absence> findAll() {
     return ABSENCE_REPOSITORY.findAll();
   }
 
-  @Nonnull
-  public List<Absence> delete(@Nonnull final Set<Absence> selected) {
+  @NonNull
+  public List<Absence> delete(@NonNull final Set<Absence> selected) {
     final List<Absence> existing = ABSENCE_REPOSITORY.findAll();
     final List<Absence> toModified = new ArrayList<>(existing);
     toModified.removeAll(selected);
@@ -27,7 +26,7 @@ public class AbsenceService {
     return toModified;
   }
 
-  public void save(@Nonnull final Absence newAbsence) {
+  public void save(@NonNull final Absence newAbsence) {
     ABSENCE_REPOSITORY.appendToFile(newAbsence);
   }
 }

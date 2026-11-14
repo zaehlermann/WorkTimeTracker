@@ -1,24 +1,23 @@
 package de.zaehlermann.timetracker.service;
 
+import de.zaehlermann.timetracker.model.Correction;
+import de.zaehlermann.timetracker.repository.CorrectionRepository;
+import org.eclipse.jdt.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import de.zaehlermann.timetracker.model.Correction;
-import de.zaehlermann.timetracker.repository.CorrectionRepository;
 
 public class CorrectionService {
 
   private static final CorrectionRepository CORRECTION_REPOSITORY = new CorrectionRepository();
 
-  public void save(@Nonnull final Correction correction) {
+  public void save(@NonNull final Correction correction) {
     CORRECTION_REPOSITORY.appendToFile(correction);
   }
 
-  @Nonnull
-  public List<Correction> delete(@Nonnull final Set<Correction> selected) {
+  @NonNull
+  public List<Correction> delete(@NonNull final Set<Correction> selected) {
     final List<Correction> existing = CORRECTION_REPOSITORY.findAll();
     final List<Correction> toModified = new ArrayList<>(existing);
     toModified.removeAll(selected);
@@ -26,7 +25,7 @@ public class CorrectionService {
     return toModified;
   }
 
-  @Nonnull
+  @NonNull
   public List<Correction> findAll() {
     return CORRECTION_REPOSITORY.findAll();
   }

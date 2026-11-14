@@ -1,14 +1,14 @@
 package de.zaehlermann.timetracker.repository;
 
+import de.zaehlermann.timetracker.globals.DefaultDirs;
+import de.zaehlermann.timetracker.model.Employee;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
-
-import de.zaehlermann.timetracker.globals.DefaultDirs;
-import de.zaehlermann.timetracker.model.Employee;
 
 public class EmployeeRepository extends AbstractCsvRepository {
 

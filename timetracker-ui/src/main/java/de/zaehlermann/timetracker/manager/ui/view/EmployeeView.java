@@ -24,8 +24,8 @@ import de.zaehlermann.timetracker.model.Employee;
 import de.zaehlermann.timetracker.service.EmployeeService;
 import de.zaehlermann.timetracker.service.RfidScanService;
 import de.zaehlermann.timetracker.validate.ValidateUtils;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+import org.eclipse.jdt.annotation.NonNull;
 
 import java.io.Serial;
 import java.util.List;
@@ -104,7 +104,7 @@ public class EmployeeView extends Main {
     Notification.show("Employee added").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
   }
 
-  private void clearTextFields(@Nonnull final List<? extends HasValue<?, String>> textFields) {
+  private void clearTextFields(@NonNull final List<? extends HasValue<?, String>> textFields) {
     textFields.forEach(HasValue::clear);
     for(final HasValue<?, String> textField : textFields) {
       if(textField instanceof final HasValidationProperties hasValidationProperties) {

@@ -1,10 +1,10 @@
 package de.zaehlermann.timetracker.model;
 
-import static java.util.Objects.requireNonNull;
+import org.eclipse.jdt.annotation.NonNull;
 
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A simple key-value pair used in journal summaries.
@@ -14,7 +14,7 @@ public class JournalSummaryItem {
   public final String key;
   public final String value;
 
-  public JournalSummaryItem(@Nonnull final String key, @Nonnull final String value) {
+  public JournalSummaryItem(@NonNull final String key, @NonNull final String value) {
     this.key = requireNonNull(key);
     this.value = requireNonNull(value);
   }
@@ -30,21 +30,21 @@ public class JournalSummaryItem {
     return Objects.hashCode(key);
   }
 
-  @Nonnull
+  @NonNull
   public String getKey() {
     return key;
   }
 
-  @Nonnull
+  @NonNull
   public String getValue() {
     return value;
   }
 
-  @Nonnull
+  @NonNull
   public String toTxtLine() {
     return key + ": " + value + System.lineSeparator();
   }
-  @Nonnull
+  @NonNull
   public String toCsvLine() {
     return key + ";" + value + System.lineSeparator();
   }

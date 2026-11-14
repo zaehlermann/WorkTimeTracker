@@ -1,5 +1,6 @@
 package de.zaehlermann.timetracker.pdf.builder;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.openpdf.text.Document;
 import org.openpdf.text.DocumentException;
 import org.openpdf.text.Font;
@@ -7,7 +8,6 @@ import org.openpdf.text.FontFactory;
 import org.openpdf.text.Paragraph;
 import org.openpdf.text.pdf.PdfWriter;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,44 +20,44 @@ public class PdfBuilder {
   private final Document document;
   private final PdfWriter writer;
 
-  public PdfBuilder(@Nonnull final String filePath) throws FileNotFoundException {
+  public PdfBuilder(@NonNull final String filePath) throws FileNotFoundException {
     this.document = new Document();
     this.writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
     this.writer.setPageEvent(new FooterEvent());
   }
 
-  public PdfBuilder(@Nonnull final File file) throws FileNotFoundException {
+  public PdfBuilder(@NonNull final File file) throws FileNotFoundException {
     this.document = new Document();
     this.writer = PdfWriter.getInstance(document, new FileOutputStream(file));
     this.writer.setPageEvent(new FooterEvent());
   }
 
-  @Nonnull
-  public PdfBuilder withTitle(@Nonnull final String title) {
+  @NonNull
+  public PdfBuilder withTitle(@NonNull final String title) {
     document.addTitle(title);
     return this;
   }
 
-  @Nonnull
-  public PdfBuilder withAuthor(@Nonnull final String author) {
+  @NonNull
+  public PdfBuilder withAuthor(@NonNull final String author) {
     document.addAuthor(author);
     return this;
   }
 
-  @Nonnull
+  @NonNull
   public PdfBuilder open() {
     document.open();
     return this;
   }
 
-  @Nonnull
-  public PdfBuilder addParagraph(@Nonnull final String text) throws DocumentException {
+  @NonNull
+  public PdfBuilder addParagraph(@NonNull final String text) throws DocumentException {
     document.add(new Paragraph(text, FONT_BODY));
     return this;
   }
 
-  @Nonnull
-  public PdfBuilder addTable(@Nonnull final PdfTable pdfTable) throws DocumentException {
+  @NonNull
+  public PdfBuilder addTable(@NonNull final PdfTable pdfTable) throws DocumentException {
     document.add(pdfTable.build());
     return this;
   }

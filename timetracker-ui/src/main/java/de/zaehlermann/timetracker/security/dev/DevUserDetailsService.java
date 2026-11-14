@@ -1,6 +1,6 @@
 package de.zaehlermann.timetracker.security.dev;
 
-import jakarta.annotation.Nonnull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,6 +48,7 @@ import java.util.Optional;
  * @see DevUser The development user class stored in this service
  * @see UserDetailsService Spring Security's interface for loading user authentication details
  */
+@NonNullByDefault
 final class DevUserDetailsService implements UserDetailsService {
 
   private final Map<String, UserDetails> userByUsername;
@@ -65,7 +66,7 @@ final class DevUserDetailsService implements UserDetailsService {
   }
 
   @Override
-  public UserDetails loadUserByUsername(@Nonnull final String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
     return Optional.ofNullable(userByUsername.get(username))
       .orElseThrow(() -> new UsernameNotFoundException(username));
   }

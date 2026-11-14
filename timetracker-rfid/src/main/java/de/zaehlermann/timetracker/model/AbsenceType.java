@@ -1,14 +1,13 @@
 package de.zaehlermann.timetracker.model;
 
 import de.zaehlermann.timetracker.i18n.Messages;
-
-import static java.util.Arrays.asList;
+import org.eclipse.jdt.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import static java.util.Arrays.asList;
 
 public enum AbsenceType {
 
@@ -47,32 +46,32 @@ public enum AbsenceType {
    */
   COMPENSATION_TIME("absencetype.compensation_time","CH");
 
-  @Nonnull
+  @NonNull
   private final String messageKey;
-  @Nonnull
+  @NonNull
   private final String printValueShort;
 
   AbsenceType(
-    @Nonnull final String messageKey,
-    @Nonnull final String printValueShort) {
+    @NonNull final String messageKey,
+    @NonNull final String printValueShort) {
     this.messageKey = messageKey;
     this.printValueShort = printValueShort;
 
   }
 
-  @Nonnull
+  @NonNull
   public static List<AbsenceType> getSelectableValues() {
     final List<AbsenceType> list = new ArrayList<>(asList(SICKNESS, VACATION, ALLOWED_ABSENCE, PUBLIC_HOLIDAY, COMPANY_HOLIDAY));
     list.sort(Comparator.comparing(Enum::name));
     return list;
   }
 
-  @Nonnull
+  @NonNull
   public String getPrintValueShort() {
     return printValueShort;
   }
 
-  @Nonnull
+  @NonNull
   public String getPrintValueLong() {
     return Messages.get(this.messageKey);
   }

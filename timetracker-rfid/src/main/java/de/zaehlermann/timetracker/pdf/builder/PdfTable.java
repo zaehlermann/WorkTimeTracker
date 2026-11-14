@@ -1,5 +1,6 @@
 package de.zaehlermann.timetracker.pdf.builder;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.openpdf.text.Element;
 import org.openpdf.text.Font;
 import org.openpdf.text.FontFactory;
@@ -7,7 +8,6 @@ import org.openpdf.text.Phrase;
 import org.openpdf.text.pdf.PdfPCell;
 import org.openpdf.text.pdf.PdfPTable;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.util.List;
 
@@ -26,22 +26,13 @@ public class PdfTable {
     this.table.getDefaultCell().setBorderWidth(0.1f);
   }
 
-  @Nonnull
-  public PdfTable setColumnWidths(@Nonnull final float... widths) {
-    try {
-      table.setWidths(widths);
-    } catch (final Exception ignored) {
-    }
-    return this;
-  }
-
-  @Nonnull
-  public PdfTable addHeader(@Nonnull final String... headers) {
+  @NonNull
+  public PdfTable addHeader(@NonNull final String... headers) {
     return addHeader(asList(headers));
   }
 
-  @Nonnull
-  public PdfTable addHeader(@Nonnull final List<String> headers) {
+  @NonNull
+  public PdfTable addHeader(@NonNull final List<String> headers) {
     for (final String header : headers) {
       final PdfPCell cell = new PdfPCell(new Phrase(header, FONT_TABLE_HEADER));
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -53,13 +44,13 @@ public class PdfTable {
     return this;
   }
 
-  @Nonnull
-  public PdfTable addRow(@Nonnull final String... cells) {
+  @NonNull
+  public PdfTable addRow(@NonNull final String... cells) {
     return addRow(asList(cells));
   }
 
-  @Nonnull
-  public PdfTable addRow(@Nonnull final List<String> cells) {
+  @NonNull
+  public PdfTable addRow(@NonNull final List<String> cells) {
     for (final String cellText : cells) {
       final PdfPCell cell = new PdfPCell(new Phrase(cellText, FONT_TABLE_BODY));
       //cell.setPadding(5);
@@ -69,8 +60,8 @@ public class PdfTable {
     return this;
   }
 
-  @Nonnull
-  public PdfTable addRows(@Nonnull final List<List<String>> rows) {
+  @NonNull
+  public PdfTable addRows(@NonNull final List<List<String>> rows) {
     rows.forEach(this::addRow);
     return this;
   }

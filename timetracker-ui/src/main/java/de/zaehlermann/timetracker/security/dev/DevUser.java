@@ -3,6 +3,7 @@ package de.zaehlermann.timetracker.security.dev;
 import de.zaehlermann.timetracker.security.AppUserInfo;
 import de.zaehlermann.timetracker.security.AppUserPrincipal;
 import de.zaehlermann.timetracker.security.domain.UserId;
+import org.eclipse.jdt.annotation.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -11,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.annotation.Nonnull;
 import java.io.Serial;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -70,13 +70,13 @@ final class DevUser implements AppUserPrincipal, UserDetails {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public AppUserInfo getAppUser() {
     return appUser;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return authorities;
   }
@@ -87,7 +87,7 @@ final class DevUser implements AppUserPrincipal, UserDetails {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String getUsername() {
     return appUser.getPreferredUsername();
   }
@@ -202,46 +202,6 @@ final class DevUser implements AppUserPrincipal, UserDetails {
      */
     public DevUserBuilder email(@Nullable final String email) {
       this.email = email;
-      return this;
-    }
-
-    /**
-     * Sets the user's profile URL.
-     * @param profileUrl the profile URL
-     * @return this builder for method chaining
-     */
-    public DevUserBuilder profileUrl(@Nullable final String profileUrl) {
-      this.profileUrl = profileUrl;
-      return this;
-    }
-
-    /**
-     * Sets the user's profile picture URL.
-     * @param pictureUrl the picture URL
-     * @return this builder for method chaining
-     */
-    public DevUserBuilder pictureUrl(@Nullable final String pictureUrl) {
-      this.pictureUrl = pictureUrl;
-      return this;
-    }
-
-    /**
-     * Sets the user's time zone.
-     * @param zoneInfo the time zone (never {@code null})
-     * @return this builder for method chaining
-     */
-    public DevUserBuilder zoneInfo(final ZoneId zoneInfo) {
-      this.zoneInfo = requireNonNull(zoneInfo);
-      return this;
-    }
-
-    /**
-     * Sets the user's locale.
-     * @param locale the locale (never {@code null})
-     * @return this builder for method chaining
-     */
-    public DevUserBuilder locale(final Locale locale) {
-      this.locale = requireNonNull(locale);
       return this;
     }
 

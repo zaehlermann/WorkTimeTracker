@@ -16,9 +16,9 @@ import de.zaehlermann.timetracker.repository.JournalRepository;
 import de.zaehlermann.timetracker.repository.RfidScanRepository;
 import de.zaehlermann.timetracker.repository.VacationRepository;
 import de.zaehlermann.timetracker.repository.WorkModelRepository;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.List;
 
@@ -34,8 +34,8 @@ public class JournalService {
   private static final WorkModelRepository WORK_MODEL_REPOSITORY = new WorkModelRepository();
   private static final VacationRepository VACATION_REPOSITORY = new VacationRepository();
 
-  @Nonnull
-  public String createAndSaveJournalTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
+  @NonNull
+  public String createAndSaveJournalTxt(@NonNull final String employeeId, @NonNull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalTxt(ALL_DETAILS);
     final String selectedRangeDesc = journal.printSelectedRange();
@@ -43,26 +43,26 @@ public class JournalService {
     return journalTxt;
   }
 
-  @Nonnull
-  public File downloadCsv(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
+  @NonNull
+  public File downloadCsv(@NonNull final String employeeId, @NonNull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalCsv(ALL_DETAILS);
     final String selectedRangeDesc = journal.printSelectedRange();
     return JOURNAL_REPOSITORY.saveToCsvFile(employeeId, selectedRangeDesc, journalTxt);
   }
 
-  @Nonnull
-  public File downloadTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
+  @NonNull
+  public File downloadTxt(@NonNull final String employeeId, @NonNull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String journalTxt = journal.printJournalTxt(ALL_DETAILS);
     final String selectedRangeDesc = journal.printSelectedRange();
     return JOURNAL_REPOSITORY.saveToTxtFile(employeeId, selectedRangeDesc, journalTxt);
   }
 
-  @Nonnull
-  public File downloadPdf(@Nonnull final JournalSummaryType journalSummaryType,
-                          @Nonnull final String employeeId,
-                          @Nonnull final Integer year,
+  @NonNull
+  public File downloadPdf(@NonNull final JournalSummaryType journalSummaryType,
+                          @NonNull final String employeeId,
+                          @NonNull final Integer year,
                           @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String selectedRangeDesc = journal.printSelectedRange();
@@ -71,8 +71,8 @@ public class JournalService {
     return pdfFile;
   }
 
-  @Nonnull
-  public Journal createJournal(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
+  @NonNull
+  public Journal createJournal(@NonNull final String employeeId, @NonNull final Integer year, @Nullable final Integer month) {
     final Employee employee = EMPLOYEE_REPOSITORY.findEmployeeByEmployeeId(employeeId);
     final List<WorkModel> workModels = WORK_MODEL_REPOSITORY.findAllWorkModelsByEmployeeId(employeeId);
     final List<Vacation> vacations = VACATION_REPOSITORY.findVacationsByEmployeeId(employeeId);
@@ -82,14 +82,14 @@ public class JournalService {
     return new Journal(employee, workModels, vacations, absences, corrections, allScans, year, month);
   }
 
-  @Nonnull
+  @NonNull
   public List<String> getAllEmployeeNames() {
     return EMPLOYEE_REPOSITORY.findAll().stream()
       .map(Employee::getEmployeeId)
       .toList();
   }
 
-  @Nonnull
+  @NonNull
   public File downloadBackup() {
     return BackupRepository.backupRecordsDirectory();
   }

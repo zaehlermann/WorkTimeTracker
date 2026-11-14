@@ -4,9 +4,9 @@ import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.pdf.builder.PdfBuilder;
 import de.zaehlermann.timetracker.pdf.builder.PdfTable;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import static de.zaehlermann.timetracker.globals.TimeFormat.formatDurationHHHmm;
 import static de.zaehlermann.timetracker.globals.TimeFormat.formatHoursHHHmm;
 
+@NonNullByDefault
 public class Journal {
 
   private final Employee employee;
@@ -35,18 +36,17 @@ public class Journal {
   private final List<WorkModel> workModels;
   private final List<Vacation> vacations;
   private final List<Absence> absences;
-  @Nonnull
   private final Integer selectedYear;
   @Nullable
   private final Integer selectedMonth;
 
-  public Journal(@Nonnull final Employee employee,
-                 @Nonnull final List<WorkModel> workModels,
-                 @Nonnull final List<Vacation> vacations,
-                 @Nonnull final List<Absence> absences,
-                 @Nonnull final List<Correction> corrections,
-                 @Nonnull final List<RfidScan> allScans,
-                 @Nonnull final Integer selectedYear,
+  public Journal(final Employee employee,
+                 final List<WorkModel> workModels,
+                 final List<Vacation> vacations,
+                 final List<Absence> absences,
+                 final List<Correction> corrections,
+                 final List<RfidScan> allScans,
+                 final Integer selectedYear,
                  @Nullable final Integer selectedMonth) {
     this.employee = employee;
     this.workModels = workModels;
@@ -74,11 +74,10 @@ public class Journal {
       .toList();
   }
 
-  @Nonnull
-  private static Workday createWorkDay(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
-                                       @Nonnull final List<Absence> absences,
-                                       @Nonnull final Map<LocalDate, List<Correction>> correctionsByDay,
-                                       @Nonnull final List<WorkModel> workModels) {
+  private static Workday createWorkDay(final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
+                                       final List<Absence> absences,
+                                       final Map<LocalDate, List<Correction>> correctionsByDay,
+                                       final List<WorkModel> workModels) {
 
     final LocalDate day = dailyScans.getKey();
 
@@ -99,14 +98,14 @@ public class Journal {
   }
 
   @Nullable
-  private static Correction getCorrectionOfTheDay(@Nonnull final Map<LocalDate, List<Correction>> correctionsByDay,
-                                                  @Nonnull final LocalDate day) {
+  private static Correction getCorrectionOfTheDay(final Map<LocalDate, List<Correction>> correctionsByDay,
+                                                  final LocalDate day) {
     final List<Correction> dailyCorrection = correctionsByDay.getOrDefault(day, List.of());
     return dailyCorrection.isEmpty() ? null : dailyCorrection.getLast();
   }
 
   @Nullable
-  private static LocalTime getLogin(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
+  private static LocalTime getLogin(final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
                                     @Nullable final Correction correctionOfTheDay) {
 
     if (correctionOfTheDay != null && correctionOfTheDay.getLogin() != null) {
@@ -116,7 +115,7 @@ public class Journal {
   }
 
   @Nullable
-  private static LocalTime getLogout(@Nonnull final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
+  private static LocalTime getLogout(final Map.Entry<LocalDate, List<RfidScan>> dailyScans,
                                      @Nullable final Correction correctionOfTheDay) {
 
     if (correctionOfTheDay != null && correctionOfTheDay.getLogout() != null) {
@@ -125,7 +124,6 @@ public class Journal {
     return dailyScans.getValue().isEmpty() ? null : dailyScans.getValue().getLast().getScanTime();
   }
 
-  @Nonnull
   public List<JournalSummaryItem> getEmployeeWorkModelSummaryItems() {
     final List<JournalSummaryItem> items = new ArrayList<>(getEmployeeSummaryItems());
     items.addAll(getLastWorkModelSummaryItems());
@@ -133,12 +131,10 @@ public class Journal {
     return items;
   }
 
-  @Nonnull
   public List<JournalSummaryItem> getEmployeeSummaryItems() {
     return employee.getSummaryItems();
   }
 
-  @Nonnull
   public List<JournalSummaryItem> getLastWorkModelSummaryItems() {
     return workModels.getLast().getSummaryItems();
   }
@@ -150,12 +146,11 @@ public class Journal {
       .collect(Collectors.toList());
   }
 
-  @Nonnull
-  private static String getRangeDesc(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
+  private static String getRangeDesc(final LocalDate start, final LocalDate end) {
     return MessageKeys.TIME_JOURNALS_SALDO_BETWEEN.getTranslation(start, end);
   }
 
-  public void createJournalPdf(@Nonnull final File file, @Nonnull final JournalSummaryType journalSummaryType) {
+  public void createJournalPdf(final File file, final JournalSummaryType journalSummaryType) {
     final List<List<String>> pdfTableRows = workdays.stream()
       .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
       .map(Workday::toPdfRow)
@@ -175,7 +170,6 @@ public class Journal {
 
   }
 
-  @Nonnull
   public String printJournalTxt(final JournalSummaryType journalSummaryType) {
     return printJournalHeader(journalSummaryType) +
       Workday.HEADER_LINE_TXT + System.lineSeparator() +
@@ -185,7 +179,6 @@ public class Journal {
         .collect(Collectors.joining());
   }
 
-  @Nonnull
   public String printJournalCsv(final JournalSummaryType journalSummaryType) {
     return printJournalHeader(journalSummaryType) +
       Workday.HEADER_LINE_CSV + System.lineSeparator() +
@@ -195,7 +188,6 @@ public class Journal {
         .collect(Collectors.joining());
   }
 
-  @Nonnull
   private String printJournalHeader(final JournalSummaryType journalSummaryType) {
     return "# " + Messages.get(MessageKeys.EMPLOYEE_SUMMARY) + System.lineSeparator() +
       getEmployeeWorkModelSummaryItems().stream()
@@ -210,7 +202,6 @@ public class Journal {
       "# " + Messages.get(MessageKeys.TIME_JOURNAL_DETAILS) + System.lineSeparator();
   }
 
-  @Nonnull
   public List<JournalSummaryItem> getJournalSummaryItems(final JournalSummaryType journalSummaryType) {
     final LocalDate today = LocalDate.now(ZoneId.systemDefault());
     final LocalDate firstWorkingDay = workdays.getFirst().getDay();
@@ -257,15 +248,13 @@ public class Journal {
     return String.valueOf(vacationRest);
   }
 
-  @Nonnull
   private BigDecimal calcInitialHours() {
     return workModels.stream()
       .map(w -> BigDecimal.valueOf(w.getInitialHours()))
       .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
-  @Nonnull
-  private String calcSelectedHours(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
+  private String calcSelectedHours(final Integer selectedYear, @Nullable final Integer selectedMonth) {
     final long sum = workdays.stream()
       .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
       .map(workday -> workday.getHoursDayInPlace().toMinutes())
@@ -274,16 +263,14 @@ public class Journal {
     return formatDurationHHHmm(Duration.of(sum, ChronoUnit.MINUTES));
   }
 
-  @Nonnull
-  private BigDecimal calcSaldoInRange(@Nonnull final LocalDate start, @Nonnull final LocalDate end) {
+  private BigDecimal calcSaldoInRange(final LocalDate start, final LocalDate end) {
     return workdays.stream()
       .filter(w -> w.isInDateRange(start, end))
       .map(Workday::getSaldo)
       .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
-  @Nonnull
-  private String calcSelectedSaldo(@Nonnull final Integer selectedYear, @Nullable final Integer selectedMonth) {
+  private String calcSelectedSaldo(final Integer selectedYear, @Nullable final Integer selectedMonth) {
     final BigDecimal totalSaldo = workdays.stream()
       .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
       .map(Workday::getSaldo)
@@ -291,7 +278,6 @@ public class Journal {
     return formatHoursHHHmm(totalSaldo);
   }
 
-  @Nonnull
   public List<Workday> getSelectedWorkdays() {
     return workdays.stream()
       .filter(w -> w.isInSelectedRange(selectedYear, selectedMonth))
@@ -304,12 +290,10 @@ public class Journal {
       .count();
   }
 
-  @Nonnull
   public String getSelectedTotalSaldo() {
     return calcSelectedSaldo(selectedYear, selectedMonth);
   }
 
-  @Nonnull
   public String getSelectedTotalHours() {
     return calcSelectedHours(selectedYear, selectedMonth);
   }
@@ -342,7 +326,6 @@ public class Journal {
       .count();
   }
 
-  @Nonnull
   public String printSelectedRange() {
     return selectedYear + (selectedMonth == null ? "" : "-" + Month.of(selectedMonth).getValue());
   }

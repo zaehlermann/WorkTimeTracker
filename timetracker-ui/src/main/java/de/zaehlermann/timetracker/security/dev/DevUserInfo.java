@@ -2,9 +2,9 @@ package de.zaehlermann.timetracker.security.dev;
 
 import de.zaehlermann.timetracker.security.AppUserInfo;
 import de.zaehlermann.timetracker.security.domain.UserId;
+import org.eclipse.jdt.annotation.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.time.ZoneId;
 import java.util.Locale;
 
@@ -44,19 +44,19 @@ record DevUserInfo(UserId userId, String preferredUsername, String fullName, @Nu
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public UserId getUserId() {
     return userId;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String getPreferredUsername() {
     return preferredUsername;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String getFullName() {
     return fullName;
   }
@@ -80,13 +80,13 @@ record DevUserInfo(UserId userId, String preferredUsername, String fullName, @Nu
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public ZoneId getZoneId() {
     return zoneId;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Locale getLocale() {
     return locale;
   }

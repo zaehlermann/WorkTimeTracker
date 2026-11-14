@@ -1,17 +1,17 @@
 package de.zaehlermann.timetracker.repository;
 
-import javax.annotation.Nonnull;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
+import org.eclipse.jdt.annotation.NonNull;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public abstract class AbstractCsvRepository {
 
-  public static void saveToFile(@Nonnull final String fileContent, @Nonnull final Path filePath) {
+  public static void saveToFile(@NonNull final String fileContent, @NonNull final Path filePath) {
     filePath.getParent().toFile().mkdirs();
     try {
       Files.writeString(filePath, fileContent, UTF_8,
@@ -22,7 +22,7 @@ public abstract class AbstractCsvRepository {
     }
   }
 
-  public void appendToFile(@Nonnull final String fileContent, @Nonnull final Path filePath) {
+  public void appendToFile(@NonNull final String fileContent, @NonNull final Path filePath) {
     try {
       Files.writeString(filePath, fileContent, UTF_8,
         StandardOpenOption.CREATE,

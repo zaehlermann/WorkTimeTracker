@@ -1,13 +1,12 @@
 package de.zaehlermann.timetracker.model;
 
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.StringUtils;
 
 public class Correction implements AbstractCsvEntity<Correction> {
 
@@ -17,18 +16,18 @@ public class Correction implements AbstractCsvEntity<Correction> {
   private final LocalTime login;
   private final LocalTime logout;
 
-  public Correction(@Nonnull final String employeeId,
-                    @Nonnull final LocalDate workday,
+  public Correction(@NonNull final String employeeId,
+                    @NonNull final LocalDate workday,
                     @Nullable final LocalTime login,
-                    @Nonnull final LocalTime logout) {
+                    @NonNull final LocalTime logout) {
     this.employeeId = employeeId;
     this.workday = workday;
     this.login = login;
     this.logout = logout;
   }
 
-  public Correction(@Nonnull final String employeeId,
-                    @Nonnull final String workday,
+  public Correction(@NonNull final String employeeId,
+                    @NonNull final String workday,
                     @Nullable final String login,
                     @Nullable final String logout) {
     this.employeeId = employeeId;
@@ -37,12 +36,12 @@ public class Correction implements AbstractCsvEntity<Correction> {
     this.logout = StringUtils.isBlank(logout) ? null : LocalTime.parse(logout);
   }
 
-  @Nonnull
+  @NonNull
   public String getEmployeeId() {
     return employeeId;
   }
 
-  @Nonnull
+  @NonNull
   public LocalDate getWorkday() {
     return workday;
   }
@@ -68,7 +67,7 @@ public class Correction implements AbstractCsvEntity<Correction> {
     return Objects.hash(employeeId, workday);
   }
 
-  @Nonnull
+  @NonNull
   public String toCsvLine() {
     return employeeId + ";" +
            workday + ";" +
@@ -76,8 +75,8 @@ public class Correction implements AbstractCsvEntity<Correction> {
            (logout == null ? "" : logout) + System.lineSeparator();
   }
 
-  @Nonnull
-  public static Correction fromCsvLine(@Nonnull final String csvLine) {
+  @NonNull
+  public static Correction fromCsvLine(@NonNull final String csvLine) {
     final String[] split = csvLine.split(";", -1);
     return new Correction(split[0], split[1], split[2], split[3]);
   }
