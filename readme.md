@@ -16,8 +16,8 @@ The solution contains out of two subprojects:
 
 ## Sub-projects
 
-* [timetracker-rfid](timetracker-rfid/README.md): The RFID scanner application.
-* [timetracker-ui](timetracker-ui/README.md): The web interface for administrators.
+* [timetracker-rfid](timetracker-rfid/readme.md): The RFID scanner application.
+* [timetracker-ui](timetracker-ui/readme.md): The web interface for administrators.
 
 ## Documentation
 

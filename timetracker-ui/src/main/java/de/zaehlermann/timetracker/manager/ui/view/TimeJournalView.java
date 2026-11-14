@@ -25,6 +25,7 @@ import de.zaehlermann.timetracker.i18n.MessageKeys;
 import de.zaehlermann.timetracker.i18n.Messages;
 import de.zaehlermann.timetracker.i18n.SupportedLocales;
 import de.zaehlermann.timetracker.model.Journal;
+import de.zaehlermann.timetracker.model.JournalSummaryType;
 import de.zaehlermann.timetracker.model.JournalSummaryItem;
 import de.zaehlermann.timetracker.model.Workday;
 import de.zaehlermann.timetracker.service.JournalService;
@@ -42,6 +43,8 @@ import java.time.format.TextStyle;
 import java.util.Comparator;
 import java.util.List;
 
+import static de.zaehlermann.timetracker.model.JournalSummaryType.ALL_DETAILS;
+import static de.zaehlermann.timetracker.model.JournalSummaryType.MONTHLY_HOURS_ONLY;
 import static java.util.Arrays.asList;
 
 @Route("time-journals")
@@ -82,8 +85,8 @@ public class TimeJournalView extends Main {
     selectMonth.setEmptySelectionAllowed(true);
     selectMonth.setEmptySelectionCaption(MessageKeys.TIME_JOURNAL_ALL.getTranslation());
     selectMonth.setItemLabelGenerator(item -> item == null ?
-                                              MessageKeys.TIME_JOURNAL_ALL.getTranslation() :
-                                              Month.of(item).getDisplayName(TextStyle.FULL, SupportedLocales.getDefault()));
+      MessageKeys.TIME_JOURNAL_ALL.getTranslation() :
+      Month.of(item).getDisplayName(TextStyle.FULL, SupportedLocales.getDefault()));
     selectMonth.setItems(asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)); // select from the employee file
     selectMonth.setValue(LocalDate.now(ZoneId.systemDefault()).getMonth().getValue());
 
@@ -126,7 +129,7 @@ public class TimeJournalView extends Main {
     workdayGrid.addColumn(Workday::getDay)
       .setKey(COLUMN_DATE)
       .setHeader(MessageKeys.TIME_JOURNAL_DATE.getTranslation())
-      .setFooter("Total Days:");
+      .setFooter(MessageKeys.TIME_JOURNAL_TOTAL_DAYS.getTranslation());
     workdayGrid.addColumn(Workday::getWeekDayName)
       .setKey(COLUMN_WEEKDAY)
       .setHeader(MessageKeys.TIME_JOURNAL_WEEKDAY.getTranslation())
@@ -173,20 +176,29 @@ public class TimeJournalView extends Main {
     showJournalButton.addClickListener(
       clickEvent -> displayJournal(selectEmployee, selectYear, selectMonth, employeeSummaryGrid, journalSummaryGrid, workdayGrid));
 
-    final Anchor downloadJournalPdf = new Anchor(downloadPdf(selectEmployee, selectYear, selectMonth),
-                                                 MessageKeys.TIME_JOURNAL_DOWNLOAD_PDF.getTranslation());
+    final Anchor downloadJournalPdf1 = new Anchor(downloadPdf(ALL_DETAILS, selectEmployee, selectYear, selectMonth),
+      MessageKeys.TIME_JOURNAL_DOWNLOAD_PDF.getTranslation());
+    final Anchor downloadJournalPdf2 = new Anchor(downloadPdf(MONTHLY_HOURS_ONLY, selectEmployee, selectYear, selectMonth),
+      MessageKeys.TIME_JOURNAL_DOWNLOAD_PDF2.getTranslation());
     final Anchor downloadJournalTxt = new Anchor(downloadTxt(selectEmployee, selectYear, selectMonth),
-                                                 MessageKeys.TIME_JOURNAL_DOWNLOAD_TXT.getTranslation());
+      MessageKeys.TIME_JOURNAL_DOWNLOAD_TXT.getTranslation());
     final Anchor downloadJournalCsv = new Anchor(downloadCsv(selectEmployee, selectYear, selectMonth),
-                                                 MessageKeys.TIME_JOURNAL_DOWNLOAD_CSV.getTranslation());
+      MessageKeys.TIME_JOURNAL_DOWNLOAD_CSV.getTranslation());
     final Anchor downloadJournalBackup = new Anchor(downloadFullBackup(),
-                                                    MessageKeys.TIME_JOURNAL_DOWNLOAD_FULL_BACKUP.getTranslation());
+      MessageKeys.TIME_JOURNAL_DOWNLOAD_FULL_BACKUP.getTranslation());
 
     final FormLayout formLayout = new FormLayout(selectEmployee, selectYear, selectMonth, showJournalButton);
     final Details formDetails = new Details(MessageKeys.TIME_JOURNAL_SELECT.getTranslation(), formLayout);
     formDetails.setOpened(true);
 
-    final FormLayout downloadLayout = new FormLayout(downloadJournalPdf, downloadJournalTxt, downloadJournalCsv, downloadJournalBackup);
+    final FormLayout downloadLayout = new FormLayout(
+      downloadJournalPdf1,
+      downloadJournalPdf2,
+      downloadJournalTxt,
+      downloadJournalCsv,
+      downloadJournalBackup
+    );
+
     downloadLayout.setAutoResponsive(true);
     downloadLayout.setAutoRows(true);
     downloadLayout.setWidthFull();
@@ -204,12 +216,13 @@ public class TimeJournalView extends Main {
   }
 
   @Nonnull
-  private static DownloadHandler downloadPdf(@Nonnull final Select<String> selectEmployee,
+  private static DownloadHandler downloadPdf(final JournalSummaryType journalSummaryType,
+                                             @Nonnull final Select<String> selectEmployee,
                                              @Nonnull final Select<Integer> selectYear,
                                              @Nonnull final Select<Integer> selectMonth) {
 
     return DownloadHandler.fromInputStream((InputStreamDownloadCallback) downloadEvent -> {
-      final File file = JOURNAL_SERVICE.downloadPdf(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
+      final File file = JOURNAL_SERVICE.downloadPdf(journalSummaryType, selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
       final FileInputStream fileInputStream = new FileInputStream(file);
       return new DownloadResponse(fileInputStream, file.getName(), "application/pdf", file.length());
     });
@@ -255,7 +268,7 @@ public class TimeJournalView extends Main {
                                      @Nonnull final Grid<Workday> workdayGrid) {
 
     final boolean isValid = ValidateUtils.validateSelects(List.of(selectEmployee, selectYear));
-    if(!isValid) {
+    if (!isValid) {
       Notification.show("Please fill all required fields").addThemeVariants(NotificationVariant.LUMO_ERROR);
       return;
     }
@@ -263,7 +276,7 @@ public class TimeJournalView extends Main {
     final Journal journal = JOURNAL_SERVICE.createJournal(selectEmployee.getValue(), selectYear.getValue(), selectMonth.getValue());
     employeeSummaryGrid.setItems(journal.getEmployeeWorkModelSummaryItems());
     employeeSummaryGrid.recalculateColumnWidths();
-    journalSummaryGrid.setItems(journal.getJournalSummaryItems());
+    journalSummaryGrid.setItems(journal.getJournalSummaryItems(ALL_DETAILS));
     journalSummaryGrid.recalculateColumnWidths();
 
     workdayGrid.setItems(journal.getSelectedWorkdays());

@@ -1,15 +1,10 @@
 package de.zaehlermann.timetracker.service;
 
-import java.io.File;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import de.zaehlermann.timetracker.model.Absence;
 import de.zaehlermann.timetracker.model.Correction;
 import de.zaehlermann.timetracker.model.Employee;
 import de.zaehlermann.timetracker.model.Journal;
+import de.zaehlermann.timetracker.model.JournalSummaryType;
 import de.zaehlermann.timetracker.model.RfidScan;
 import de.zaehlermann.timetracker.model.Vacation;
 import de.zaehlermann.timetracker.model.WorkModel;
@@ -21,6 +16,13 @@ import de.zaehlermann.timetracker.repository.JournalRepository;
 import de.zaehlermann.timetracker.repository.RfidScanRepository;
 import de.zaehlermann.timetracker.repository.VacationRepository;
 import de.zaehlermann.timetracker.repository.WorkModelRepository;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.List;
+
+import static de.zaehlermann.timetracker.model.JournalSummaryType.ALL_DETAILS;
 
 public class JournalService {
 
@@ -35,7 +37,7 @@ public class JournalService {
   @Nonnull
   public String createAndSaveJournalTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
-    final String journalTxt = journal.printJournalTxt();
+    final String journalTxt = journal.printJournalTxt(ALL_DETAILS);
     final String selectedRangeDesc = journal.printSelectedRange();
     JOURNAL_REPOSITORY.saveToTxtFile(employeeId, selectedRangeDesc, journalTxt);
     return journalTxt;
@@ -44,7 +46,7 @@ public class JournalService {
   @Nonnull
   public File downloadCsv(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
-    final String journalTxt = journal.printJournalCsv();
+    final String journalTxt = journal.printJournalCsv(ALL_DETAILS);
     final String selectedRangeDesc = journal.printSelectedRange();
     return JOURNAL_REPOSITORY.saveToCsvFile(employeeId, selectedRangeDesc, journalTxt);
   }
@@ -52,17 +54,20 @@ public class JournalService {
   @Nonnull
   public File downloadTxt(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
-    final String journalTxt = journal.printJournalTxt();
+    final String journalTxt = journal.printJournalTxt(ALL_DETAILS);
     final String selectedRangeDesc = journal.printSelectedRange();
     return JOURNAL_REPOSITORY.saveToTxtFile(employeeId, selectedRangeDesc, journalTxt);
   }
 
   @Nonnull
-  public File downloadPdf(@Nonnull final String employeeId, @Nonnull final Integer year, @Nullable final Integer month) {
+  public File downloadPdf(@Nonnull final JournalSummaryType journalSummaryType,
+                          @Nonnull final String employeeId,
+                          @Nonnull final Integer year,
+                          @Nullable final Integer month) {
     final Journal journal = createJournal(employeeId, year, month);
     final String selectedRangeDesc = journal.printSelectedRange();
     final File pdfFile = JournalRepository.getJournalPdfFilePath(employeeId, selectedRangeDesc).toFile();
-    journal.createJournalPdf(pdfFile);
+    journal.createJournalPdf(pdfFile, journalSummaryType);
     return pdfFile;
   }
 
