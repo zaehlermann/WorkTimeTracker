@@ -1,14 +1,14 @@
 How-to release
 =================
 
-Feature Release, e.g. for v.1.7.0
+Feature Release, e.g. for v.1.8.0
 
 # Create a branch
 
-    mvn release:branch -DbranchName="bugfix/timetracker-1.7"
-    git checkout bugfix/timetracker-1.7
+    mvn release:branch -DbranchName="bugfix/timetracker-1.8"
+    git checkout bugfix/timetracker-1.8
 
-# Perform QA etc etc
+# Perform QA etc. etc.
 
 * Check for SNAPSHOT dependencies.
 * Prepare next target version number.
@@ -20,8 +20,8 @@ Feature Release, e.g. for v.1.7.0
 
 There is no need for mvn release:perform yet.
 
-# Switch back to master
+# Switch back to main
 
 At this point you can switch back to trunk by executing:
 
-    git checkout master
+    git checkout main
