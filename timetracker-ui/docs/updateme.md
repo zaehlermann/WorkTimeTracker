@@ -29,11 +29,11 @@ scp target/timetracker-ui-1.7.0.jar mike@192.168.188.83:/home/mike/timetracker
 * Start the service.
 
 ```bash
-ssh mike@timetracker.local
+ssh mike@timetracker.local / ssh mike@192.168.188.83
 cd timetracker
 systemctl --user stop timetracker-ui
-mv timetracker-ui.jar timetracker-ui-1.6.0-backup.jar
-mv timetracker-ui-1.7.0.jar timetracker-ui.jar
+mv timetracker-ui.jar timetracker-ui-1.7.0-backup.jar
+mv timetracker-ui-1.8.0.jar timetracker-ui.jar
 systemctl --user start timetracker-ui
 ```
 
